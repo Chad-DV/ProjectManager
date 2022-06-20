@@ -41,6 +41,19 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public Project(int id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, int userId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dateCreated = dateCreated;
+        this.dateDue = dateDue;
+        this.priority = priority;
+        this.userId = userId;
+
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Project(int id, String title, String description, LocalDateTime dateDue, String priority, String checklist, int userId) {
         this.id = id;
         this.title = title;

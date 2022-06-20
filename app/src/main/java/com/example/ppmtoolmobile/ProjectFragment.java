@@ -35,6 +35,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private Button projectAddBtn1;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
+
     private RecyclerView recyclerView;
     private TextView sortProjectsTextView;
     private ProgressBar projectListLoadingProgressBar;
@@ -51,7 +52,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
         projectList = new ArrayList<>();
-        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList, this);
+
         recyclerView = v.findViewById(R.id.projectRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProjectFragment.this.getActivity()));
 
@@ -71,33 +72,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         super.onStart();
         projectListLoadingProgressBar.setVisibility(View.VISIBLE);
         projectList.clear();
-//            Project project1 = new Project(
-//                "Test project 3",
-//                "Lorem ipsum dolor sit amet, consectetur adipisci ng elit ut aliquam, purus sit amet luctus venenatis.",
-//                LocalDateTime.now(),
-//                "High",
-//                23);
-//
-//            Project project2 = new Project(
-//                "Test project 4",
-//                "Lorem ipsum dolor sit amet, consectetur adipisci ng elit ut aliquam, purus sit amet luctus venenatis.",
-//                LocalDateTime.now(),
-//                "Low",
-//                23);
-//
-//
-//
-//            projectList.add(project1);
-//            projectList.add(project2);
-//
-//
-//
-//        for(Project p : projectList) {
-//            daoHelper.addProject(p);
-//        }
+
+        projectList = daoHelper.getAllProjects();
 
 
-        daoHelper.getAllProjects();
+        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList, this);
+
+        System.out.println(daoHelper.getAllProjects());
 
 
 

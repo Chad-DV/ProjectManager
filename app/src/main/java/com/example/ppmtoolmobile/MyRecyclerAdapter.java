@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Project project = projectList.get(position);
+        holder.projectPriorityInfoBtn.setText(project.getPriority() + " priority");
         holder.projectListTitleTextView.setText(project.getTitle());
         holder.projectListDescriptionTextView.setText(project.getDescription());
 
@@ -49,9 +51,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
     }
 
 
+
     public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         TextView projectListTitleTextView,projectListDescriptionTextView;
+        Button projectPriorityInfoBtn;
         OnProjectClickListener onProjectClickListener;
 //        ImageView scheduleThumbnailImageView;
 
@@ -60,6 +64,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
             projectListTitleTextView = itemView.findViewById(R.id.projectListTitleTextView);
             projectListDescriptionTextView = itemView.findViewById(R.id.projectListDescriptionTextView);
+            projectPriorityInfoBtn = itemView.findViewById(R.id.projectPriorityInfoBtn);
 //            scheduleThumbnailImageView = itemView.findViewById(R.id.scheduleThumbnailImageView);
 
             this.onProjectClickListener = onProjectClickListener;

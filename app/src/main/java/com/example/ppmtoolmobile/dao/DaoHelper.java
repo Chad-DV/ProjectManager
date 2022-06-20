@@ -182,22 +182,32 @@ public class DaoHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(0);
                 String title = cursor.getString(1);
                 String description = cursor.getString(2);
-//                String dateCreated = cursor.getString(3);
+                String dateCreated = cursor.getString(3);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+                LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+
                 String dateDue = cursor.getString(4);
+
+                LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+
                 String priority = cursor.getString(5);
                 String checklist = cursor.getString(6);
                 int userId = cursor.getInt(7);
 
-                Project project = new Project(id, title, description, LocalDateTime.now(), priority, checklist, userId);
+                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
 
                 projectList.add(project);
 
 
             } while (cursor.moveToNext());
 
-            System.out.println(projectList);
+//            System.out.println(projectList);
 
             cursor.close();
+
+            System.out.println("Returning from ");
+            return projectList;
 
 
         }
