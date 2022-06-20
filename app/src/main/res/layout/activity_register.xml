@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="35dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".RegisterActivity">
+
+
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@drawable/ic_logo" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/registerTextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="-0.03"
+            android:text="Register with "
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_black"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/registerTextView2"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="-0.03"
+            android:text="PPMTool"
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_black"
+            android:textSize="22sp" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/registerTextView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="-0.01"
+        android:layout_marginTop="3dp"
+        android:text="We do not share or collect your data"
+        android:layout_marginBottom="35dp"
+        android:textAlignment="textStart"
+        android:textColor="@color/dark_blue_gray"
+        android:textSize="12sp" />
+
+
+
+
+    <EditText
+        android:id="@+id/registerFirstNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_default"
+        android:textSize="15sp"
+        android:letterSpacing="-0.01"
+        android:hint="First name"
+        android:textColorHint="@color/dark_blue_gray"
+        android:textColor="@color/dark_black"
+        android:fontFamily="@font/lato"/>
+
+    <EditText
+        android:id="@+id/registerLastNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_default"
+        android:textSize="15sp"
+        android:letterSpacing="-0.01"
+        android:layout_marginTop="8dp"
+        android:hint="Last name"
+        android:textColorHint="@color/dark_blue_gray"
+        android:textColor="@color/dark_black"
+        android:fontFamily="@font/lato"/>
+
+
+    <EditText
+        android:id="@+id/registerEmailAddressEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/input_default"
+        android:textSize="15sp"
+        android:letterSpacing="-0.01"
+        android:hint="Email address"
+        android:layout_marginTop="8dp"
+        android:textColorHint="@color/dark_blue_gray"
+        android:textColor="@color/dark_black"
+        android:fontFamily="@font/lato"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint=" "
+        android:layout_marginTop="-4dp"
+        app:passwordToggleTint="@color/dark_blue_gray"
+        app:passwordToggleEnabled="true">
+
+        <EditText
+            android:id="@+id/registerPasswordEditText"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/input_default"
+            android:textSize="15sp"
+            android:letterSpacing="-0.01"
+            android:hint="Password"
+            android:textColorHint="@color/dark_blue_gray"
+            android:textColor="@color/dark_black"
+            android:fontFamily="@font/lato"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/registerBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/primary_button"
+        android:elevation="30dp"
+
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="-0.01"
+        android:paddingRight="10dp"
+        android:text="Register"
+
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:backgroundTint="@null" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content">
+
+
+        <View
+            android:id="@+id/SplitLine_hor1"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height= "1dp"
+            android:layout_weight="1"
+            android:background="@color/light_blue_gray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:textColor="@color/dark_blue_gray"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="Or"/>
+
+        <View
+            android:id="@+id/SplitLine_hor2"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height= "1dp"
+            android:background="@color/light_blue_gray" />
+
+
+
+    </LinearLayout>
+
+
+
+
+    <Button
+        android:id="@+id/loginGoogleBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/outline_button"
+        android:fontFamily="@font/lato"
+        android:textSize="13sp"
+        android:drawableStart="@drawable/ic_google_logo"
+        android:textColor="@color/dark_gray"
+        android:elevation="0dp"
+        android:letterSpacing="-0.01"
+        android:text="Continue with Google"
+        android:textAllCaps="false" />
+
+
+    <Button
+        android:id="@+id/loginFacebookBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/outline_button"
+        android:fontFamily="@font/lato"
+        android:textSize="13sp"
+        android:drawableLeft="@drawable/ic_facebook_logo"
+        android:textColor="@color/dark_gray"
+        android:elevation="0dp"
+        android:letterSpacing="-0.01"
+        android:text="Continue with Facebook"
+        android:textAllCaps="false"/>
+
+
+    <ProgressBar
+        android:id="@+id/registerProgressBar"
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+
+    </ProgressBar>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/loginPromptTextView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="-0.02"
+            android:text="Already have an account? "
+            android:textAlignment="textStart"
+            android:textColor="@color/dark_gray"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/loginPromptTextView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="-0.02"
+            android:text="Login"
+            android:textAlignment="textStart"
+            android:textColor="@color/primary_purple"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+    <!--    </LinearLayout>-->
+</LinearLayout>

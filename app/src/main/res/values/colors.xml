@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dark_black">#2C2C2C</color>
+    <color name="dark_gray">#555555</color>
+    <color name="light_blue_gray">#F2F5FA</color>
+    <color name="dark_blue_gray">#ADB3C8</color>
+    <color name="primary_purple">#AA55FF</color>
+    <color name="white">#ffffff</color>
+
+    <!-- CARD COLOURS -->
+    <color name="light_red">#FFEBEB</color>
+    <color name="dark_red">#FF5555</color>
+
+    <color name="light_orange">#FFF7EB</color>
+    <color name="dark_orange">#FFB155</color>
+
+    <color name="light_green">#ECFFEB</color>
+    <color name="dark_green">#55FF7A</color>
+</resources>
