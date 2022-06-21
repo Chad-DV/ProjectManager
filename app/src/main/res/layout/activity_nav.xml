@@ -20,8 +20,11 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavView"
         android:layout_width="match_parent"
+        android:backgroundTint="@color/dark_blue_gray"
         android:layout_height="wrap_content"
-        android:background="#fff"
+        android:background="@color/primary_purple"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/dark_blue_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

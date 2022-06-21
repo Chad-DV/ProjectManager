@@ -6,6 +6,7 @@
     android:orientation="horizontal"
     android:background="@drawable/project_item_card_shadow"
     android:padding="15dp"
+
     android:layout_marginBottom="10dp"
     >
 
@@ -14,8 +15,8 @@
             <ImageView
                 android:layout_gravity="center_vertical"
                 android:id="@+id/scheduleThumbnailImageView"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@drawable/project_cover_image_1" />
 
 
@@ -23,7 +24,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="82dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical">
@@ -41,28 +42,43 @@
                     android:textSize="16sp" />
 
 
-                <TextView
-                    android:id="@+id/projectListDescriptionTextView"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/lato"
-                    android:letterSpacing="-0.03"
-                    android:maxLength="90"
-                    android:drawablePadding="30dp"
-                    android:drawableRight="@drawable/ic_arrow_right_soft"
-                    android:maxLines="2"
-                    android:text="Lorem ipsum dolor sit amet, consectetur adipisci ng elit ut aliquam, purus sit amet luctus venenatis."
-                    android:textColor="@color/dark_blue_gray"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/projectListDescriptionTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginBottom="7dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/lato"
+
+                        android:letterSpacing="-0.03"
+                        android:maxLength="90"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:text="Lorem ipsum dolor sit amet, consectetur adipisci ng elit ut aliquam, purus sit amet luctus venenatis."
+                        android:textColor="@color/dark_blue_gray"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_arrow_right_soft"/>
+
+                </LinearLayout>
 
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+
                     android:orientation="horizontal">
 
                     <Button
@@ -74,6 +90,7 @@
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
                         android:text="Not started"
+                        android:elevation="0dp"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
@@ -85,10 +102,10 @@
                         android:layout_height="25dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/project_card_small_button"
-                        android:backgroundTint="@color/light_red"
+                        android:backgroundTint="@null"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
-
+                        android:elevation="0dp"
                         android:text="High priority"
                         android:textAlignment="center"
                         android:textAllCaps="false"

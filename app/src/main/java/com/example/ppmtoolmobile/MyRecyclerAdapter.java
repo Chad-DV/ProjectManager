@@ -1,6 +1,8 @@
 package com.example.ppmtoolmobile;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +12,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ppmtoolmobile.model.Priority;
 import com.example.ppmtoolmobile.model.Project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>  {
@@ -33,11 +37,24 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         return new MyViewHolder(view, onProjectClickListener);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
         Project project = projectList.get(position);
         holder.projectPriorityInfoBtn.setText(project.getPriority() + " priority");
+
+        if(project.getPriority().equals("High") || project.getPriority().equals("None")) {
+            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_red);
+            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_red);
+        } else if(project.getPriority().equals("Medium")) {
+            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_orange);
+            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_orange);
+        } else if(project.getPriority().equals("Low")) {
+            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_green);
+            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_green);
+        }
+
         holder.projectListTitleTextView.setText(project.getTitle());
         holder.projectListDescriptionTextView.setText(project.getDescription());
 
@@ -47,6 +64,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
     @Override
     public int getItemCount() {
+
         return projectList.size();
     }
 

@@ -140,8 +140,14 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
             Project theProject = new Project(title, description, dateTimeFormatted, priority, 12);
 
-            daoHelper.addProject(theProject);
-            Toast.makeText(AddProjectActivity.this, "Project with title " + theProject.getTitle() + " was added", Toast.LENGTH_SHORT).show();
+            boolean result = daoHelper.addProject(theProject);
+
+            if(result) {
+                Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(AddProjectActivity.this, "Error adding project", Toast.LENGTH_SHORT).show();
+            }
+
 
             clearInput();
 

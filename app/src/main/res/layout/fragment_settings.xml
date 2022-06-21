@@ -44,6 +44,7 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/settingsProfileCardView"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="120dp"
@@ -107,6 +108,7 @@
 
     <!-- setting 2 -->
     <androidx.cardview.widget.CardView
+        android:id="@+id/settingsMyProjectsCardView"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="13dp"
@@ -170,6 +172,7 @@
 
     <!-- setting 3 -->
     <androidx.cardview.widget.CardView
+        android:id="@+id/settingsNotificationsCardView"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="13dp"
@@ -233,6 +236,7 @@
 
     <!-- setting 4 -->
     <androidx.cardview.widget.CardView
+        android:id="@+id/settingsLogoutCardView"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="13dp"

@@ -154,7 +154,7 @@ public class DaoHelper extends SQLiteOpenHelper {
     }
 
 
-    public void addProject(Project project) {
+    public Boolean addProject(Project project) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -165,9 +165,63 @@ public class DaoHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
 //        cv.put(COLUMN_USER_PROJECT_FK, project.get);
 
-        db.insert(PROJECT_TABLE, null, cv);
+        long result = db.insert(PROJECT_TABLE, null, cv);
+
+        return result == -1 ?  false : true;
 
     }
+
+    public Boolean updateProject(Project project) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_PROJECT_TITLE, project.getTitle());
+        cv.put(COLUMN_PROJECT_DESCRIPTION, project.getDescription());
+        cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
+        cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
+        cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[] {String.valueOf(project.getId())});
+
+
+        if(cursor.getCount() > 0) {
+            long result = db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
+
+            return result == -1 ?  false : true;
+        } else {
+            return false;
+        }
+
+
+
+//        return db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[] { String.valueOf(project.getId())});
+
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE id = ?", new String[]{project.getTitle()})
+
+
+    }
+
+    public Boolean deleteProjectById(Project project) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[] {String.valueOf(project.getId())});
+
+        if(cursor.getCount() > 0) {
+            long result = db.delete(PROJECT_TABLE, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
+
+            db.close();
+            return result == -1 ?  false : true;
+        } else {
+            return false;
+        }
+    }
+
+    public Project getProjectById(int id) {
+
+
+        return null;
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public List<Project> getAllProjects() {
@@ -183,12 +237,10 @@ public class DaoHelper extends SQLiteOpenHelper {
                 String title = cursor.getString(1);
                 String description = cursor.getString(2);
                 String dateCreated = cursor.getString(3);
+                String dateDue = cursor.getString(4);
 
                 DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
                 LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-
-                String dateDue = cursor.getString(4);
-
                 LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
 
                 String priority = cursor.getString(5);
@@ -205,13 +257,13 @@ public class DaoHelper extends SQLiteOpenHelper {
 //            System.out.println(projectList);
 
             cursor.close();
-
+            db.close();
             System.out.println("Returning from ");
-            return projectList;
+
 
 
         }
-        return null;
+        return projectList;
     }
 
     public List<Project> getUserProjects(int id) {
