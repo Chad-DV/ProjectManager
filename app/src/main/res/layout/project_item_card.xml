@@ -7,7 +7,7 @@
     android:background="@drawable/project_item_card_shadow"
     android:padding="15dp"
 
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
     >
 
 
@@ -53,12 +53,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
                         android:layout_marginBottom="7dp"
+                        android:layout_weight="1"
                         android:ellipsize="end"
                         android:fontFamily="@font/lato"
-
                         android:letterSpacing="-0.03"
                         android:maxLength="90"
-                        android:layout_weight="1"
                         android:maxLines="1"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipisci ng elit ut aliquam, purus sit amet luctus venenatis."
                         android:textColor="@color/dark_blue_gray"
@@ -67,9 +66,8 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_arrow_right_soft"/>
+                        android:src="@drawable/ic_arrow_right_soft" />
 
                 </LinearLayout>
 

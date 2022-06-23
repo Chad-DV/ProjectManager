@@ -1,0 +1,65 @@
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:gravity="center_vertical"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+
+
+            <ProgressBar
+                android:id="@+id/projectListLoadingProgressBar"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:layout_height="match_parent"/>
+
+
+            <TextView
+                android:id="@+id/d32"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:fontFamily="@font/lato_bold"
+                android:letterSpacing="-0.01"
+                android:text="You currently have no projects to manage"
+                android:textAlignment="center"
+                android:textColor="@color/dark_black"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/d33"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:letterSpacing="-0.01"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:text="Create your first project and get started!"
+                android:textColor="@color/dark_blue_gray"
+                android:textSize="13sp" />
+
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_empty_project_list_illustration"/>
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+

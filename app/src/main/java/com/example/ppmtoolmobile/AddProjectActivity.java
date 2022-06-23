@@ -54,14 +54,12 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         addProjectTimeEditText = (EditText) findViewById(R.id.addProjectTimeEditText);
         addProjectPriorityRadioGroup = (RadioGroup) findViewById(R.id.addProjectPriorityRadioGroup);
 
-        re333r = (TextView) findViewById(R.id.re333r);
 
 
         dateSetListener = (datePicker, year, month, day) -> {
             addProjectDueDateEditText.setText(year + "-" + checkDigit(month + 1)  + "-" + checkDigit(day));
         };
 
-        re333r.setOnClickListener(this);
         addProjectBtn.setOnClickListener(this);
         addProjectDueDateEditText.setOnClickListener(this);
         addProjectTimeEditText.setOnClickListener(this);
@@ -91,10 +89,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             Calendar mcurrentTime = Calendar.getInstance();
             int currHour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
             int currMinute = mcurrentTime.get(Calendar.MINUTE);
-            //Theme_Holo_Light_Dialog
-            //Theme_Holo_Light_DarkActionBar  //*Top Position
             timePickerDialog = new TimePickerDialog(this,android.R.style.Theme_Holo_Light_Dialog, (timePicker, selectedHour, selectedMinute) -> {
-                //*Return values
                 addProjectTimeEditText.setText( "" + checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
                 Toast.makeText(AddProjectActivity.this, "hour=" + selectedHour + " min=" + selectedMinute, Toast.LENGTH_SHORT).show();
 
@@ -132,13 +127,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         } else {
             String dateTime = dateDue + " " + timeDue;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            LocalDateTime dateTimeFormatted = LocalDateTime.parse(dateTime, formatter);
 
-            System.out.println("date time: " + dateTime);
-            System.out.println();
-            System.out.println("date time formatted:" + dateTimeFormatted);
-
-            Project theProject = new Project(title, description, dateTimeFormatted, priority, 12);
+            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, 12);
 
             boolean result = daoHelper.addProject(theProject);
 
@@ -176,9 +166,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
     private String getProjectPriorityValue() {
         int radioId = addProjectPriorityRadioGroup.getCheckedRadioButtonId();
-
         projectPriorityRadioBtn = findViewById(radioId);
-
         return projectPriorityRadioBtn.getText().toString();
     }
 }

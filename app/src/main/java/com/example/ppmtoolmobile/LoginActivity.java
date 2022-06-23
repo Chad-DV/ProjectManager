@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         boolean isValid = daoHelper.login(new User(null, null, "john@gmail.com", "password"));
 
         if(isValid) {
-            Intent goToLoginIntent = new Intent(LoginActivity.this, NavActivity.class);
+            Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);
             startActivity(goToLoginIntent);
         } else {
             System.out.println("Failure");

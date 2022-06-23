@@ -171,13 +171,13 @@ public class DaoHelper extends SQLiteOpenHelper {
 
     }
 
-    public Boolean updateProject(Project project) {
+    public Boolean editProject(Project project) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_PROJECT_TITLE, project.getTitle());
         cv.put(COLUMN_PROJECT_DESCRIPTION, project.getDescription());
-        cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
+//        cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
         cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
         cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
 
@@ -201,13 +201,13 @@ public class DaoHelper extends SQLiteOpenHelper {
 
     }
 
-    public Boolean deleteProjectById(Project project) {
+    public Boolean deleteProjectById(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[] {String.valueOf(project.getId())});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[] {String.valueOf(id)});
 
         if(cursor.getCount() > 0) {
-            long result = db.delete(PROJECT_TABLE, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
+            long result = db.delete(PROJECT_TABLE, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(id)});
 
             db.close();
             return result == -1 ?  false : true;
@@ -216,10 +216,43 @@ public class DaoHelper extends SQLiteOpenHelper {
         }
     }
 
-    public Project getProjectById(int id) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Project getProjectById(long projectId) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(projectId)});
 
 
-        return null;
+        System.out.println(cursor.getCount());
+
+//        Cursor cursor = db.query(TABLE_COUNTRY, new String[] { KEY_ID,
+//                        COUNTRY_NAME, POPULATION }, KEY_ID + "=?",
+//                new String[] { String.valueOf(id) }, null, null, null, null);
+
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        long id = cursor.getLong(0);
+        String title = cursor.getString(1);
+        String description = cursor.getString(2);
+        String dateCreated = cursor.getString(3);
+        String dateDue = cursor.getString(4);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+        LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+
+        String priority = cursor.getString(5);
+        String checklist = cursor.getString(6);
+        int userId = cursor.getInt(7);
+
+        Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
+
+        return  project;
+
     }
 
 
@@ -233,7 +266,7 @@ public class DaoHelper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                int id = cursor.getInt(0);
+                long id = cursor.getLong(0);
                 String title = cursor.getString(1);
                 String description = cursor.getString(2);
                 String dateCreated = cursor.getString(3);
@@ -264,6 +297,17 @@ public class DaoHelper extends SQLiteOpenHelper {
 
         }
         return projectList;
+    }
+
+    public int getProjectCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
+
+
+//        if(cursor != null) cursor.moveToNext();
+
+        System.out.println(cursor.getCount());
+        return cursor.getCount();
     }
 
     public List<Project> getUserProjects(int id) {

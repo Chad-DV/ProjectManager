@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,9 +39,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view == settingsProfileCardView) {
-            startActivity(new Intent(SettingsFragment.this.getActivity(), ProjectFragment.class));
+            getFragmentManager().beginTransaction().replace(R.id.navframeLayout, new ProfileFragment()).commit();
         } else if(view == settingsMyProjectsCardView) {
-            startActivity(new Intent(SettingsFragment.this.getActivity(), ProjectFragment.class));
+            getFragmentManager().beginTransaction().replace(R.id.navframeLayout, new ProjectFragment()).commit();
         } else if(view == settingsNotificationsCardView) {
             startActivity(new Intent(SettingsFragment.this.getActivity(), ProjectFragment.class));
         } else if(view == settingsLogoutCardView) {

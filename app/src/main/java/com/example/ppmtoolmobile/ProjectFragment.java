@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,36 +35,38 @@ import java.util.List;
 
 public class ProjectFragment extends Fragment implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
 
-    private Button projectAddBtn1;
+    private TextView sortProjectsTextView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
 
     private RecyclerView recyclerView;
-    private TextView sortProjectsTextView,displayUserProjectCountTextView;
+
     private ProgressBar projectListLoadingProgressBar;
     private long projectId;
     private int projectCount;
     private DaoHelper daoHelper;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_project, null);
         projectList = new ArrayList<>();
+
+        View v = inflater.inflate(R.layout.fragment_project, null);
+
+
+
         daoHelper = new DaoHelper(getActivity().getApplicationContext());
-        projectAddBtn1 = v.findViewById(R.id.projectAddBtn1);
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
-        displayUserProjectCountTextView = v.findViewById(R.id.displayUserProjectCountTextView);
+
         projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
 
 
         recyclerView = v.findViewById(R.id.projectRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(ProjectFragment.this.getActivity()));
 
-
-
-        projectAddBtn1.setOnClickListener(this);
         sortProjectsTextView.setOnClickListener(this);
+
 
         return v;
 
@@ -75,18 +78,11 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onStart() {
         super.onStart();
         loadProjects();
-
-
     }
-
-
 
     @Override
     public void onClick(View view) {
-        if(view == projectAddBtn1) {
-            Intent goToAddProjectIntent = new Intent(ProjectFragment.this.getActivity(), AddProjectActivity.class);
-            startActivity(goToAddProjectIntent);
-        } else if(view == sortProjectsTextView) {
+        if(view == sortProjectsTextView) {
             sortProjects();
         }
     }
@@ -144,7 +140,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
 
-
+//        Toast.makeText(ProjectFragment.this.getActivity(), project.toString(), Toast.LENGTH_SHORT).show();
 
         PopupMenu popupMenu = new PopupMenu(ProjectFragment.this.getActivity(), sortProjectsTextView);
 
@@ -155,13 +151,18 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
             switch (menuItem.getItemId()) {
                 case R.id.option_delete:
 
-                    deleteProject(position);
+                    deleteProject(projectId);
                     projectList = daoHelper.getAllProjects();
                     adapter.notifyDataSetChanged();
                     break;
                 case R.id.option_edit:
+                    Intent getProjectIdIntent = new Intent(ProjectFragment.this.getActivity(), EditProjectActivity.class);
+                    getProjectIdIntent.putExtra("projectId", projectId);
+                    startActivity(getProjectIdIntent);
 
-                    Toast.makeText(ProjectFragment.this.getActivity(), String.valueOf(project), Toast.LENGTH_SHORT).show();
+//                    Project theProject =  daoHelper.getProjectById(projectId);
+//                    Toast.makeText(ProjectFragment.this.getActivity(), theProject.toString(), Toast.LENGTH_SHORT).show();
+//                    System.out.println(project.toString());
                     break;
             }
             return true;
@@ -186,18 +187,16 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         projectListLoadingProgressBar.setVisibility(View.GONE);
         recyclerView.setAdapter(adapter);
 
-        displayUserProjectCountTextView.setText("You currently have " + projectCount + " project(s)");
-        adapter.notifyDataSetChanged();
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void deleteProject(int position) {
+    private void deleteProject(long position) {
         new AlertDialog.Builder(ProjectFragment.this.getActivity())
                 .setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this entry?")
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    boolean res = daoHelper.deleteProjectById(projectList.get(position));
+                    boolean res = daoHelper.deleteProjectById(position);
 
                     adapter.notifyDataSetChanged();
                     Toast.makeText(ProjectFragment.this.getActivity(), String.valueOf(res), Toast.LENGTH_SHORT).show();

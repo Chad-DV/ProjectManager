@@ -41,7 +41,7 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(int id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, int userId) {
+    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, int userId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -54,7 +54,7 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(int id, String title, String description, LocalDateTime dateDue, String priority, String checklist, int userId) {
+    public Project(long id, String title, String description, LocalDateTime dateDue, String priority, int userId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -67,17 +67,6 @@ public class Project {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(int id, String title, String description, LocalDateTime dateDue, String dueTime, String priority, String checklist, int userId) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.dateCreated = LocalDateTime.now();
-        this.dateDue = calculateDueDate(3);
-        this.priority = priority;
-        this.checklist = checklist;
-        this.userId = userId;
-    }
 
 
 
