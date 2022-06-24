@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DaoHelper extends SQLiteOpenHelper {
+public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
 
     public static final String DATABASE_NAME = "ppmtool.db";
     public static final String USER_TABLE = "user";
@@ -82,7 +82,7 @@ public class DaoHelper extends SQLiteOpenHelper {
     }
 
 
-    public void register(User user) {
+    public Boolean register(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -92,19 +92,12 @@ public class DaoHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         long result = db.insert(USER_TABLE, null, cv);
-
-        System.out.println("User created successfully: " + result);
-//        if(result == -1) {
-//            return false;
-//        } else {
-//            return true;
-//        }
-
+        return result == -1 ?  false : true;
 
     }
 
 
-    public boolean login(User user) {
+    public Boolean login(User user) {
         SQLiteDatabase db = this.getReadableDatabase();
         boolean valid = false;
 
@@ -132,7 +125,7 @@ public class DaoHelper extends SQLiteOpenHelper {
         return valid;
     }
 
-    public boolean isEmailExists(String email) {
+    public Boolean isEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(USER_TABLE,// Selecting Table
                 new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
