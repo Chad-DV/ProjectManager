@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
+public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
     public static final String DATABASE_NAME = "ppmtool.db";
     public static final String USER_TABLE = "user";
@@ -47,22 +47,19 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
     private String CREATE_USER_TABLE_QUERY = "CREATE TABLE " + USER_TABLE + "(" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_FIRST_NAME + " TEXT,"
             + COLUMN_USER_LAST_NAME + " TEXT," + COLUMN_USER_EMAIL_ADDRESS + " TEXT," + COLUMN_USER_PASSWORD + " TEXT" + ")";
 
-    private String CREATE_PROJECT_TABLE_QUERY = "CREATE TABLE " + PROJECT_TABLE +  "(" + COLUMN_PROJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PROJECT_TITLE + " TEXT,"
+    private String CREATE_PROJECT_TABLE_QUERY = "CREATE TABLE " + PROJECT_TABLE + "(" + COLUMN_PROJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PROJECT_TITLE + " TEXT,"
             + COLUMN_PROJECT_DESCRIPTION + " TEXT," + COLUMN_PROJECT_DATE_CREATED + " TEXT," + COLUMN_PROJECT_DATE_DUE + " TEXT,"
             + COLUMN_PROJECT_PRIORITY + " TEXT," + COLUMN_PROJECT_CHECKLIST + " TEXT," + COLUMN_USER_PROJECT_FK + " INTEGER,"
-            + "FOREIGN KEY(" + COLUMN_USER_PROJECT_FK +") REFERENCES " + USER_TABLE + "(" + COLUMN_USER_ID +") ON DELETE CASCADE ON UPDATE CASCADE)";
+            + "FOREIGN KEY(" + COLUMN_USER_PROJECT_FK + ") REFERENCES " + USER_TABLE + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE ON UPDATE CASCADE)";
 
 
     private String DROP_USER_TABLE_QUERY = "DROP TABLE IF EXISTS " + USER_TABLE;
     private String DROP_PROJECT_TABLE_QUERY = "DROP TABLE IF EXISTS " + PROJECT_TABLE;
 
 
-
     public DaoHelper(@Nullable Context context) {
-        super(context,DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 1);
     }
-
-
 
 
     @Override
@@ -92,7 +89,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
         cv.put(COLUMN_USER_PASSWORD, user.getPassword());
 
         long result = db.insert(USER_TABLE, null, cv);
-        return result == -1 ?  false : true;
+        return result == -1 ? false : true;
 
     }
 
@@ -109,7 +106,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
                 null, null, null);
 
 
-        if (cursor != null && cursor.moveToFirst()&& cursor.getCount() > 0) {
+        if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
             //if cursor has value then in user database there is user associated with this given email
             User user1 = new User(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
 
@@ -133,7 +130,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
                 new String[]{email},//Where clause
                 null, null, null);
 
-        if (cursor != null && cursor.moveToFirst()&& cursor.getCount()>0) {
+        if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
             System.out.println("User with email " + email + " already exists");
             //if cursor has value then in user database there is user associated with this given email so return true
             return true;
@@ -160,7 +157,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
 
         long result = db.insert(PROJECT_TABLE, null, cv);
 
-        return result == -1 ?  false : true;
+        return result == -1 ? false : true;
 
     }
 
@@ -174,17 +171,16 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
         cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
         cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[] {String.valueOf(project.getId())});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
 
 
-        if(cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) {
             long result = db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
 
-            return result == -1 ?  false : true;
+            return result == -1 ? false : true;
         } else {
             return false;
         }
-
 
 
 //        return db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[] { String.valueOf(project.getId())});
@@ -197,13 +193,13 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
     public Boolean deleteProjectById(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[] {String.valueOf(id)});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(id)});
 
-        if(cursor.getCount() > 0) {
+        if (cursor.getCount() > 0) {
             long result = db.delete(PROJECT_TABLE, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(id)});
 
             db.close();
-            return result == -1 ?  false : true;
+            return result == -1 ? false : true;
         } else {
             return false;
         }
@@ -244,7 +240,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
 
         Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
 
-        return  project;
+        return project;
 
     }
 
@@ -287,7 +283,6 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
             System.out.println("Returning from ");
 
 
-
         }
         return projectList;
     }
@@ -315,9 +310,41 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO{
         String query = "SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = " + id;
 
 
-
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<Project> searchProjects(String query) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Project> projectList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_TITLE + " LIKE ?", new String[]{query});
+
+
+        if (cursor.moveToFirst() && cursor != null) {
+            do {
+                long id = cursor.getLong(0);
+                String title = cursor.getString(1);
+                String description = cursor.getString(2);
+                String dateCreated = cursor.getString(3);
+                String dateDue = cursor.getString(4);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+                LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+                LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+
+                String priority = cursor.getString(5);
+                String checklist = cursor.getString(6);
+                int userId = cursor.getInt(7);
+
+                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
+
+                projectList.add(project);
+
+
+            } while (cursor.moveToNext());
+        }
+        return projectList;
+    }
 
 }
+

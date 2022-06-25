@@ -1,0 +1,44 @@
+[33mcommit 9dfce57ae88b16b73958431e56e081c1ddaf8823[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Github-user191 <luqmaan78629@protonmail.com>
+Date:   Fri Jun 24 11:33:52 2022 +0200
+
+    Added interface for user and project methods
+
+[33mcommit f102e7f99dca534ef7e404f3e784182446b92ec2[m
+Author: Github-user191 <luqmaan78629@protonmail.com>
+Date:   Thu Jun 23 08:43:14 2022 +0200
+
+    replaced fragment nav menu with activity , Replaced Project main page with 2 inner fragments based on whether a user has projects or not
+
+[33mcommit e3b98449f2a63c4e9fb91011b3c0682e8c23f29e[m
+Author: Github-user191 <luqmaan78629@protonmail.com>
+Date:   Tue Jun 21 12:11:22 2022 +0200
+
+    Added delete by id functionality on projects, fixed project_item_card responsiveness
+
+[33mcommit e4be7f1c1b72b454cef124c102ac1f8673a83e78[m
+Author: Github-user191 <luqmaan78629@protonmail.com>
+Date:   Mon Jun 20 16:34:11 2022 +0200
+
+    Can display list of projects from SQLite in recycler view, need to fix responsiveness of project_item_card
+
+[33mcommit 8d0d533aabfbfa03843085385f793a30299cc75b[m
+Merge: c5e6816 c4080e8
+Author: Github-user191 <luqmaan78629@protonmail.com>
+Date:   Mon Jun 20 10:53:06 2022 +0200
+
+    Merge branch 'main' of https://github.com/Github-user191/ppmtool_android
+    
+    THe Commit.
+
+[33mcommit c5e68162f2c6472a3b50e7f0fcf8e394502e7515[m
+Author: Github-user191 <luqmaan78629@protonmail.com>
+Date:   Mon Jun 20 10:48:24 2022 +0200
+
+    UI part, working on CRUD operations
+
+[33mcommit c4080e835c5d25a7737d538a9e4a2d6aae209f9f[m
+Author: Github-user191 <82766238+Github-user191@users.noreply.github.com>
+Date:   Mon Jun 20 10:39:34 2022 +0200
+
+    Initial commit

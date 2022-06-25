@@ -206,8 +206,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-
-
     }
 
 }
