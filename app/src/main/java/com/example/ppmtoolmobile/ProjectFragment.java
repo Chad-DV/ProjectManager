@@ -1,5 +1,8 @@
 package com.example.ppmtoolmobile;
 
+import static android.content.Intent.getIntent;
+import static android.content.Intent.getIntentOld;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -50,22 +53,16 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        projectList = new ArrayList<>();
-
         View v = inflater.inflate(R.layout.fragment_project, null);
 
-
-
         daoHelper = new DaoHelper(getActivity().getApplicationContext());
+        loadProjects(v);
+        buildRecyclerView(v);
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
 
-        projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
-
-
-        recyclerView = v.findViewById(R.id.projectRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ProjectFragment.this.getActivity()));
-
         sortProjectsTextView.setOnClickListener(this);
+
+
 
 
         return v;
@@ -73,19 +70,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public void onStart() {
-        super.onStart();
-        loadProjects();
-    }
-
     @Override
     public void onClick(View view) {
         if(view == sortProjectsTextView) {
             sortProjects();
         }
     }
+
 
     private void sortProjects() {
         // Initializing the popup menu and giving the reference as current context
@@ -120,11 +111,15 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         popupMenu.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onProjectClick(View view, int position) {
         Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
         Toast.makeText(ProjectFragment.this.getActivity(), "Short clicked", Toast.LENGTH_SHORT).show();
+
+        filterList("321");
+
 //        Intent viewSchedule = new Intent(ProjectFragment.this.getActivity(), ViewSchedule.class);
 //        viewSchedule.putExtra("title", project.getTitle());
 //        viewSchedule.putExtra("description", project.getDescription());
@@ -175,17 +170,46 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void loadProjects() {
+    private void filterList(String query) {
+        List<Project> filteredList = new ArrayList<>();
+
+
+        filteredList = daoHelper.searchProjects(query);
+
+        if(filteredList.isEmpty()) {
+            Toast.makeText(getActivity().getApplicationContext(), "No projects matched with " + query , Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity().getApplicationContext(), projectList.toString() , Toast.LENGTH_SHORT).show();
+        }
+
+        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), filteredList, this);
+        recyclerView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+//        adapter.filterList(filteredList);
+
+
+    }
+
+    private void buildRecyclerView(View v) {
+        recyclerView = v.findViewById(R.id.projectRecyclerView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ProjectFragment.this.getActivity()));
+        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList, this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void loadProjects(View v) {
+        projectList = new ArrayList<>();
+        projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
 
         projectListLoadingProgressBar.setVisibility(View.VISIBLE);
-        projectList.clear();
+//        projectList.clear();
 
         projectList = daoHelper.getAllProjects();
 
         projectCount = projectList.size();
-        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList, this);
         projectListLoadingProgressBar.setVisibility(View.GONE);
-        recyclerView.setAdapter(adapter);
 
 
     }

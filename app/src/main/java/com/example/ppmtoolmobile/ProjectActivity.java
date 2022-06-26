@@ -110,7 +110,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             Intent goToAddProjectIntent = new Intent(this, AddProjectActivity.class);
             startActivity(goToAddProjectIntent);
         } else if(view == searchProjectEditText) {
-            searchProjects();
+//            searchProjects();
         }
     }
 
@@ -138,8 +138,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 //
 //        projectList = daoHelper.getAllProjects();
 
-        adapter = new MyRecyclerAdapter(this, projectList, this);
-        recyclerView.setAdapter(adapter);
+//        adapter = new MyRecyclerAdapter(this, projectList, this);
+//        recyclerView.setAdapter(adapter);
     }
 
 

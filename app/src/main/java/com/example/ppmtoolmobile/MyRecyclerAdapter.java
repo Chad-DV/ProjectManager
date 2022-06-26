@@ -64,8 +64,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
     @Override
     public int getItemCount() {
-
         return projectList.size();
+    }
+
+    public void filterList(List<Project> projectList) {
+        this.projectList = projectList;
+        notifyDataSetChanged();
     }
 
 
@@ -102,6 +106,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
             return true;
         }
     }
+
 
     public interface OnProjectClickListener {
         void onProjectClick(View view, int position);
