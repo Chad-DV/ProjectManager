@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.DaoHelper;
 import com.example.ppmtoolmobile.model.User;
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginBtn.setOnClickListener(this);
         registerPromptTextView2.setOnClickListener(this);
 
+
     }
 
     @Override
@@ -50,7 +52,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void loginUser() {
 
-        String emailAddress = loginEmailAddressEditText.getText().toString().trim();
+//        String emailAddress = loginEmailAddressEditText.getText().toString().trim();
+        String emailAddress = "john@gmail.com";
         String password = loginPasswordEditText.getText().toString().trim();
 //
 //        if(TextUtils.isEmpty(emailAddress)) {
@@ -71,10 +74,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            return;
 //        }
 
-        boolean isValid = daoHelper.login(new User(null, null, "john@gmail.com", "password"));
+        boolean isValid = daoHelper.login(new User(emailAddress, "password"));
 
         if(isValid) {
             Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);
+            goToLoginIntent.putExtra("authenticatedUser", emailAddress);
             startActivity(goToLoginIntent);
         } else {
             System.out.println("Failure");

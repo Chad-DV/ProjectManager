@@ -38,10 +38,11 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
     public static final String COLUMN_PROJECT_DESCRIPTION = "description";
     public static final String COLUMN_PROJECT_DATE_CREATED = "date_created";
     public static final String COLUMN_PROJECT_DATE_DUE = "date_due";
-    public static final String COLUMN_PROJECT_DUE_TIME = "due_time";
+//    public static final String COLUMN_PROJECT_DUE_TIME = "due_time";
     public static final String COLUMN_PROJECT_PRIORITY = "priority";
     public static final String COLUMN_PROJECT_CHECKLIST = "checklist";
     public static final String COLUMN_USER_PROJECT_FK = "user_id";
+    private static int DATABASE_VERSION = 1;
 
 
     private String CREATE_USER_TABLE_QUERY = "CREATE TABLE " + USER_TABLE + "(" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_FIRST_NAME + " TEXT,"
@@ -58,12 +59,14 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
 
     public DaoHelper(@Nullable Context context) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(CREATE_USER_TABLE_QUERY);
         db.execSQL(CREATE_PROJECT_TABLE_QUERY);
 
@@ -74,6 +77,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
         //Drop User Table if exist
         db.execSQL(DROP_USER_TABLE_QUERY);
         db.execSQL(DROP_PROJECT_TABLE_QUERY);
+        DATABASE_VERSION++;
         // Create tables again
         onCreate(db);
     }
@@ -82,6 +86,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
     public Boolean register(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+
 
         cv.put(COLUMN_USER_FIRST_NAME, user.getFirstName());
         cv.put(COLUMN_USER_LAST_NAME, user.getLastName());
@@ -101,7 +106,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
         Cursor cursor = db.query(USER_TABLE,// Selecting Table
                 new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
-                COLUMN_USER_EMAIL_ADDRESS + "=?",
+                COLUMN_USER_EMAIL_ADDRESS + " = ? ",
                 new String[]{user.getEmailAddress()},//Where clause
                 null, null, null);
 
@@ -126,7 +131,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(USER_TABLE,// Selecting Table
                 new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
-                COLUMN_USER_EMAIL_ADDRESS + "=?",
+                COLUMN_USER_EMAIL_ADDRESS + " = ?",
                 new String[]{email},//Where clause
                 null, null, null);
 
@@ -143,19 +148,107 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
         return false;
     }
 
+    public String getCurrentUserFirstName(String emailAddress) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
-    public Boolean addProject(Project project) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.query(USER_TABLE,// Selecting Table
+                new String[]{COLUMN_USER_FIRST_NAME},//Selecting columns want to query
+                COLUMN_USER_EMAIL_ADDRESS + " = ?",
+                new String[]{String.valueOf(emailAddress)},//Where clause
+                null, null, null);
+
+        while(cursor.moveToNext()) {
+            return cursor.getString(0);
+        }
+
+        return "not found";
+
+    }
+
+    public long getCurrentUserId(String emailAddress) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(USER_TABLE,// Selecting Table
+                new String[]{COLUMN_USER_ID},//Selecting columns want to query
+                COLUMN_USER_EMAIL_ADDRESS + " = ?",
+                new String[]{String.valueOf(emailAddress)},//Where clause
+                null, null, null);
+
+        long userId = 0;
+
+
+
+        while(cursor.moveToNext()) {
+            userId = cursor.getLong(0);
+        }
+
+        return userId;
+
+    }
+
+    public User getUserDetails(String theEmailAddress) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        User user = null;
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{theEmailAddress});
+
+        Cursor cursor = db.query(USER_TABLE,// Selecting Table
+                new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
+                COLUMN_USER_EMAIL_ADDRESS + " = ?",
+                new String[]{String.valueOf(theEmailAddress)},//Where clause
+                null, null, null);
+
+        System.out.println("cursor count: " + cursor.getCount());
+
+        if(cursor.moveToNext()) {
+            long userId = cursor.getLong(0);
+            String firstName = cursor.getString(1);
+            String lastName = cursor.getString(2);
+            String emailAddress = cursor.getString(3);
+            String password = cursor.getString(4);
+
+            user = new User(userId, firstName, lastName, emailAddress, password);
+        }
+
+
+        return user;
+
+
+    }
+
+
+    public Boolean addProject(Project project, String emailAddress) {
+        SQLiteDatabase dbWrite = this.getWritableDatabase();
+        SQLiteDatabase dbRead = this.getReadableDatabase();
+
+
         ContentValues cv = new ContentValues();
+        Cursor cursor = dbRead.query(USER_TABLE,// Selecting Table
+                new String[]{COLUMN_USER_ID},//Selecting columns want to query
+                COLUMN_USER_EMAIL_ADDRESS + " = ?",
+                new String[]{String.valueOf(emailAddress)},//Where clause
+                null, null, null);
 
-        cv.put(COLUMN_PROJECT_TITLE, project.getTitle());
-        cv.put(COLUMN_PROJECT_DESCRIPTION, project.getDescription());
-        cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
-        cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
-        cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
-//        cv.put(COLUMN_USER_PROJECT_FK, project.get);
 
-        long result = db.insert(PROJECT_TABLE, null, cv);
+        System.out.println(cursor.getCount());
+
+
+
+        while(cursor.moveToNext()) {
+            long userId = cursor.getLong(0);
+
+            cv.put(COLUMN_PROJECT_TITLE, project.getTitle());
+            cv.put(COLUMN_PROJECT_DESCRIPTION, project.getDescription());
+            cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
+            cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
+            cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
+            cv.put(COLUMN_USER_PROJECT_FK, userId);
+
+            System.out.println(userId);
+        }
+
+
+
+        long result = dbWrite.insert(PROJECT_TABLE, null, cv);
 
         return result == -1 ? false : true;
 
@@ -215,14 +308,6 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
         System.out.println(cursor.getCount());
 
-//        Cursor cursor = db.query(TABLE_COUNTRY, new String[] { KEY_ID,
-//                        COUNTRY_NAME, POPULATION }, KEY_ID + "=?",
-//                new String[] { String.valueOf(id) }, null, null, null, null);
-
-
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
 
         long id = cursor.getLong(0);
         String title = cursor.getString(1);
@@ -244,73 +329,96 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
     }
 
+//
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public List<Project> getAllProjects() {
+//
+//
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        List<Project> projectList = new ArrayList<>();
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                long id = cursor.getLong(0);
+//                String title = cursor.getString(1);
+//                String description = cursor.getString(2);
+//                String dateCreated = cursor.getString(3);
+//                String dateDue = cursor.getString(4);
+//
+//                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+//                LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+//                LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+//
+//                String priority = cursor.getString(5);
+//                String checklist = cursor.getString(6);
+//                int userId = cursor.getInt(7);
+//
+//                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
+//
+//                projectList.add(project);
+//
+//
+//            } while (cursor.moveToNext());
+//
+//            cursor.close();
+//            db.close();
+//
+//        }
+//        return projectList;
+//    }
+
+    public int getProjectCount(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ?", new String[]{String.valueOf(userId)});
+
+
+        return cursor.getCount();
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Project> getAllProjects() {
-
+    public List<Project> getUserProjects(long userId) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         List<Project> projectList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                long id = cursor.getLong(0);
-                String title = cursor.getString(1);
-                String description = cursor.getString(2);
-                String dateCreated = cursor.getString(3);
-                String dateDue = cursor.getString(4);
-
-                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-                LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-                LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
-
-                String priority = cursor.getString(5);
-                String checklist = cursor.getString(6);
-                int userId = cursor.getInt(7);
-
-                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
-
-                projectList.add(project);
 
 
-            } while (cursor.moveToNext());
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ?", new String[]{String.valueOf(userId)});
 
-//            System.out.println(projectList);
+//        Cursor cursor = db.query(PROJECT_TABLE,
+//                new String[]{COLUMN_PROJECT_ID, COLUMN_PROJECT_TITLE},
+//                COLUMN_USER_PROJECT_FK + " = " + userId,
+//                null, null, null, null, null);
 
-            cursor.close();
-            db.close();
-            System.out.println("Returning from ");
 
+        while(cursor.moveToNext()) {
+            long id = cursor.getLong(0);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String dateCreated = cursor.getString(3);
+            String dateDue = cursor.getString(4);
 
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+            LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+
+            String priority = cursor.getString(5);
+            String checklist = cursor.getString(6);
+            int theUserId = cursor.getInt(7);
+
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, theUserId);
+
+            projectList.add(project);
         }
+
+        System.out.println("ALL USER PROJECTS");
+        for(Project p : projectList) {
+            System.out.println(p);
+        }
+
         return projectList;
-    }
-
-    public int getProjectCount() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
-
-
-//        if(cursor != null) cursor.moveToNext();
-
-        System.out.println(cursor.getCount());
-        return cursor.getCount();
-    }
-
-    public List<Project> getUserProjects(int id) {
-
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = db.query(PROJECT_TABLE,
-                new String[]{COLUMN_PROJECT_ID, COLUMN_PROJECT_TITLE},
-                COLUMN_USER_PROJECT_FK + " = " + id,
-                null, null, null, null, null);
-
-        String query = "SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = " + id;
-
-
-        return null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -343,6 +451,8 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
             } while (cursor.moveToNext());
         }
+//        db.close();
+//        cursor.close();
         return projectList;
     }
 

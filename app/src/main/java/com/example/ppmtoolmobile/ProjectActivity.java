@@ -29,7 +29,7 @@ import java.util.Set;
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
 
     private Button projectAddBtn1;
-    private TextView displayUserProjectCountTextView;
+    private TextView displayUserProjectCountTextView,welcomeUserTextView1;
     private EditText searchProjectEditText;
     private DaoHelper daoHelper;
     private BottomNavigationView bottomNavView;
@@ -37,8 +37,10 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private MyRecyclerAdapter adapter;
 
     private RecyclerView recyclerView;
-
+    private String authenticatedUser;
     private int projectCount;
+    private long userId;
+    private String userFirstName;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -48,30 +50,42 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
         projectAddBtn1 = findViewById(R.id.projectAddBtn1);
         displayUserProjectCountTextView = findViewById(R.id.displayUserProjectCountTextView);
-        searchProjectEditText = findViewById(R.id.searchProjectEditText);
+        welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
+//        searchProjectEditText = findViewById(R.id.searchProjectEditText);
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_home);
         daoHelper = new DaoHelper(this);
-
-        projectCount = daoHelper.getProjectCount();
 
         //
         recyclerView = findViewById(R.id.projectRecyclerView);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        authenticatedUser = getIntent().getStringExtra("authenticatedUser");
 
-        //
+        userId = daoHelper.getCurrentUserId(authenticatedUser);
+        userFirstName = daoHelper.getCurrentUserFirstName(authenticatedUser);
+        projectCount = daoHelper.getProjectCount(userId);
+
+        welcomeUserTextView1.setText("Welcome " + userFirstName + ", " + userId);
+
+
+
+
+
+
+        System.out.println("FROM PROJECT ACTIVITY: CURRENT USER ID: " + userId + ", " + "PROJECT COUNT: " + projectCount );
+        Toast.makeText(this, "Project count: " + projectCount, Toast.LENGTH_SHORT).show();
 
         displayUserProjectCountTextView.setText("You currently have " + projectCount + " projects");
-
-
+//
+//
         if(projectCount <= 0) {
             loadFragment(new EmptyProjectListFragment());
         } else {
             loadFragment(new ProjectFragment());
         }
 
-
+//        loadFragment(new ProjectFragment());
 
         // Perform item selected listener
         bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,7 +95,10 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 switch(item.getItemId())
                 {
                     case R.id.nav_profile:
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                        Intent goToProfileActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
+                        goToProfileActivityIntent.putExtra("authenticatedUser", authenticatedUser);
+                        startActivity(goToProfileActivityIntent);
+
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_home:
@@ -96,7 +113,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-        searchProjectEditText.setOnClickListener(this);
+//        searchProjectEditText.setOnClickListener(this);
         projectAddBtn1.setOnClickListener(this);
 
 
@@ -108,6 +125,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         if(view == projectAddBtn1) {
             Intent goToAddProjectIntent = new Intent(this, AddProjectActivity.class);
+            goToAddProjectIntent.putExtra("authenticatedUser", authenticatedUser);
             startActivity(goToAddProjectIntent);
         } else if(view == searchProjectEditText) {
 //            searchProjects();
@@ -133,13 +151,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             Toast.makeText(this, projectList.toString() , Toast.LENGTH_SHORT).show();
         }
 
-
-//        projectList.clear();
-//
-//        projectList = daoHelper.getAllProjects();
-
-//        adapter = new MyRecyclerAdapter(this, projectList, this);
-//        recyclerView.setAdapter(adapter);
     }
 
 

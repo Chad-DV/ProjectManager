@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/lato_black"
                     android:letterSpacing="-0.01"
-                    android:text="Welcome wwb2ack"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="24sp" />
 

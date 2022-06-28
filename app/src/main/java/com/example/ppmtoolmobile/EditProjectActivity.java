@@ -164,7 +164,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             String dateTime = dateDue + " " + timeDue;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, 12);
+            Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority);
 
 
             System.out.println(theProject);

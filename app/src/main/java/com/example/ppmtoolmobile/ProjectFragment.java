@@ -41,13 +41,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private TextView sortProjectsTextView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
-
+    private EditText searchProjectEditText;
     private RecyclerView recyclerView;
 
     private ProgressBar projectListLoadingProgressBar;
     private long projectId;
-    private int projectCount;
     private DaoHelper daoHelper;
+    private long theUserId;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -55,10 +55,25 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         View v = inflater.inflate(R.layout.fragment_project, null);
 
+        sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
+        searchProjectEditText = v.findViewById(R.id.searchProjectEditText);
+
+        String authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
+
+        System.out.println("from project fragment: " + authenticatedUser);
+
+//        Toast.makeText(ProjectFragment.this.getActivity(), authenticatedUser, Toast.LENGTH_SHORT).show();
+
+//        System.out.println("from project fragment: "+ authenticatedUser + " " + theUserId);
+
+
         daoHelper = new DaoHelper(getActivity().getApplicationContext());
+
+        theUserId = daoHelper.getCurrentUserId(authenticatedUser);
         loadProjects(v);
         buildRecyclerView(v);
-        sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
+
+
 
         sortProjectsTextView.setOnClickListener(this);
 
@@ -76,7 +91,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
             sortProjects();
         }
     }
-
 
     private void sortProjects() {
         // Initializing the popup menu and giving the reference as current context
@@ -132,7 +146,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onProjectLongClick(View view, int position) {
 
 
-        Project project = projectList.get(position);
+//        Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
 
 //        Toast.makeText(ProjectFragment.this.getActivity(), project.toString(), Toast.LENGTH_SHORT).show();
@@ -147,8 +161,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                 case R.id.option_delete:
 
                     deleteProject(projectId);
-                    projectList = daoHelper.getAllProjects();
-                    adapter.notifyDataSetChanged();
                     break;
                 case R.id.option_edit:
                     Intent getProjectIdIntent = new Intent(ProjectFragment.this.getActivity(), EditProjectActivity.class);
@@ -179,14 +191,11 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         if(filteredList.isEmpty()) {
             Toast.makeText(getActivity().getApplicationContext(), "No projects matched with " + query , Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), projectList.toString() , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity().getApplicationContext(), filteredList.toString() , Toast.LENGTH_SHORT).show();
         }
 
         adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), filteredList, this);
         recyclerView.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
-//        adapter.filterList(filteredList);
-
 
     }
 
@@ -206,9 +215,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         projectListLoadingProgressBar.setVisibility(View.VISIBLE);
 //        projectList.clear();
 
-        projectList = daoHelper.getAllProjects();
+        projectList = daoHelper.getUserProjects(theUserId);
 
-        projectCount = projectList.size();
         projectListLoadingProgressBar.setVisibility(View.GONE);
 
 
@@ -222,7 +230,10 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
                     boolean res = daoHelper.deleteProjectById(position);
 
-                    adapter.notifyDataSetChanged();
+                    projectList = daoHelper.getUserProjects(theUserId);
+
+                    adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList, this);
+                    recyclerView.setAdapter(adapter);
                     Toast.makeText(ProjectFragment.this.getActivity(), String.valueOf(res), Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(android.R.string.paste_as_plain_text, (dialog, which) -> {

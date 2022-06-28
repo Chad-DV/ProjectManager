@@ -21,7 +21,7 @@ public class NavActivity extends AppCompatActivity {
 
 
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.navframeLayout, new ProjectFragment()).commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.navframeLayout, new ProjectFragment()).commit();
 
 //        bottomNavView.setOnItemSelectedListener(item -> {
 //            switch(item.getItemId()) {

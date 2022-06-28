@@ -22,26 +22,25 @@ public class Project {
 //    private String dueTime;
     private String priority;
     private String checklist;
-    private int userId;
+    private long userId;
 
     public Project() {
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(String title, String description, LocalDateTime dateDue, String priority, int userId) {
+    public Project(String title, String description, LocalDateTime dateDue, String priority) {
         this.title = title;
         this.description = description;
         this.dateCreated = LocalDateTime.now();
         this.dateDue = dateDue;
         this.priority = priority;
-        this.userId = userId;
 
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, int userId) {
+    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, long userId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -54,7 +53,7 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(long id, String title, String description, LocalDateTime dateDue, String priority, int userId) {
+    public Project(long id, String title, String description, LocalDateTime dateDue, String priority) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -62,8 +61,6 @@ public class Project {
         this.dateDue = calculateDueDate(3);
         this.priority = priority;
         this.checklist = checklist;
-        this.userId = userId;
-
 
     }
 
@@ -119,7 +116,7 @@ public class Project {
         this.priority = priority;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
@@ -135,14 +132,6 @@ public class Project {
         this.checklist = checklist;
     }
 
-
-//    private String getDateTime() {
-//
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-//        Date date = new Date();
-//        return dateFormat.format(date);
-//
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private LocalDateTime calculateDueDate(int expiryTimeInDays) {

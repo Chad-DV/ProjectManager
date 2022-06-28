@@ -1,18 +1,21 @@
 package com.example.ppmtoolmobile.model;
 
+import java.util.List;
+
 public class User {
 
-    private int id;
+    private long id;
     private String firstName;
     private String lastName;
     private String emailAddress;
     private String password;
+    private List<Project> projectList;
 
     public User() {
 
     }
 
-    public User(int id, String firstName, String lastName, String emailAddress, String password) {
+    public User(long id, String firstName, String lastName, String emailAddress, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -27,7 +30,12 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
+    public User(String emailAddress, String password) {
+        this.emailAddress = emailAddress;
+        this.password = password;
+    }
+
+    public long getId() {
         return id;
     }
 
@@ -65,6 +73,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Project> getProjectList() {
+        return projectList;
+    }
+
+    public void setProjectList(List<Project> projectList) {
+        this.projectList = projectList;
     }
 
     @Override

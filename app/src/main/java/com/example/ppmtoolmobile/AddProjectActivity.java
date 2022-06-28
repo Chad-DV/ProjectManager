@@ -108,6 +108,14 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         String dateDue = addProjectDueDateEditText.getText().toString().trim();
         String timeDue = addProjectTimeEditText.getText().toString().trim();
         String priority = getProjectPriorityValue();
+        String authenticatedUser = getIntent().getStringExtra("authenticatedUser");
+
+        if(authenticatedUser != null) {
+            Toast.makeText(AddProjectActivity.this, authenticatedUser, Toast.LENGTH_SHORT).show();
+        }
+
+
+
 
 
 
@@ -128,9 +136,9 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             String dateTime = dateDue + " " + timeDue;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, 12);
+            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority);
 
-            boolean result = daoHelper.addProject(theProject);
+            boolean result = daoHelper.addProject(theProject,authenticatedUser);
 
             if(result) {
                 Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();

@@ -3,6 +3,7 @@ package com.example.ppmtoolmobile;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -24,19 +25,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private ProgressBar registerProgressBar;
     private DaoHelper daoHelper;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         daoHelper = new DaoHelper(this);
-
         loginPromptTextView2 = (TextView) findViewById(R.id.loginPromptTextView2);
         registerBtn = (Button) findViewById(R.id.registerBtn);
         firstNameEditText = (EditText) findViewById(R.id.registerFirstNameEditText);
         lastNameEditText = (EditText) findViewById(R.id.registerLastNameEditText);
         emailAddressEditText = (EditText) findViewById(R.id.registerEmailAddressEditText);
         passwordEditText = (EditText) findViewById(R.id.registerPasswordEditText);
+
+
 
         loginPromptTextView2.setOnClickListener(RegisterActivity.this);
         registerBtn.setOnClickListener(RegisterActivity.this);
