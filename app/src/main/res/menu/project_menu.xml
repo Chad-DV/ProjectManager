@@ -8,4 +8,8 @@
         android:title="Edit project"
         android:id="@+id/option_edit"/>
 
+    <item
+        android:title="Change project status"
+        android:id="@+id/option_project_status"/>
+
 </menu>

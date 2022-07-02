@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -35,6 +36,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private EditText editProjectTitleEditText, editProjectDescriptionEditText, editProjectDueDateEditText, editProjectDueTimeEditText;
     private Button editProjectBtn;
     private long projectId;
+    private ImageView editProjectNavigationBack;
     private DaoHelper daoHelper;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
@@ -55,6 +57,8 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueTimeEditText = findViewById(R.id.editProjectDueTimeEditText);
         editProjectBtn = findViewById(R.id.editProjectBtn);
         editProjectPriorityRadioGroup = findViewById(R.id.editProjectPriorityRadioGroup);
+        editProjectNavigationBack = findViewById(R.id.editProjectNavigationBack);
+
         daoHelper = new DaoHelper(this);
 
 
@@ -68,6 +72,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueDateEditText.setOnClickListener(this);
         editProjectDueTimeEditText.setOnClickListener(this);
         editProjectBtn.setOnClickListener(this);
+        editProjectNavigationBack.setOnClickListener(this);
 
 
     }
@@ -104,6 +109,8 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             timePickerDialog.setTitle("Select a Time");
             timePickerDialog.show();
+        } else if(view == editProjectNavigationBack) {
+            finish();
         }
     }
 

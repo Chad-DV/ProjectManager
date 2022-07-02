@@ -6,8 +6,11 @@ import androidx.annotation.RequiresApi;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -58,12 +61,27 @@ public class Project {
         this.title = title;
         this.description = description;
         this.dateCreated = LocalDateTime.now();
-        this.dateDue = calculateDueDate(3);
+        this.dateDue = dateDue;
         this.priority = priority;
         this.checklist = checklist;
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public long calculateDaysTillProjectDue(LocalDateTime dateCreated, LocalDateTime dateDue) {
+
+//        Period period = Period.between(dateCreated.toLocalDate(), dateDue.toLocalDate());
+//        Duration duration = Duration.between(dateCreated.toLocalTime(), dateDue.toLocalTime());
+
+        System.out.println("STATUS OF PROJECT");
+        System.out.println("Project created: " + dateCreated);
+        System.out.println("Project due: " + dateDue);
+
+        System.out.println("Project is due in : " + ChronoUnit.DAYS.between(dateCreated, dateDue) + " days");
+
+
+        return ChronoUnit.DAYS.between(dateCreated, dateDue);
+    }
 
 
 

@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
@@ -189,8 +190,6 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
     public User getUserDetails(String theEmailAddress) {
         SQLiteDatabase db = this.getReadableDatabase();
         User user = null;
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{theEmailAddress});
-
         Cursor cursor = db.query(USER_TABLE,// Selecting Table
                 new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
                 COLUMN_USER_EMAIL_ADDRESS + " = ?",
@@ -211,8 +210,6 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
 
         return user;
-
-
     }
 
 
@@ -305,68 +302,66 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(projectId)});
 
+        while(cursor.moveToNext()) {
+            long id = cursor.getLong(0);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String dateCreated = cursor.getString(3);
+            String dateDue = cursor.getString(4);
 
-        System.out.println(cursor.getCount());
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+            LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
 
+            String priority = cursor.getString(5);
+            String checklist = cursor.getString(6);
+            int userId = cursor.getInt(7);
 
-        long id = cursor.getLong(0);
-        String title = cursor.getString(1);
-        String description = cursor.getString(2);
-        String dateCreated = cursor.getString(3);
-        String dateDue = cursor.getString(4);
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-        LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
-
-        String priority = cursor.getString(5);
-        String checklist = cursor.getString(6);
-        int userId = cursor.getInt(7);
-
-        Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
-
-        return project;
-
+            return project;
+        }
+        return null;
     }
 
-//
-//    @RequiresApi(api = Build.VERSION_CODES.O)
-//    public List<Project> getAllProjects() {
-//
-//
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        List<Project> projectList = new ArrayList<>();
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                long id = cursor.getLong(0);
-//                String title = cursor.getString(1);
-//                String description = cursor.getString(2);
-//                String dateCreated = cursor.getString(3);
-//                String dateDue = cursor.getString(4);
-//
-//                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-//                LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-//                LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
-//
-//                String priority = cursor.getString(5);
-//                String checklist = cursor.getString(6);
-//                int userId = cursor.getInt(7);
-//
-//                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
-//
-//                projectList.add(project);
-//
-//
-//            } while (cursor.moveToNext());
-//
-//            cursor.close();
-//            db.close();
-//
-//        }
-//        return projectList;
-//    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<Project> getAllProjects() {
+
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Project> projectList = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                long id = cursor.getLong(0);
+                String title = cursor.getString(1);
+                String description = cursor.getString(2);
+                String dateCreated = cursor.getString(3);
+                String dateDue = cursor.getString(4);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+                LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+                LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+
+                String priority = cursor.getString(5);
+                String checklist = cursor.getString(6);
+                int userId = cursor.getInt(7);
+
+                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
+
+                projectList.add(project);
+
+
+            } while (cursor.moveToNext());
+
+            cursor.close();
+            db.close();
+
+        }
+        return projectList;
+    }
 
     public int getProjectCount(long userId) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -383,6 +378,7 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
         SQLiteDatabase db = this.getReadableDatabase();
         List<Project> projectList = new ArrayList<>();
+
 
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ?", new String[]{String.valueOf(userId)});
@@ -422,10 +418,13 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Project> searchProjects(String query) {
+    public List<Project> searchProjects(long userId, String query) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<Project> projectList = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_TITLE + " LIKE ?", new String[]{query});
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? AND " + COLUMN_PROJECT_TITLE + " LIKE ?",
+                new String[]{String.valueOf(userId), query});
+//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_TITLE + " LIKE ?", new String[]{query.toLowerCase()});
 
 
         if (cursor.moveToFirst() && cursor != null) {
@@ -442,9 +441,9 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
 
                 String priority = cursor.getString(5);
                 String checklist = cursor.getString(6);
-                int userId = cursor.getInt(7);
+                int theUserId = cursor.getInt(7);
 
-                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
+                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, theUserId);
 
                 projectList.add(project);
 
@@ -453,6 +452,72 @@ public class DaoHelper extends SQLiteOpenHelper implements ProjectAndUserDAO {
         }
 //        db.close();
 //        cursor.close();
+        return projectList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<Project> sortByPriorityHighToNone(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Project> projectList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? "
+                + "ORDER BY " + COLUMN_PROJECT_PRIORITY + " DESC", new String[]{String.valueOf(userId)});
+
+
+
+        while(cursor.moveToNext()) {
+            long id = cursor.getLong(0);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String dateCreated = cursor.getString(3);
+            String dateDue = cursor.getString(4);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+            LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+
+            String priority = cursor.getString(5);
+            String checklist = cursor.getString(6);
+            int theUserId = cursor.getInt(7);
+
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, theUserId);
+
+            projectList.add(project);
+        }
+
+        return projectList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<Project> sortByPriorityNoneToHigh(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Project> projectList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? "
+                + "ORDER BY " + COLUMN_PROJECT_PRIORITY + " ASC", new String[]{String.valueOf(userId)});
+
+
+
+        while(cursor.moveToNext()) {
+            long id = cursor.getLong(0);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String dateCreated = cursor.getString(3);
+            String dateDue = cursor.getString(4);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+            LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
+            LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
+
+            String priority = cursor.getString(5);
+            String checklist = cursor.getString(6);
+            int theUserId = cursor.getInt(7);
+
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, theUserId);
+
+            projectList.add(project);
+        }
+
         return projectList;
     }
 

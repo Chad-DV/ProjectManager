@@ -96,7 +96,7 @@
 
                     <Button
                         android:id="@+id/projectPriorityInfoBtn"
-                        android:layout_width="90dp"
+                        android:layout_width="100dp"
                         android:layout_height="25dp"
                         android:layout_marginLeft="10dp"
                         android:background="@drawable/project_card_small_button"

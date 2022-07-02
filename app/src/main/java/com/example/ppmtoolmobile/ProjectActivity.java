@@ -51,41 +51,34 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         projectAddBtn1 = findViewById(R.id.projectAddBtn1);
         displayUserProjectCountTextView = findViewById(R.id.displayUserProjectCountTextView);
         welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
-//        searchProjectEditText = findViewById(R.id.searchProjectEditText);
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_home);
+
         daoHelper = new DaoHelper(this);
 
-        //
-        recyclerView = findViewById(R.id.projectRecyclerView);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        // getting current username through intent from LoginActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
 
+        Toast.makeText(this, "project activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
+
+        // current user id
         userId = daoHelper.getCurrentUserId(authenticatedUser);
+
+        // Getting users first name and amount of projects (This will be displayed in the heading of the main screen)
         userFirstName = daoHelper.getCurrentUserFirstName(authenticatedUser);
         projectCount = daoHelper.getProjectCount(userId);
 
         welcomeUserTextView1.setText("Welcome " + userFirstName + ", " + userId);
-
-
-
-
-
-
-        System.out.println("FROM PROJECT ACTIVITY: CURRENT USER ID: " + userId + ", " + "PROJECT COUNT: " + projectCount );
-        Toast.makeText(this, "Project count: " + projectCount, Toast.LENGTH_SHORT).show();
-
         displayUserProjectCountTextView.setText("You currently have " + projectCount + " projects");
 //
 //
-        if(projectCount <= 0) {
-            loadFragment(new EmptyProjectListFragment());
-        } else {
-            loadFragment(new ProjectFragment());
-        }
+//        if(projectCount <= 0) {
+//            loadFragment(new EmptyProjectListFragment());
+//        } else {
+//            loadFragment(new ProjectFragment());
+//        }
 
-//        loadFragment(new ProjectFragment());
+        loadFragment(new ProjectFragment());
 
         // Perform item selected listener
         bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -143,7 +136,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private void searchProjects() {
         String query = searchProjectEditText.getText().toString().trim();
 
-        projectList = daoHelper.searchProjects(query);
+        projectList = daoHelper.searchProjects(userId, query);
 
         if(projectList.isEmpty()) {
             Toast.makeText(this, "No projects matched with " + query , Toast.LENGTH_SHORT).show();

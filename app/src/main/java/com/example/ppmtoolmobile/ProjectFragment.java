@@ -3,6 +3,8 @@ package com.example.ppmtoolmobile;
 import static android.content.Intent.getIntent;
 import static android.content.Intent.getIntentOld;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -29,12 +31,18 @@ import com.example.ppmtoolmobile.dao.DaoHelper;
 import com.example.ppmtoolmobile.model.Priority;
 import com.example.ppmtoolmobile.model.Project;
 
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ProjectFragment extends Fragment implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
 
@@ -58,14 +66,10 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         searchProjectEditText = v.findViewById(R.id.searchProjectEditText);
 
+        // getting current username through intent from LoginActivity.class
         String authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
 
-        System.out.println("from project fragment: " + authenticatedUser);
-
-//        Toast.makeText(ProjectFragment.this.getActivity(), authenticatedUser, Toast.LENGTH_SHORT).show();
-
-//        System.out.println("from project fragment: "+ authenticatedUser + " " + theUserId);
-
+        Toast.makeText(ProjectFragment.this.getActivity(), "project fragment: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         daoHelper = new DaoHelper(getActivity().getApplicationContext());
 
@@ -84,7 +88,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
     }
 
-
     @Override
     public void onClick(View view) {
         if(view == sortProjectsTextView) {
@@ -100,14 +103,21 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         popupMenu.getMenuInflater().inflate(R.menu.sort_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.option_priority_high_low:
                         // sort function
+                        projectList = daoHelper.sortByPriorityHighToNone(theUserId);
+                        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList);
+                        recyclerView.setAdapter(adapter);
                         break;
                     case R.id.option_priority_low_high:
                         // sort function
+                        projectList = daoHelper.sortByPriorityNoneToHigh(theUserId);
+                        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList);
+                        recyclerView.setAdapter(adapter);
                         break;
                     case R.id.option_due_date_newest_to_oldest:
                         // sort function
@@ -132,7 +142,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         projectId = projectList.get(position).getId();
         Toast.makeText(ProjectFragment.this.getActivity(), "Short clicked", Toast.LENGTH_SHORT).show();
 
-        filterList("321");
+        filterList("69");
 
 //        Intent viewSchedule = new Intent(ProjectFragment.this.getActivity(), ViewSchedule.class);
 //        viewSchedule.putExtra("title", project.getTitle());
@@ -146,10 +156,9 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onProjectLongClick(View view, int position) {
 
 
-//        Project project = projectList.get(position);
+        Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
 
-//        Toast.makeText(ProjectFragment.this.getActivity(), project.toString(), Toast.LENGTH_SHORT).show();
 
         PopupMenu popupMenu = new PopupMenu(ProjectFragment.this.getActivity(), sortProjectsTextView);
 
@@ -186,7 +195,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         List<Project> filteredList = new ArrayList<>();
 
 
-        filteredList = daoHelper.searchProjects(query);
+        filteredList = daoHelper.searchProjects(theUserId, query);
 
         if(filteredList.isEmpty()) {
             Toast.makeText(getActivity().getApplicationContext(), "No projects matched with " + query , Toast.LENGTH_SHORT).show();
@@ -213,10 +222,9 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
 
         projectListLoadingProgressBar.setVisibility(View.VISIBLE);
-//        projectList.clear();
+        projectList.clear();
 
         projectList = daoHelper.getUserProjects(theUserId);
-
         projectListLoadingProgressBar.setVisibility(View.GONE);
 
 

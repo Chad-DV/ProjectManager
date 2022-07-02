@@ -243,7 +243,7 @@
 
 
         <ImageButton
-            android:id="@+id/btn_id"
+            android:id="@+id/generateAddProjectChecklistEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -268,6 +268,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
 
@@ -275,15 +276,14 @@
             android:id="@+id/addProjectChecklistEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginRight="15dp"
+            android:layout_weight="1"
             android:background="@drawable/input_default"
             android:fontFamily="@font/lato"
-            android:textColorHint="@color/dark_blue_gray"
-            android:textColor="@color/dark_black"
             android:hint="Add item"
+            android:textColor="@color/dark_black"
+            android:textColorHint="@color/dark_blue_gray"
             android:textSize="15sp" />
-
 
         <ImageButton
             android:id="@+id/addProjectChecklistAddSuccessBtn"
@@ -293,8 +293,14 @@
             android:background="@null"
             android:src="@drawable/ic_checklist_add_success" />
 
+    </LinearLayout>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:id="@+id/addChecklistLinearLayout">
 
 
     </LinearLayout>
@@ -309,7 +315,7 @@
         android:id="@+id/addProjectBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/primary_button"
         android:elevation="10dp"
         android:fontFamily="@font/lato_bold"

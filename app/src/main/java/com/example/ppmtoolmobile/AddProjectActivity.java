@@ -3,17 +3,26 @@ package com.example.ppmtoolmobile;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -26,19 +35,22 @@ import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class AddProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button addProjectBtn;
     private TextView re333r;
-    private EditText addProjectTitleEditText, addProjectDescriptionEditText, addProjectDueDateEditText, addProjectTimeEditText;
+    private EditText addProjectTitleEditText, addProjectDescriptionEditText, addProjectDueDateEditText, addProjectTimeEditText,addProjectChecklistEditText;
     private RadioGroup addProjectPriorityRadioGroup;
+    private ImageView addProjectNavigationBack;
+    private ImageButton generateAddProjectChecklistEditText;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
     private DaoHelper daoHelper;
     private RadioButton projectPriorityRadioBtn, projectPriorityHighRadioBtn, projectPriorityMediumRadioBtn, projectPriorityLowRadioBtn, projectPriorityNoneRadioBtn;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,9 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         addProjectDueDateEditText = (EditText) findViewById(R.id.addProjectDueDateEditText);
         addProjectTimeEditText = (EditText) findViewById(R.id.addProjectTimeEditText);
         addProjectPriorityRadioGroup = (RadioGroup) findViewById(R.id.addProjectPriorityRadioGroup);
+        addProjectNavigationBack = findViewById(R.id.addProjectNavigationBack);
+        addProjectChecklistEditText = findViewById(R.id.addProjectChecklistEditText);
+        generateAddProjectChecklistEditText = findViewById(R.id.generateAddProjectChecklistEditText);
 
 
 
@@ -63,6 +78,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         addProjectBtn.setOnClickListener(this);
         addProjectDueDateEditText.setOnClickListener(this);
         addProjectTimeEditText.setOnClickListener(this);
+        generateAddProjectChecklistEditText.setOnClickListener(this);
+        addProjectNavigationBack.setOnClickListener(this);
 
     }
 
@@ -71,7 +88,6 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         if(view == addProjectBtn) {
-            System.out.println("test");
             addProject();
         } else if(view == addProjectDueDateEditText) {
             Calendar mcurrentDate=Calendar.getInstance();
@@ -98,6 +114,22 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             timePickerDialog.setTitle("Select a Time");
             timePickerDialog.show();
+        } else if(view == generateAddProjectChecklistEditText) {
+            LinearLayout ll = (LinearLayout)findViewById(R.id.addChecklistLinearLayout);
+
+            EditText et = new EditText(this);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0,0,0,20);
+
+            et.setLayoutParams(params);
+            et.setBackground(getResources().getDrawable(R.drawable.input_default));
+            et.setHint("Add a item...");
+            et.setTypeface(getResources().getFont(R.font.lato));
+            et.setTextSize(15);
+            ll.addView(et);
+
+        } else if(view == addProjectNavigationBack) {
+             finish();
         }
     }
 

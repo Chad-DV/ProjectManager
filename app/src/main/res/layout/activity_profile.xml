@@ -50,14 +50,14 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginTop="60dp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
 
         <EditText
             android:id="@+id/profileFirstNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="130dp"
             android:background="@drawable/input_default"
             android:fontFamily="@font/lato"
             android:hint="First name"
