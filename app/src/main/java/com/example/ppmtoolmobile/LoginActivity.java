@@ -4,15 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -20,14 +17,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button loginBtn;
     private EditText loginEmailAddressEditText, loginPasswordEditText;
     private TextView registerPromptTextView2;
-    private DaoHelper daoHelper;
+    private ProjectAndUserDAOImpl databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        daoHelper = new DaoHelper(this);
+        databaseHelper = new ProjectAndUserDAOImpl(this);
 
         loginBtn = (Button) findViewById(R.id.loginBtn);
         loginEmailAddressEditText = (EditText) findViewById(R.id.loginEmailAddressEditText);
@@ -74,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            return;
 //        }
 
-        boolean isValid = daoHelper.login(new User(emailAddress, "password"));
+        boolean isValid = databaseHelper.login(new User(emailAddress, "password"));
 
         if(isValid) {
             Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);

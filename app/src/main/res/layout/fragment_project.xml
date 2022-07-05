@@ -1,12 +1,9 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:scrollbars="none"
-    android:background="@color/white"
-    android:layout_height="match_parent">
+
 
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ProjectFragment"
@@ -43,7 +40,7 @@
                     android:drawableRight="@drawable/ic_sort_icon"
                     android:drawablePadding="5dp"
                     android:textColor="@color/dark_blue_gray"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
 
             </LinearLayout>
@@ -57,20 +54,40 @@
                 android:layout_height="match_parent"/>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/projectRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:foregroundGravity="center" />
+                    <EditText
+                        android:id="@+id/searchProjectEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/search_input"
+                        android:drawableLeft="@drawable/ic_search_icon"
+                        android:drawablePadding="15sp"
+                        android:fontFamily="@font/lato"
+                        android:hint="Search for a project"
+                        android:letterSpacing="-0.01"
+                        android:textColor="@color/dark_black"
+                        android:textColorHint="@color/dark_blue_gray"
+                        android:textSize="16sp" />
 
 
-        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/projectRecyclerView"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+
+    />
+
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="130dp"/>-->
+
+
+    </LinearLayout>
 
 
 
 
 
-
-</ScrollView>

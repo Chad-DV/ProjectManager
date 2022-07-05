@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -15,23 +14,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
-import java.util.Set;
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
 
     private Button projectAddBtn1;
     private TextView displayUserProjectCountTextView,welcomeUserTextView1;
     private EditText searchProjectEditText;
-    private DaoHelper daoHelper;
+    private ProjectAndUserDAOImpl databaseHelper;
     private BottomNavigationView bottomNavView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
@@ -48,13 +45,14 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
 
+        searchProjectEditText = findViewById(R.id.searchProjectEditText);
         projectAddBtn1 = findViewById(R.id.projectAddBtn1);
         displayUserProjectCountTextView = findViewById(R.id.displayUserProjectCountTextView);
         welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_home);
 
-        daoHelper = new DaoHelper(this);
+        databaseHelper = new ProjectAndUserDAOImpl(this);
 
         // getting current username through intent from LoginActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
@@ -62,11 +60,11 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(this, "project activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         // current user id
-        userId = daoHelper.getCurrentUserId(authenticatedUser);
+        userId = databaseHelper.getCurrentUserId(authenticatedUser);
 
         // Getting users first name and amount of projects (This will be displayed in the heading of the main screen)
-        userFirstName = daoHelper.getCurrentUserFirstName(authenticatedUser);
-        projectCount = daoHelper.getProjectCount(userId);
+        userFirstName = databaseHelper.getCurrentUserFirstName(authenticatedUser);
+        projectCount = databaseHelper.getProjectCount(userId);
 
         welcomeUserTextView1.setText("Welcome " + userFirstName + ", " + userId);
         displayUserProjectCountTextView.setText("You currently have " + projectCount + " projects");
@@ -89,16 +87,13 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
                 {
                     case R.id.nav_profile:
                         Intent goToProfileActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
-                        goToProfileActivityIntent.putExtra("authenticatedUser", authenticatedUser);
-                        startActivity(goToProfileActivityIntent);
-
-                        overridePendingTransition(0,0);
+                        moveToIntent(goToProfileActivityIntent);
                         return true;
                     case R.id.nav_home:
                         return true;
                     case R.id.nav_settings:
-                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, SettingsActivity.class);
+                        moveToIntent(goToSettingsActivityIntent);
                         return true;
                 }
                 return false;
@@ -106,11 +101,23 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-//        searchProjectEditText.setOnClickListener(this);
+        searchProjectEditText.setOnClickListener(this);
         projectAddBtn1.setOnClickListener(this);
 
+    }
 
 
+    private void moveToIntent(Intent intent) {
+//        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
+
+        intent.putExtra("authenticatedUser", authenticatedUser);
+        startActivity(intent);
+        overridePendingTransition(0,0);
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -134,15 +141,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void searchProjects() {
-        String query = searchProjectEditText.getText().toString().trim();
 
-        projectList = daoHelper.searchProjects(userId, query);
-
-        if(projectList.isEmpty()) {
-            Toast.makeText(this, "No projects matched with " + query , Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, projectList.toString() , Toast.LENGTH_SHORT).show();
-        }
 
     }
 

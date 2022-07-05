@@ -11,7 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -20,7 +20,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private EditText profileFirstNameEditText, profileLastNameEditText, profileEmailAddressEditText;
     private BottomNavigationView bottomNavView;
     private ImageView profileNavigationBack;
-    private DaoHelper daoHelper;
+    private ProjectAndUserDAOImpl databaseHelper;
     private String authenticatedUser;
 
     @Override
@@ -37,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
 
         Toast.makeText(this, "profile activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
-        daoHelper = new DaoHelper(this);
+        databaseHelper = new ProjectAndUserDAOImpl(this);
         loadUserDetails();
 
         profileNavigationBack.setOnClickListener(this);
@@ -54,14 +54,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 switch(item.getItemId())
                 {
                     case R.id.nav_home:
-                        finish();
-                        overridePendingTransition(0,0);
+                        Intent goToProjectActivityIntent = new Intent(ProfileActivity.this, ProjectActivity.class);
+                        moveToIntent(goToProjectActivityIntent);
                         return true;
                     case R.id.nav_profile:
                         return true;
                     case R.id.nav_settings:
-                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent goToSettingsActivityIntent = new Intent(ProfileActivity.this, SettingsActivity.class);
+                        moveToIntent(goToSettingsActivityIntent);
                         return true;
                 }
                 return false;
@@ -76,9 +76,17 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    private void moveToIntent(Intent intent) {
+//        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
+
+        intent.putExtra("authenticatedUser", authenticatedUser);
+        startActivity(intent);
+        overridePendingTransition(0,0);
+    }
+
 
     private void loadUserDetails() {
-        User user = daoHelper.getUserDetails(authenticatedUser);
+        User user = databaseHelper.getUserDetails(authenticatedUser);
         profileFirstNameEditText.setText(user.getFirstName());
         profileLastNameEditText.setText(user.getLastName());
         profileEmailAddressEditText.setText(user.getEmailAddress());

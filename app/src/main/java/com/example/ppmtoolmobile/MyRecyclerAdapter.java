@@ -55,15 +55,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         Project project = projectList.get(position);
         holder.projectPriorityInfoBtn.setText(project.getPriority() + " priority");
 
+
+
         if(project.getPriority().equals("High") || project.getPriority().equals("None")) {
             holder.projectPriorityInfoBtn.setTextColor(R.color.dark_red);
-            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_red);
+//            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_red);
         } else if(project.getPriority().equals("Medium")) {
             holder.projectPriorityInfoBtn.setTextColor(R.color.dark_orange);
-            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_orange);
+//            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_orange);
+
         } else if(project.getPriority().equals("Low")) {
             holder.projectPriorityInfoBtn.setTextColor(R.color.dark_green);
-            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_green);
+//            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_green);
         }
 
         holder.projectListTitleTextView.setText(project.getTitle());
@@ -84,7 +87,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         return projectList.size();
     }
 
-    public void filterList(List<Project> projectList) {
+    public void refreshList(List<Project> projectList) {
         this.projectList = projectList;
         notifyDataSetChanged();
     }

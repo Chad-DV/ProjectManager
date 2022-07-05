@@ -3,22 +3,16 @@ package com.example.ppmtoolmobile;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.InputType;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,16 +22,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
-
-import org.w3c.dom.Text;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class AddProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,7 +39,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
     private ImageButton generateAddProjectChecklistEditText;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
-    private DaoHelper daoHelper;
+    private ProjectAndUserDAOImpl databaseHelper;
     private RadioButton projectPriorityRadioBtn, projectPriorityHighRadioBtn, projectPriorityMediumRadioBtn, projectPriorityLowRadioBtn, projectPriorityNoneRadioBtn;
 
     @Override
@@ -57,7 +47,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project);
 
-        daoHelper = new DaoHelper(this);
+        databaseHelper = new ProjectAndUserDAOImpl(this);
 
         addProjectBtn = (Button) findViewById(R.id.addProjectBtn);
         addProjectTitleEditText = (EditText) findViewById(R.id.addProjectTitleEditText);
@@ -128,6 +118,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             et.setTextSize(15);
             ll.addView(et);
 
+            Toast.makeText(AddProjectActivity.this, et.getText(), Toast.LENGTH_SHORT).show();
+
         } else if(view == addProjectNavigationBack) {
              finish();
         }
@@ -170,7 +162,10 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
             Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority);
 
-            boolean result = daoHelper.addProject(theProject,authenticatedUser);
+            boolean result = databaseHelper.addProject(theProject,authenticatedUser);
+
+
+
 
             if(result) {
                 Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();

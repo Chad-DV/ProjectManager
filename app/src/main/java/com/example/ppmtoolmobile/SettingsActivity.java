@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -18,6 +19,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private BottomNavigationView bottomNavView;
     private CardView settingsProfileCardView, settingsMyProjectsCardView, settingsNotificationsCardView, settingsLogoutCardView;
     private ImageView settingsNavigationBack;
+    private String authenticatedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         settingsMyProjectsCardView = findViewById(R.id.settingsMyProjectsCardView);
         settingsNotificationsCardView = findViewById(R.id.settingsNotificationsCardView);
         settingsLogoutCardView = findViewById(R.id.settingsLogoutCardView);
+
+        authenticatedUser = getIntent().getStringExtra("authenticatedUser");
+
+        Toast.makeText(this, "settings activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         bottomNavView.setSelectedItemId(R.id.nav_settings);
 
@@ -47,12 +53,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 switch(item.getItemId())
                 {
                     case R.id.nav_profile:
-                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                        overridePendingTransition(0,0);
+                        Intent goToProfileActivityIntent = new Intent(SettingsActivity.this, ProfileActivity.class);
+                        moveToIntent(goToProfileActivityIntent);
                         return true;
                     case R.id.nav_home:
-                        finish();
-                        overridePendingTransition(0,0);
+                        Intent goToProjectActivityIntent = new Intent(SettingsActivity.this, ProjectActivity.class);
+                        moveToIntent(goToProjectActivityIntent);
                         return true;
                     case R.id.nav_settings:
                         return true;
@@ -64,14 +70,24 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    private void moveToIntent(Intent intent) {
+//        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
+
+        intent.putExtra("authenticatedUser", authenticatedUser);
+        startActivity(intent);
+        overridePendingTransition(0,0);
+    }
+
     @Override
     public void onClick(View view) {
         if(view == settingsNavigationBack) {
             finish();
         } else if(view == settingsProfileCardView) {
-            startActivity(new Intent(this, ProfileActivity.class));
+            Intent goToProfileActivityIntent = new Intent(SettingsActivity.this, ProfileActivity.class);
+            moveToIntent(goToProfileActivityIntent);
         } else if(view == settingsMyProjectsCardView) {
-            startActivity(new Intent(this, ProjectActivity.class));
+            Intent goToProjectActivityIntent = new Intent(SettingsActivity.this, ProjectActivity.class);
+            moveToIntent(goToProjectActivityIntent);
         } else if(view == settingsNotificationsCardView) {
 
         } else if(view == settingsLogoutCardView) {
