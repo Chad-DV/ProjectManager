@@ -25,6 +25,7 @@ public class Project {
 //    private String dueTime;
     private String priority;
     private String checklist;
+    private String remindMe;
     private long userId;
 
     public Project() {
@@ -89,11 +90,11 @@ public class Project {
 
 
         // send push notification based on time remaining
+        // Remind 2 weeks (336 hours) (20160 minutes) before due date
         // Remind 1 week (168 hours) (10080 minutes) before due date
         // Remind 1 day (24 hours) (1440 minutes) before due date
-        // Remind 12 hours (720 minutes) before due date
         // Remind 1 hour (60 minutes) before due date
-        // Remind 20 minutes before due date
+        // Remind 30 minutes before due date
 
         long minutes = ChronoUnit.MINUTES.between(current, dateDue);
         long hours = ChronoUnit.HOURS.between(current, dateDue);

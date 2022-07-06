@@ -177,13 +177,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato"
-        android:gravity="start"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
         android:letterSpacing="-0.01"
         android:scaleX=".9"
         android:scaleY=".9"
         android:text="2 weeks before"
         android:layout_marginTop="10dp"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe1WeekCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="1 week before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe1DayCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="1 day before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe1HourCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="1 hour before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe30MinutesCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="30 minutes before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
 
 
 
