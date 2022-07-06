@@ -16,10 +16,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:background="@drawable/gradient_card_background"
             android:layout_height="190dp"
-            android:padding="20dp"
-            android:orientation="vertical">
+            android:background="@drawable/gradient_card_background"
+            android:orientation="vertical"
+            android:padding="20dp">
 
 
             <LinearLayout
@@ -67,14 +67,14 @@
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/searchProjectEditText"
+            <AutoCompleteTextView
+                android:id="@+id/filterProjectEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="17dp"
                 android:background="@drawable/search_input"
                 android:drawableLeft="@drawable/ic_search_icon"
-                android:drawablePadding="15sp"
+                android:drawablePadding="15dp"
                 android:fontFamily="@font/lato"
                 android:hint="Search for a project"
                 android:letterSpacing="-0.01"
@@ -82,27 +82,33 @@
                 android:textColorHint="@color/dark_blue_gray"
                 android:textSize="16sp" />
 
+            <!--            <EditText-->
+            <!--                android:id="@+id/searchProjectEditText"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="20dp"-->
+            <!--                android:background="@drawable/search_input"-->
+            <!--                android:drawableLeft="@drawable/ic_search_icon"-->
+            <!--                android:drawablePadding="15sp"-->
+            <!--                android:fontFamily="@font/lato"-->
+            <!--                android:hint="Search for a project"-->
+            <!--                android:letterSpacing="-0.01"-->
+            <!--                android:textColor="@color/dark_black"-->
+            <!--                android:textColorHint="@color/dark_blue_gray"-->
+            <!--                android:textSize="16sp" />-->
+
 
         </LinearLayout>
 
 
-        <ScrollView
+        <FrameLayout
+            android:id="@+id/projectFrameLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="20dp">
-            <FrameLayout
-                android:id="@+id/projectFrameLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            android:layout_height="wrap_content"
 
-                android:layout_marginTop="10dp"
-                />
+            android:padding="20dp"
 
-
-        </ScrollView>
-
-
-
+            />
 
 
 

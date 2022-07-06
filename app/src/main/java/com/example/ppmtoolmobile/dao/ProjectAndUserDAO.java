@@ -8,16 +8,22 @@ import java.util.List;
 
 public interface ProjectAndUserDAO {
 
+    // User
     Boolean register(User user);
     Boolean login(User user);
     Boolean isEmailExists(String email);
+    String getCurrentUserFirstName(String emailAddress);
+    long getCurrentUserId(String emailAddress);
+    User getUserDetails(String theEmailAddress);
 
+    // Project
     Boolean addProject(Project project, String emailAddress);
     Boolean editProject(Project project);
     Boolean deleteProjectById(long id);
-    Project getProjectById(long projectId);
-//    List<Project> getAllProjects();
-    int getProjectCount(long userId);
     List<Project> getUserProjects(long userId);
+    Project getProjectById(long projectId);
+    int getProjectCount(long userId);
+    List<Project> sortByPriorityHighToNone(long userId);
+    List<Project> sortByPriorityNoneToHigh(long userId);
 
 }

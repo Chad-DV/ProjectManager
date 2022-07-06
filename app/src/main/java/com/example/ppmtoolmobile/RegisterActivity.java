@@ -3,7 +3,6 @@ package com.example.ppmtoolmobile;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -14,7 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -23,7 +22,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText firstNameEditText, lastNameEditText, emailAddressEditText, passwordEditText;
     private TextView loginPromptTextView2;
     private ProgressBar registerProgressBar;
-    private DaoHelper daoHelper;
+    private ProjectAndUserDAOImpl databaseHelper;
 
 
     @Override
@@ -31,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        daoHelper = new DaoHelper(this);
+        databaseHelper = new ProjectAndUserDAOImpl(this);
         loginPromptTextView2 = (TextView) findViewById(R.id.loginPromptTextView2);
         registerBtn = (Button) findViewById(R.id.registerBtn);
         firstNameEditText = (EditText) findViewById(R.id.registerFirstNameEditText);
@@ -98,8 +97,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if(!daoHelper.isEmailExists(emailAddress)) {
-            daoHelper.register(new User(firstName, lastName, emailAddress, password));
+        if(!databaseHelper.isEmailExists(emailAddress)) {
+            databaseHelper.register(new User(firstName, lastName, emailAddress, password));
         } else {
             Toast.makeText(this, "User with email " + emailAddress + " already exists!", Toast.LENGTH_LONG).show();
         }

@@ -1,9 +1,5 @@
 package com.example.ppmtoolmobile;
 
-import static android.content.Intent.getIntent;
-import static android.content.Intent.getIntentOld;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,40 +10,38 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
-import com.example.ppmtoolmobile.model.Priority;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ProjectFragment extends Fragment implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
 
     private TextView sortProjectsTextView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
-    private EditText searchProjectEditText;
+    private EditText filterProjectEditText;
     private RecyclerView recyclerView;
 
     private ProgressBar projectListLoadingProgressBar;
     private long projectId;
-    private DaoHelper daoHelper;
+    private ProjectAndUserDAOImpl databaseHelper;
     private long theUserId;
+    private String authenticatedUser;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -55,27 +49,38 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         View v = inflater.inflate(R.layout.fragment_project, null);
 
+        databaseHelper = new ProjectAndUserDAOImpl(getActivity().getApplicationContext());
+
+        filterProjectEditText = v.findViewById(R.id.filterProjectEditText);
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
-        searchProjectEditText = v.findViewById(R.id.searchProjectEditText);
+        authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
 
-        String authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
-
-        System.out.println("from project fragment: " + authenticatedUser);
-
-//        Toast.makeText(ProjectFragment.this.getActivity(), authenticatedUser, Toast.LENGTH_SHORT).show();
-
-//        System.out.println("from project fragment: "+ authenticatedUser + " " + theUserId);
+        Toast.makeText(ProjectFragment.this.getActivity(), "project fragment: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
 
-        daoHelper = new DaoHelper(getActivity().getApplicationContext());
 
-        theUserId = daoHelper.getCurrentUserId(authenticatedUser);
+        theUserId = databaseHelper.getCurrentUserId(authenticatedUser);
+
         loadProjects(v);
         buildRecyclerView(v);
+
+        filterProjectEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filterProjects(editable.toString());
+            }
+        });
 
 
 
         sortProjectsTextView.setOnClickListener(this);
+//        searchProjectEditText.setOnClickListener(this);
 
 
 
@@ -84,7 +89,15 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onStart() {
+        super.onStart();
+        refreshProjects();
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View view) {
         if(view == sortProjectsTextView) {
@@ -100,14 +113,19 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         popupMenu.getMenuInflater().inflate(R.menu.sort_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.option_priority_high_low:
                         // sort function
+                        projectList = databaseHelper.sortByPriorityHighToNone(theUserId);
+                        adapter.refreshList(projectList);
                         break;
                     case R.id.option_priority_low_high:
                         // sort function
+                        projectList = databaseHelper.sortByPriorityNoneToHigh(theUserId);
+                        adapter.refreshList(projectList);
                         break;
                     case R.id.option_due_date_newest_to_oldest:
                         // sort function
@@ -128,17 +146,18 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onProjectClick(View view, int position) {
-        Project project = projectList.get(position);
+//        Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
-        Toast.makeText(ProjectFragment.this.getActivity(), "Short clicked", Toast.LENGTH_SHORT).show();
 
-        filterList("321");
+//        filterList("69");
 
-//        Intent viewSchedule = new Intent(ProjectFragment.this.getActivity(), ViewSchedule.class);
-//        viewSchedule.putExtra("title", project.getTitle());
-//        viewSchedule.putExtra("description", project.getDescription());
-//
-//        startActivity(viewSchedule);
+        Intent goToProjectIntent = new Intent(ProjectFragment.this.getActivity(), ViewProjectActivity.class);
+        goToProjectIntent.putExtra("authenticatedUser", authenticatedUser);
+        goToProjectIntent.putExtra("projectId", projectId);
+//        goToProjectIntent.putExtra("title", project.getTitle());
+//        goToProjectIntent.putExtra("description", project.getDescription());
+
+        startActivity(goToProjectIntent);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -146,10 +165,9 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onProjectLongClick(View view, int position) {
 
 
-//        Project project = projectList.get(position);
+        Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
 
-//        Toast.makeText(ProjectFragment.this.getActivity(), project.toString(), Toast.LENGTH_SHORT).show();
 
         PopupMenu popupMenu = new PopupMenu(ProjectFragment.this.getActivity(), sortProjectsTextView);
 
@@ -182,21 +200,23 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void filterList(String query) {
+    private void filterProjects(String query) {
         List<Project> filteredList = new ArrayList<>();
 
-
-        filteredList = daoHelper.searchProjects(query);
-
-        if(filteredList.isEmpty()) {
-            Toast.makeText(getActivity().getApplicationContext(), "No projects matched with " + query , Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity().getApplicationContext(), filteredList.toString() , Toast.LENGTH_SHORT).show();
+        for (Project project : projectList) {
+            if (project.getTitle().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(project);
+            }
         }
 
-        adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), filteredList, this);
-        recyclerView.setAdapter(adapter);
+        adapter.refreshList(filteredList);
+    }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void refreshProjects() {
+        projectList = databaseHelper.getUserProjects(theUserId);
+        adapter.refreshList(projectList);
     }
 
     private void buildRecyclerView(View v) {
@@ -213,10 +233,22 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
 
         projectListLoadingProgressBar.setVisibility(View.VISIBLE);
-//        projectList.clear();
+        projectList.clear();
 
-        projectList = daoHelper.getUserProjects(theUserId);
+        projectList = databaseHelper.getUserProjects(theUserId);
 
+//        for(Project p : projectList) {
+//            System.out.println(p.isProjectExpired(p.getDateCreated()));
+//        }
+
+//        for(Project p : projectList) {
+//            if(Long.parseLong(p.getDateDue().toString()) > Long.parseLong(p.getDateCreated().toString())) {
+//                System.out.print("OVERDUE::: " + p.getTitle() + " : " + p.getDateCreated() + " : " + p.getDateDue() + " : " + p.calculateDaysTillProjectDue(p.getDateCreated(), p.getDateDue()) + "\n");
+//            } else {
+//
+//                System.out.print("NOT OVERDUE::: " + p.getTitle() + " : " + p.getDateCreated() + " : " + p.getDateDue() + " : " + p.calculateDaysTillProjectDue(p.getDateCreated(), p.getDateDue()) + "\n");
+//            }
+//        }
         projectListLoadingProgressBar.setVisibility(View.GONE);
 
 
@@ -228,9 +260,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                 .setTitle("Delete entry")
                 .setMessage("Are you sure you want to delete this entry?")
                 .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    boolean res = daoHelper.deleteProjectById(position);
-
-                    projectList = daoHelper.getUserProjects(theUserId);
+                    boolean res = databaseHelper.deleteProjectById(position);
+                    projectList = databaseHelper.getUserProjects(theUserId);
 
                     adapter = new MyRecyclerAdapter(ProjectFragment.this.getActivity(), projectList, this);
                     recyclerView.setAdapter(adapter);

@@ -5,24 +5,22 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EmptyProjectListFragment extends Fragment implements MyRecyclerAdapter.OnProjectClickListener {
 
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
-    private DaoHelper daoHelper;
+    private ProjectAndUserDAOImpl projectAndUserDAOImpl;
     private RecyclerView recyclerView;
 
 

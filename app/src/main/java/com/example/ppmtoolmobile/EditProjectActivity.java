@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -14,28 +13,25 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.DaoHelper;
+import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 
 public class EditProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText editProjectTitleEditText, editProjectDescriptionEditText, editProjectDueDateEditText, editProjectDueTimeEditText;
     private Button editProjectBtn;
     private long projectId;
-    private DaoHelper daoHelper;
+    private ImageView editProjectNavigationBack;
+    private ProjectAndUserDAOImpl databaseHelper;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
     private RadioButton editProjectPriorityRadioBtn;
@@ -55,7 +51,9 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueTimeEditText = findViewById(R.id.editProjectDueTimeEditText);
         editProjectBtn = findViewById(R.id.editProjectBtn);
         editProjectPriorityRadioGroup = findViewById(R.id.editProjectPriorityRadioGroup);
-        daoHelper = new DaoHelper(this);
+        editProjectNavigationBack = findViewById(R.id.editProjectNavigationBack);
+
+        databaseHelper = new ProjectAndUserDAOImpl(this);
 
 
         loadProjectData();
@@ -68,6 +66,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueDateEditText.setOnClickListener(this);
         editProjectDueTimeEditText.setOnClickListener(this);
         editProjectBtn.setOnClickListener(this);
+        editProjectNavigationBack.setOnClickListener(this);
 
 
     }
@@ -104,6 +103,8 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             timePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             timePickerDialog.setTitle("Select a Time");
             timePickerDialog.show();
+        } else if(view == editProjectNavigationBack) {
+            finish();
         }
     }
 
@@ -111,7 +112,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadProjectData() {
         projectId = getIntent().getLongExtra("projectId", 0);
-        Project project = daoHelper.getProjectById(projectId);
+        Project project = databaseHelper.getProjectById(projectId);
 
         // get full date and time as LocalDateTime
         LocalDateTime dueDateAndTime = project.getDateDue();
@@ -169,7 +170,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
 
             System.out.println(theProject);
 
-            boolean result = daoHelper.editProject(theProject);
+            boolean result = databaseHelper.editProject(theProject);
 
             if (result) {
                 Toast.makeText(EditProjectActivity.this, "Project was edited sucessfully", Toast.LENGTH_SHORT).show();

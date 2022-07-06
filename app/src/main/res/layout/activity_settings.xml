@@ -44,8 +44,6 @@
         </LinearLayout>
 
 
-
-
         <androidx.cardview.widget.CardView
             android:id="@+id/settingsProfileCardView"
             android:layout_width="match_parent"
@@ -58,17 +56,17 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_blue_gray"
+
                 android:elevation="0dp"
                 android:padding="10dp">
 
                 <ImageView
-                    android:layout_gravity="center_vertical"
                     android:id="@+id/settingsUserImageView"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="5dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/ic_user_icon" />
 
                 <LinearLayout
@@ -82,11 +80,11 @@
                     <TextView
                         android:id="@+id/settingsProfileTitleTextView"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="Profile"
                         android:textColor="@color/dark_black"
                         android:textSize="18sp" />
@@ -96,9 +94,9 @@
                         android:id="@+id/settingsProfileDescriptionTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="Settings related to your account  and profile details"
                         android:textColor="@color/dark_blue_gray"
                         android:textSize="12sp" />
@@ -122,17 +120,17 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_blue_gray"
+
                 android:elevation="0dp"
                 android:padding="10dp">
 
                 <ImageView
-                    android:layout_gravity="center_vertical"
                     android:id="@+id/settingsProjectImageView"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="5dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/ic_project_icon" />
 
                 <LinearLayout
@@ -146,11 +144,11 @@
                     <TextView
                         android:id="@+id/settingsProjectTitleTextView"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="My Projects"
                         android:textColor="@color/dark_black"
                         android:textSize="18sp" />
@@ -160,9 +158,9 @@
                         android:id="@+id/settingsProjectDescriptionTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="View your projects"
                         android:textColor="@color/dark_blue_gray"
                         android:textSize="12sp" />
@@ -186,17 +184,17 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_blue_gray"
+
                 android:elevation="0dp"
                 android:padding="10dp">
 
                 <ImageView
-                    android:layout_gravity="center_vertical"
                     android:id="@+id/settingsNotificationsImageView"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="5dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/ic_notification_icon" />
 
                 <LinearLayout
@@ -210,11 +208,11 @@
                     <TextView
                         android:id="@+id/settingsNotificationsTitleTextView"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="Notifications"
                         android:textColor="@color/dark_black"
                         android:textSize="18sp" />
@@ -224,9 +222,9 @@
                         android:id="@+id/settingsNotificationsDescriptionTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="Manage push notifications"
                         android:textColor="@color/dark_blue_gray"
                         android:textSize="12sp" />
@@ -235,7 +233,6 @@
 
             </FrameLayout>
         </androidx.cardview.widget.CardView>
-
 
 
         <!-- setting 4 -->
@@ -251,17 +248,17 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_blue_gray"
+
                 android:elevation="0dp"
                 android:padding="10dp">
 
                 <ImageView
-                    android:layout_gravity="center_vertical"
                     android:id="@+id/settingsLogoutImageView"
                     android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="5dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
                     android:background="@drawable/ic_logout_icon" />
 
                 <LinearLayout
@@ -275,11 +272,11 @@
                     <TextView
                         android:id="@+id/settingsLogoutTitleTextView"
                         android:layout_width="wrap_content"
-                        android:layout_gravity="center_vertical"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="Logout"
                         android:textColor="@color/dark_black"
                         android:textSize="18sp" />
@@ -289,9 +286,9 @@
                         android:id="@+id/settingsLogoutDescriptionTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="-0.01"
-                        android:layout_weight="1"
                         android:text="Logout of your account"
                         android:textColor="@color/dark_blue_gray"
                         android:textSize="12sp" />

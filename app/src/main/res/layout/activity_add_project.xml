@@ -148,12 +148,106 @@
         android:textSize="15sp" />
 
 
+    <TextView
+        android:id="@+id/addProjectRemindMeTitleTextView"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_bold"
+        android:letterSpacing="-0.01"
+        android:layout_marginTop="30dp"
+        android:text="Remind me"
+        android:textColor="@color/dark_black"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/addProjectRemindMeDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:textAlignment="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/lato"
+        android:letterSpacing="-0.01"
+        android:text="Send a notification when a project is closing on a due date"
+        android:textColor="@color/dark_blue_gray"
+        android:textSize="12sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe2WeeksCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="2 weeks before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe1WeekCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="1 week before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe1DayCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="1 day before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe1HourCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="1 hour before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/addProjectRemindMe30MinutesCheckbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:buttonTint="@color/primary_purple"
+        android:backgroundTint="@color/primary_purple"
+        android:letterSpacing="-0.01"
+        android:scaleX=".9"
+        android:scaleY=".9"
+        android:text="30 minutes before"
+        android:layout_marginTop="10dp"
+        android:textSize="16sp" />
+
+
 
 
     <TextView
         android:id="@+id/addProjectPriorityTitleTextView"
         android:layout_width="wrap_content"
-        android:textAlignment="center"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato_bold"
         android:letterSpacing="-0.01"
@@ -243,7 +337,7 @@
 
 
         <ImageButton
-            android:id="@+id/btn_id"
+            android:id="@+id/generateAddProjectChecklistEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -268,6 +362,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
 
@@ -275,15 +370,14 @@
             android:id="@+id/addProjectChecklistEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginRight="15dp"
+            android:layout_weight="1"
             android:background="@drawable/input_default"
             android:fontFamily="@font/lato"
-            android:textColorHint="@color/dark_blue_gray"
-            android:textColor="@color/dark_black"
             android:hint="Add item"
+            android:textColor="@color/dark_black"
+            android:textColorHint="@color/dark_blue_gray"
             android:textSize="15sp" />
-
 
         <ImageButton
             android:id="@+id/addProjectChecklistAddSuccessBtn"
@@ -293,8 +387,14 @@
             android:background="@null"
             android:src="@drawable/ic_checklist_add_success" />
 
+    </LinearLayout>
 
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:id="@+id/addChecklistLinearLayout">
 
 
     </LinearLayout>
@@ -309,7 +409,7 @@
         android:id="@+id/addProjectBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/primary_button"
         android:elevation="10dp"
         android:fontFamily="@font/lato_bold"
