@@ -12,7 +12,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="0dp"
                 android:orientation="horizontal">
 
 
@@ -55,7 +55,7 @@
 
 
                     <EditText
-                        android:id="@+id/searchProjectEditText"
+                        android:id="@+id/filterProjectEditText"
                         android:layout_width="match_parent"
                         android:layout_height="55dp"
                         android:layout_marginTop="20dp"
@@ -72,17 +72,17 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/projectRecyclerView"
-
+            android:background="@color/dark_red"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+
             android:layout_marginTop="20dp"
+        />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"/>
 
-    />
-
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="130dp"/>-->
 
 
     </LinearLayout>

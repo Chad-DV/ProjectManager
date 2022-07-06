@@ -27,7 +27,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
     private Button projectAddBtn1;
     private TextView displayUserProjectCountTextView,welcomeUserTextView1;
-    private EditText searchProjectEditText;
+    private EditText filterProjectEditText;
     private ProjectAndUserDAOImpl databaseHelper;
     private BottomNavigationView bottomNavView;
     private List<Project> projectList;
@@ -45,7 +45,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
 
-        searchProjectEditText = findViewById(R.id.searchProjectEditText);
+        filterProjectEditText = findViewById(R.id.filterProjectEditText);
         projectAddBtn1 = findViewById(R.id.projectAddBtn1);
         displayUserProjectCountTextView = findViewById(R.id.displayUserProjectCountTextView);
         welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
@@ -101,7 +101,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-        searchProjectEditText.setOnClickListener(this);
+        filterProjectEditText.setOnClickListener(this);
         projectAddBtn1.setOnClickListener(this);
 
     }
@@ -127,7 +127,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             Intent goToAddProjectIntent = new Intent(this, AddProjectActivity.class);
             goToAddProjectIntent.putExtra("authenticatedUser", authenticatedUser);
             startActivity(goToAddProjectIntent);
-        } else if(view == searchProjectEditText) {
+        } else if(view == filterProjectEditText) {
 //            searchProjects();
         }
     }

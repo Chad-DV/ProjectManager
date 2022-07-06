@@ -421,10 +421,10 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             projectList.add(project);
         }
 
-        System.out.println("ALL USER PROJECTS");
-        for(Project p : projectList) {
-            System.out.println(p);
-        }
+//        System.out.println("ALL USER PROJECTS");
+//        for(Project p : projectList) {
+//            System.out.println(p);
+//        }
 
         return projectList;
     }

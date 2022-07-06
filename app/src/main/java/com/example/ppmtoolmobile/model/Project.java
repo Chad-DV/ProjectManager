@@ -73,14 +73,39 @@ public class Project {
 //        Period period = Period.between(dateCreated.toLocalDate(), dateDue.toLocalDate());
 //        Duration duration = Duration.between(dateCreated.toLocalTime(), dateDue.toLocalTime());
 
-        System.out.println("STATUS OF PROJECT");
-        System.out.println("Project created: " + dateCreated);
-        System.out.println("Project due: " + dateDue);
-
-        System.out.println("Project is due in : " + ChronoUnit.DAYS.between(dateCreated, dateDue) + " days");
+//        System.out.println("STATUS OF PROJECT");
+//        System.out.println("Project created: " + dateCreated);
+//        System.out.println("Project due: " + dateDue);
+//
+//        System.out.println("Project is due in : " + ChronoUnit.DAYS.between(dateCreated, dateDue) + " days");
 
 
         return ChronoUnit.DAYS.between(dateCreated, dateDue);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean isProjectExpired(LocalDateTime dateDue) {
+        LocalDateTime current = LocalDateTime.now();
+
+
+        // send push notification based on time remaining
+        // Remind 1 week (168 hours) (10080 minutes) before due date
+        // Remind 1 day (24 hours) (1440 minutes) before due date
+        // Remind 12 hours (720 minutes) before due date
+        // Remind 1 hour (60 minutes) before due date
+        // Remind 20 minutes before due date
+
+        long minutes = ChronoUnit.MINUTES.between(current, dateDue);
+        long hours = ChronoUnit.HOURS.between(current, dateDue);
+        long days = ChronoUnit.DAYS.between(current, dateDue);
+
+        long seconds = ChronoUnit.SECONDS.between(current, dateDue);
+
+        System.out.println("minutes till project is due: " + minutes);
+//        System.out.println("hours: " + hours);
+//        System.out.println("days: " + days);
+//        System.out.println("seconds " + seconds);
+        return current.isAfter(getDateDue());
     }
 
 
@@ -149,13 +174,6 @@ public class Project {
     public void setChecklist(String checkList) {
         this.checklist = checklist;
     }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private LocalDateTime calculateDueDate(int expiryTimeInDays) {
-        return LocalDateTime.now().plusDays(expiryTimeInDays);
-    }
-
 
     @Override
     public String toString() {

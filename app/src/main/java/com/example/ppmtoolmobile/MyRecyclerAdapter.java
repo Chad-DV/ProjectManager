@@ -72,11 +72,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         holder.projectListTitleTextView.setText(project.getTitle());
         holder.projectListDescriptionTextView.setText(project.getDescription());
 
-        LocalDateTime due = project.getDateDue();
 //        String dateDue = due.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String dateDue = due.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        long difference = project.calculateDaysTillProjectDue(project.getDateCreated(), project.getDateDue());
-        holder.projectDueStatusInfoBtn.setText(String.valueOf("Due : " + difference + " days"));
+        boolean isExpired = project.isProjectExpired(project.getDateDue());
+        holder.projectDueStatusInfoBtn.setText(String.valueOf(isExpired ? "expired" : "not expired"));
 
 
 

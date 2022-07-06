@@ -34,7 +34,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private TextView sortProjectsTextView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
-    private EditText searchProjectEditText;
+    private EditText filterProjectEditText;
     private RecyclerView recyclerView;
 
     private ProgressBar projectListLoadingProgressBar;
@@ -51,11 +51,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         databaseHelper = new ProjectAndUserDAOImpl(getActivity().getApplicationContext());
 
-        searchProjectEditText = v.findViewById(R.id.searchProjectEditText);
+        filterProjectEditText = v.findViewById(R.id.filterProjectEditText);
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
-        searchProjectEditText = v.findViewById(R.id.searchProjectEditText);
-
-        // getting current username through intent from LoginActivity.class
         authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
 
         Toast.makeText(ProjectFragment.this.getActivity(), "project fragment: " + authenticatedUser, Toast.LENGTH_SHORT).show();
@@ -67,7 +64,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         loadProjects(v);
         buildRecyclerView(v);
 
-        searchProjectEditText.addTextChangedListener(new TextWatcher() {
+        filterProjectEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
@@ -76,7 +73,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
             @Override
             public void afterTextChanged(Editable editable) {
-                searchProjects(editable.toString());
+                filterProjects(editable.toString());
             }
         });
 
@@ -203,9 +200,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void searchProjects(String query) {
-//        String theQuery = searchProjectEditText.getText().toString().trim();
-        ArrayList<Project> filteredList = new ArrayList<>();
+    private void filterProjects(String query) {
+        List<Project> filteredList = new ArrayList<>();
 
         for (Project project : projectList) {
             if (project.getTitle().toLowerCase().contains(query.toLowerCase())) {
@@ -240,6 +236,19 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         projectList.clear();
 
         projectList = databaseHelper.getUserProjects(theUserId);
+
+//        for(Project p : projectList) {
+//            System.out.println(p.isProjectExpired(p.getDateCreated()));
+//        }
+
+//        for(Project p : projectList) {
+//            if(Long.parseLong(p.getDateDue().toString()) > Long.parseLong(p.getDateCreated().toString())) {
+//                System.out.print("OVERDUE::: " + p.getTitle() + " : " + p.getDateCreated() + " : " + p.getDateDue() + " : " + p.calculateDaysTillProjectDue(p.getDateCreated(), p.getDateDue()) + "\n");
+//            } else {
+//
+//                System.out.print("NOT OVERDUE::: " + p.getTitle() + " : " + p.getDateCreated() + " : " + p.getDateDue() + " : " + p.calculateDaysTillProjectDue(p.getDateCreated(), p.getDateDue()) + "\n");
+//            }
+//        }
         projectListLoadingProgressBar.setVisibility(View.GONE);
 
 

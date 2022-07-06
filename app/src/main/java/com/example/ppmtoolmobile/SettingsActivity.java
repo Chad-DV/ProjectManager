@@ -3,8 +3,14 @@ package com.example.ppmtoolmobile;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,11 +26,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private CardView settingsProfileCardView, settingsMyProjectsCardView, settingsNotificationsCardView, settingsLogoutCardView;
     private ImageView settingsNavigationBack;
     private String authenticatedUser;
+    private NotificationManagerCompat notificationManagerCompat;
+    private Notification notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+
+        buildNotificationChannel();
 
         bottomNavView = findViewById(R.id.bottomNavView);
         settingsNavigationBack = findViewById(R.id.settingsNavigationBack);
@@ -89,9 +100,28 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             Intent goToProjectActivityIntent = new Intent(SettingsActivity.this, ProjectActivity.class);
             moveToIntent(goToProjectActivityIntent);
         } else if(view == settingsNotificationsCardView) {
-
+            if(51 < 11) {
+                notificationManagerCompat.notify(1, notification);
+            }
         } else if(view == settingsLogoutCardView) {
 
         }
+    }
+
+    private void buildNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("myCh", "My Channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "myCh")
+                .setSmallIcon(android.R.drawable.stat_notify_sync)
+                .setContentTitle("First notification")
+                .setContentText("This is the body");
+
+        notification = builder.build();
+
+        notificationManagerCompat = NotificationManagerCompat.from(this);
     }
 }
