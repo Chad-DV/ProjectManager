@@ -42,8 +42,9 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 //    public static final String COLUMN_PROJECT_DUE_TIME = "due_time";
     public static final String COLUMN_PROJECT_PRIORITY = "priority";
     public static final String COLUMN_PROJECT_CHECKLIST = "checklist";
+    public static final String COLUMN_PROJECT_REMIND_ME_INTERVAL = "remind_me_interval";
     public static final String COLUMN_USER_PROJECT_FK = "user_id";
-    private static int DATABASE_VERSION = 1;
+    private static int DATABASE_VERSION = 4;
 
 
     private String CREATE_USER_TABLE_QUERY = "CREATE TABLE " + USER_TABLE + "(" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_FIRST_NAME + " TEXT,"
@@ -51,7 +52,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
     private String CREATE_PROJECT_TABLE_QUERY = "CREATE TABLE " + PROJECT_TABLE + "(" + COLUMN_PROJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PROJECT_TITLE + " TEXT,"
             + COLUMN_PROJECT_DESCRIPTION + " TEXT," + COLUMN_PROJECT_DATE_CREATED + " TEXT," + COLUMN_PROJECT_DATE_DUE + " TEXT,"
-            + COLUMN_PROJECT_PRIORITY + " TEXT," + COLUMN_PROJECT_CHECKLIST + " TEXT," + COLUMN_USER_PROJECT_FK + " INTEGER,"
+            + COLUMN_PROJECT_PRIORITY + " TEXT," + COLUMN_PROJECT_REMIND_ME_INTERVAL + " TEXT," + COLUMN_PROJECT_CHECKLIST + " TEXT," + COLUMN_USER_PROJECT_FK + " INTEGER,"
             + "FOREIGN KEY(" + COLUMN_USER_PROJECT_FK + ") REFERENCES " + USER_TABLE + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE ON UPDATE CASCADE)";
 
 
@@ -78,7 +79,6 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         //Drop User Table if exist
         db.execSQL(DROP_USER_TABLE_QUERY);
         db.execSQL(DROP_PROJECT_TABLE_QUERY);
-        DATABASE_VERSION++;
         // Create tables again
         onCreate(db);
     }
@@ -166,8 +166,8 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             return cursor.getString(0);
         }
 
-        return "not found";
 
+        return null;
     }
 
     @Override
@@ -225,14 +225,13 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
 
         ContentValues cv = new ContentValues();
-        Cursor cursor = dbRead.query(USER_TABLE,// Selecting Table
-                new String[]{COLUMN_USER_ID},//Selecting columns want to query
-                COLUMN_USER_EMAIL_ADDRESS + " = ?",
-                new String[]{String.valueOf(emailAddress)},//Where clause
-                null, null, null);
+        Cursor cursor = dbRead.rawQuery("SELECT " + COLUMN_USER_ID + " FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{emailAddress});
+//        Cursor cursor = dbRead.query(USER_TABLE,// Selecting Table
+//                new String[]{COLUMN_USER_ID},//Selecting columns want to query
+//                COLUMN_USER_EMAIL_ADDRESS + " = ?",
+//                new String[]{String.valueOf(emailAddress)},//Where clause
+//                null, null, null);
 
-
-        System.out.println(cursor.getCount());
 
 
 
@@ -244,6 +243,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
             cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
             cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
+            cv.put(COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
             cv.put(COLUMN_USER_PROJECT_FK, userId);
 
             System.out.println(userId);
@@ -267,13 +267,13 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 //        cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
         cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
         cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
+        cv.put(COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
 
 
         if (cursor.getCount() > 0) {
             long result = db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
-
             return result == -1 ? false : true;
         } else {
             return false;
@@ -323,55 +323,15 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
 
             String priority = cursor.getString(5);
-            String checklist = cursor.getString(6);
-            int userId = cursor.getInt(7);
+            String remindMeInterval = cursor.getString(6);
+            String checklist = cursor.getString(7);
+            int userId = cursor.getInt(8);
 
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
-
-            return project;
+            return new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, userId);
         }
         return null;
     }
 
-
-
-//
-//    public List<Project> getAllProjects() {
-//
-//
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        List<Project> projectList = new ArrayList<>();
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                long id = cursor.getLong(0);
-//                String title = cursor.getString(1);
-//                String description = cursor.getString(2);
-//                String dateCreated = cursor.getString(3);
-//                String dateDue = cursor.getString(4);
-//
-//                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-//                LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-//                LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
-//
-//                String priority = cursor.getString(5);
-//                String checklist = cursor.getString(6);
-//                int userId = cursor.getInt(7);
-//
-//                Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, userId);
-//
-//                projectList.add(project);
-//
-//
-//            } while (cursor.moveToNext());
-//
-//            cursor.close();
-//            db.close();
-//
-//        }
-//        return projectList;
-//    }
 
     @Override
     public int getProjectCount(long userId) {
@@ -390,41 +350,8 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         SQLiteDatabase db = this.getReadableDatabase();
         List<Project> projectList = new ArrayList<>();
-
-
-
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ?", new String[]{String.valueOf(userId)});
-
-//        Cursor cursor = db.query(PROJECT_TABLE,
-//                new String[]{COLUMN_PROJECT_ID, COLUMN_PROJECT_TITLE},
-//                COLUMN_USER_PROJECT_FK + " = " + userId,
-//                null, null, null, null, null);
-
-
-        while(cursor.moveToNext()) {
-            long id = cursor.getLong(0);
-            String title = cursor.getString(1);
-            String description = cursor.getString(2);
-            String dateCreated = cursor.getString(3);
-            String dateDue = cursor.getString(4);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-            LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-            LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
-
-            String priority = cursor.getString(5);
-            String checklist = cursor.getString(6);
-            int theUserId = cursor.getInt(7);
-
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, theUserId);
-
-            projectList.add(project);
-        }
-
-//        System.out.println("ALL USER PROJECTS");
-//        for(Project p : projectList) {
-//            System.out.println(p);
-//        }
+        readDataFromCursor(projectList, cursor);
 
         return projectList;
     }
@@ -436,33 +363,12 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         SQLiteDatabase db = this.getReadableDatabase();
         List<Project> projectList = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? "
-                + "ORDER BY " + COLUMN_PROJECT_PRIORITY + " DESC", new String[]{String.valueOf(userId)});
-
-
-
-        while(cursor.moveToNext()) {
-            long id = cursor.getLong(0);
-            String title = cursor.getString(1);
-            String description = cursor.getString(2);
-            String dateCreated = cursor.getString(3);
-            String dateDue = cursor.getString(4);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-            LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-            LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
-
-            String priority = cursor.getString(5);
-            String checklist = cursor.getString(6);
-            int theUserId = cursor.getInt(7);
-
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, theUserId);
-
-            projectList.add(project);
-        }
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? " + "ORDER BY " + COLUMN_PROJECT_PRIORITY + " DESC", new String[]{String.valueOf(userId)});
+        readDataFromCursor(projectList, cursor);
 
         return projectList;
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -473,8 +379,40 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? "
                 + "ORDER BY " + COLUMN_PROJECT_PRIORITY + " ASC", new String[]{String.valueOf(userId)});
 
+        readDataFromCursor(projectList, cursor);
+
+        return projectList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<Project> sortByDateNewestToOldest(long userId) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        List<Project> projectList = new ArrayList<>();
+//   SELECT * FROM Table ORDER BY date(dateColumn) DESC Limit 1
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? "
+                + "ORDER BY date(" + COLUMN_PROJECT_DATE_DUE + ") ASC", new String[]{String.valueOf(userId)});
+        readDataFromCursor(projectList, cursor);
+
+        return projectList;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public List<Project> sortByDateOldestToNewest(long userId) {
+
+        SQLiteDatabase db = getReadableDatabase();
+        List<Project> projectList = new ArrayList<>();
+//   SELECT * FROM Table ORDER BY date(dateColumn) DESC Limit 1
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? "
+                + "ORDER BY date(" + COLUMN_PROJECT_DATE_DUE + ") DESC", new String[]{String.valueOf(userId)});
+        readDataFromCursor(projectList, cursor);
+
+        return projectList;
+    }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void readDataFromCursor(List<Project> projectList, Cursor cursor) {
         while(cursor.moveToNext()) {
             long id = cursor.getLong(0);
             String title = cursor.getString(1);
@@ -487,16 +425,13 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
 
             String priority = cursor.getString(5);
-            String checklist = cursor.getString(6);
-            int theUserId = cursor.getInt(7);
-
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, theUserId);
+            String remindMeInterval = cursor.getString(6);
+            String checklist = cursor.getString(7);
+            int theUserId = cursor.getInt(8);
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, theUserId);
 
             projectList.add(project);
         }
-
-        return projectList;
     }
-
 }
 

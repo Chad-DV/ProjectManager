@@ -2,6 +2,7 @@ package com.example.ppmtoolmobile.model;
 
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import java.sql.Timestamp;
@@ -15,6 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Project {
     private long id;
@@ -25,7 +28,7 @@ public class Project {
 //    private String dueTime;
     private String priority;
     private String checklist;
-    private String remindMe;
+    private String remindMeInterval;
     private long userId;
 
     public Project() {
@@ -33,24 +36,26 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(String title, String description, LocalDateTime dateDue, String priority) {
+    public Project(String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval) {
         this.title = title;
         this.description = description;
         this.dateCreated = LocalDateTime.now();
         this.dateDue = dateDue;
         this.priority = priority;
+        this.remindMeInterval = remindMeInterval;
 
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, long userId) {
+    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, String remindMeInterval, long userId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dateCreated = dateCreated;
         this.dateDue = dateDue;
         this.priority = priority;
+        this.remindMeInterval = remindMeInterval;
         this.userId = userId;
 
 
@@ -87,27 +92,31 @@ public class Project {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean isProjectExpired(LocalDateTime dateDue) {
         LocalDateTime current = LocalDateTime.now();
+        long minutes = ChronoUnit.MINUTES.between(current, dateDue);
 
+
+        // Here, notify the user when 1 hour is left till the project due date
+//        if(minutes == 60) {
+//            System.out.println("PROJECT EXPIRES IN 1 HOUR: " + getTitle());
+//        }
 
         // send push notification based on time remaining
-        // Remind 2 weeks (336 hours) (20160 minutes) before due date
-        // Remind 1 week (168 hours) (10080 minutes) before due date
-        // Remind 1 day (24 hours) (1440 minutes) before due date
-        // Remind 1 hour (60 minutes) before due date
-        // Remind 30 minutes before due date
-
-        long minutes = ChronoUnit.MINUTES.between(current, dateDue);
-        long hours = ChronoUnit.HOURS.between(current, dateDue);
-        long days = ChronoUnit.DAYS.between(current, dateDue);
-
-        long seconds = ChronoUnit.SECONDS.between(current, dateDue);
-
-        System.out.println("minutes till project is due: " + minutes);
-//        System.out.println("hours: " + hours);
-//        System.out.println("days: " + days);
-//        System.out.println("seconds " + seconds);
+        // Remind 2 weeks (336 hours) (20160 minutes) (1,209,600,000 milliseconds) before due date
+        // Remind 1 week (168 hours) (10080 minutes) (604,800,000 milliseconds) before due date
+        // Remind 1 day (24 hours) (1440 minutes) (86,400,000 milliseconds) before due date
+        // Remind 1 hour (60 minutes) (3,600,000 milliseconds) before due date
+        // Remind 30 minutes (1,800,000 milliseconds) before due date
+//        System.out.println("minutes till project " + getTitle() + " is due: " + minutes);
         return current.isAfter(getDateDue());
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public long getProjectRemainingTimeInMilliseconds(LocalDateTime dateDue) {
+
+//        System.out.println("project " + getTitle() + ", " + ChronoUnit.MILLIS.between(LocalDateTime.now(), dateDue) + ", expired=" + isProjectExpired(dateDue));
+        return ChronoUnit.MILLIS.between(LocalDateTime.now(), dateDue);
+    }
+
 
 
 
@@ -164,7 +173,7 @@ public class Project {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -176,8 +185,19 @@ public class Project {
         this.checklist = checklist;
     }
 
+    public String getRemindMeInterval() {
+        return remindMeInterval;
+    }
+
+    public void setRemindMeInterval(String remindMe) {
+        this.remindMeInterval = remindMeInterval;
+    }
+
+
+
+    @NonNull
     @Override
     public String toString() {
-        return id + ", " + title + ", " + description + ", " + dateCreated + ", " + dateDue + ", " + priority + ", " + checklist + "\n";
+        return id + ", " + title + ", " + description + ", " + dateCreated + ", " + dateDue + ", " + priority + ", " + checklist + ", " + remindMeInterval + "\n";
     }
 }

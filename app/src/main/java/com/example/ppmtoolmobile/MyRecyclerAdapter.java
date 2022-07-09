@@ -58,14 +58,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
 
         if(project.getPriority().equals("High") || project.getPriority().equals("None")) {
-            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_red);
+//            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_red);
 //            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_red);
         } else if(project.getPriority().equals("Medium")) {
-            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_orange);
+//            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_orange);
 //            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_orange);
 
         } else if(project.getPriority().equals("Low")) {
-            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_green);
+//            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_green);
 //            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_green);
         }
 

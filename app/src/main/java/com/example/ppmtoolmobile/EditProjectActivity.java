@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -29,6 +30,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
 
     private EditText editProjectTitleEditText, editProjectDescriptionEditText, editProjectDueDateEditText, editProjectDueTimeEditText;
     private Button editProjectBtn;
+    private CheckBox editProjectRemindMe2WeeksCheckbox, editProjectRemindMe1WeekCheckbox, editProjectRemindMe1DayCheckbox, editProjectRemindMe1HourCheckbox, editProjectRemindMe30MinutesCheckbox;
     private long projectId;
     private ImageView editProjectNavigationBack;
     private ProjectAndUserDAOImpl databaseHelper;
@@ -36,6 +38,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private TimePickerDialog timePickerDialog;
     private RadioButton editProjectPriorityRadioBtn;
     private RadioGroup editProjectPriorityRadioGroup;
+    private static String strSeparator = ", ";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -44,6 +47,11 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_edit_project);
 
 
+        editProjectRemindMe2WeeksCheckbox = findViewById(R.id.editProjectRemindMe2WeeksCheckbox);
+        editProjectRemindMe1WeekCheckbox = findViewById(R.id.editProjectRemindMe1WeekCheckbox);
+        editProjectRemindMe1DayCheckbox = findViewById(R.id.editProjectRemindMe1DayCheckbox);
+        editProjectRemindMe1HourCheckbox = findViewById(R.id.editProjectRemindMe1HourCheckbox);
+        editProjectRemindMe30MinutesCheckbox = findViewById(R.id.editProjectRemindMe30MinutesCheckbox);
 
         editProjectTitleEditText = findViewById(R.id.editProjectTitleEditText);
         editProjectDescriptionEditText = findViewById(R.id.editProjectDescriptionEditText);
@@ -121,17 +129,22 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         // Get time only as String
         String time = dueDateAndTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-
-        System.out.println("Full date: " + dueDateAndTime);
-        System.out.println("Date: " + date);
-        System.out.println("Time: " + time);
+        String[] remindMeValues = convertStringToArray(project.getRemindMeInterval());
 
         System.out.println("Project: " + project);
+        System.out.println("remind me values: ");
+        for (String s : remindMeValues) {
+            System.out.println(s);
+        }
+
+        Toast.makeText(EditProjectActivity.this, project.getRemindMeInterval(), Toast.LENGTH_SHORT).show();
 
         editProjectTitleEditText.setText(project.getTitle());
         editProjectDescriptionEditText.setText(project.getDescription());
         editProjectDueDateEditText.setText(date);
         editProjectDueTimeEditText.setText(time);
+
+        editProjectRemindMe2WeeksCheckbox.setChecked(true);
 
     }
 
@@ -145,6 +158,8 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         String dateDue = editProjectDueDateEditText.getText().toString().trim();
         String timeDue = editProjectDueTimeEditText.getText().toString().trim();
         String priority = getProjectPriorityValue();
+        String remindMeInterval = getProjectRemindMeValues();
+        String checkList;
 
 
 
@@ -191,5 +206,50 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         int radioId = editProjectPriorityRadioGroup.getCheckedRadioButtonId();
         editProjectPriorityRadioBtn = findViewById(radioId);
         return editProjectPriorityRadioBtn.getText().toString();
+    }
+
+    public String getProjectRemindMeValues() {
+        String[] msg = new String[5];
+        if(editProjectRemindMe2WeeksCheckbox.isChecked())
+            msg[0] = "2 weeks";
+        if(editProjectRemindMe1WeekCheckbox.isChecked())
+            msg[1] = "1 week";
+        if(editProjectRemindMe1DayCheckbox.isChecked())
+            msg[2] = "1 day";
+        if(editProjectRemindMe1HourCheckbox.isChecked())
+            msg[3] = "1 hour";
+        if(editProjectRemindMe30MinutesCheckbox.isChecked())
+            msg[4] = "30 minutes";
+
+
+        String strParsed = convertArrayToString(msg);
+        String[] arrParsed = convertStringToArray(strParsed);
+
+        System.out.println("STRING VALUE: " + strParsed);
+
+        System.out.println("ARRAY VALUE:");
+
+        for(String s: arrParsed) {
+            System.out.println(s);
+        }
+
+        return strParsed;
+    }
+
+    public static String convertArrayToString(String[] array){
+        String str = "";
+        for (int i = 0;i<array.length; i++) {
+            str = str+array[i];
+            // Do not append comma at the end of last element
+            if(i<array.length-1){
+                str = str+strSeparator;
+            }
+        }
+        return str;
+    }
+
+    public static String[] convertStringToArray(String str){
+        return str.split(strSeparator);
+
     }
 }

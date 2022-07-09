@@ -8,14 +8,15 @@
 
 
 <androidx.cardview.widget.CardView
-
+    android:background="@drawable/card_vector"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
+    android:elevation="0dp"
+    app:cardElevation="2dp"
     app:cardUseCompatPadding="true"
-    app:cardElevation="4dp"
+    android:layout_marginBottom="5dp"
 
 
     app:cardCornerRadius="9dp"
@@ -24,19 +25,19 @@
 
 
         <LinearLayout
-
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:padding="10dp">
 
 
             <ImageView
                 android:id="@+id/scheduleThumbnailImageView"
-                android:layout_width="wrap_content"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@drawable/project_cover_1" />
+
+                android:background="@drawable/ic_logo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,7 +56,7 @@
                     android:text="My projects"
                     android:textAlignment="textStart"
                     android:textColor="@color/dark_black"
-                    android:textSize="16sp" />
+                    android:textSize="17sp" />
 
 
                 <LinearLayout
@@ -74,15 +75,16 @@
                         android:ellipsize="end"
                         android:fontFamily="@font/lato"
                         android:letterSpacing="-0.03"
+                        android:layout_marginBottom="2dp"
                         android:maxLines="1"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipisci ng eleee"
                         android:textColor="@color/dark_blue_gray"
                         android:layout_marginRight="20dp"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="14dp"
+                        android:layout_height="16dp"
                         android:src="@drawable/ic_arrow_right_soft" />
 
 
@@ -90,58 +92,47 @@
 
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight=".2"
+                    android:layout_weight="0"
                     android:elevation="0dp"
-
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/projectDueStatusInfoBtn"
-                        android:layout_width="90dp"
-                        android:layout_height="22dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
                         android:background="@drawable/project_card_small_button"
                         android:backgroundTint="@color/dark_red"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
                         android:text="Not started"
                         android:textAlignment="center"
+                        android:elevation="0dp"
+                        android:layout_weight="1"
                         android:textAllCaps="false"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="20dp"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
 
                     <Button
                         android:id="@+id/projectPriorityInfoBtn"
-                        android:layout_width="90dp"
-                        android:layout_height="22dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
                         android:background="@drawable/project_card_small_button"
-                        android:backgroundTint="@color/light_red"
+                        android:backgroundTint="@color/dark_black"
                         android:fontFamily="@font/lato_bold"
                         android:letterSpacing="-0.01"
-                        android:text="High Priority"
+                        android:text="High priority"
                         android:textAlignment="center"
+                        android:elevation="0dp"
+                        android:layout_weight="1"
                         android:textAllCaps="false"
-                        android:textColor="@color/dark_red"
+                        android:layout_marginRight="20dp"
+                        android:textColor="@color/white"
                         android:textSize="12sp" />
 
 
-<!--                                       <Button
-                        android:id="@+id/projectPriorityInfoBtn"
-                        android:layout_width="90dp"
-                        android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
-                        android:background="@drawable/project_card_small_button"
-                        android:backgroundTint="@color/light_red"
-                        android:fontFamily="@font/lato_bold"
-                        android:letterSpacing="-0.01"
-                        android:elevation="0dp"
-                        android:text="High priority"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/dark_red"
-                        android:textSize="12sp" />-->
 
                 </LinearLayout>
             </LinearLayout>

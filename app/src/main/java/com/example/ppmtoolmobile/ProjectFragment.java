@@ -1,11 +1,17 @@
 package com.example.ppmtoolmobile;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,13 +34,15 @@ import com.example.ppmtoolmobile.model.Project;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ProjectFragment extends Fragment implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
 
     private TextView sortProjectsTextView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
-    private EditText filterProjectEditText;
+//    private EditText filterProjectEditText;
     private RecyclerView recyclerView;
 
     private ProgressBar projectListLoadingProgressBar;
@@ -49,13 +57,14 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         View v = inflater.inflate(R.layout.fragment_project, null);
 
+        createNotificationChannel();
         databaseHelper = new ProjectAndUserDAOImpl(getActivity().getApplicationContext());
 
-        filterProjectEditText = v.findViewById(R.id.filterProjectEditText);
+//        filterProjectEditText = v.findViewById(R.id.filterProjectEditText);
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
 
-        Toast.makeText(ProjectFragment.this.getActivity(), "project fragment: " + authenticatedUser, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(ProjectFragment.this.getActivity(), "project fragment: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
 
 
@@ -64,25 +73,23 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         loadProjects(v);
         buildRecyclerView(v);
 
-        filterProjectEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+//        filterProjectEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                filterProjects(editable.toString());
+//            }
+//        });
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filterProjects(editable.toString());
-            }
-        });
-
-
+        setAlarmManager();
 
         sortProjectsTextView.setOnClickListener(this);
 //        searchProjectEditText.setOnClickListener(this);
-
-
 
 
         return v;
@@ -102,6 +109,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onClick(View view) {
         if(view == sortProjectsTextView) {
             sortProjects();
+
         }
     }
 
@@ -129,9 +137,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                         break;
                     case R.id.option_due_date_newest_to_oldest:
                         // sort function
+                        projectList = databaseHelper.sortByDateNewestToOldest(theUserId);
+                        adapter.refreshList(projectList);
                         break;
                     case R.id.option_due_date_oldest_to_newest:
                         // sort function
+                        projectList = databaseHelper.sortByDateOldestToNewest(theUserId);
+                        adapter.refreshList(projectList);
                         break;
                 }
 
@@ -168,6 +180,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
 
+
+        Toast.makeText(ProjectFragment.this.getActivity(), project.toString(), Toast.LENGTH_SHORT).show();
 
         PopupMenu popupMenu = new PopupMenu(ProjectFragment.this.getActivity(), sortProjectsTextView);
 
@@ -237,18 +251,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         projectList = databaseHelper.getUserProjects(theUserId);
 
-//        for(Project p : projectList) {
-//            System.out.println(p.isProjectExpired(p.getDateCreated()));
-//        }
 
-//        for(Project p : projectList) {
-//            if(Long.parseLong(p.getDateDue().toString()) > Long.parseLong(p.getDateCreated().toString())) {
-//                System.out.print("OVERDUE::: " + p.getTitle() + " : " + p.getDateCreated() + " : " + p.getDateDue() + " : " + p.calculateDaysTillProjectDue(p.getDateCreated(), p.getDateDue()) + "\n");
-//            } else {
-//
-//                System.out.print("NOT OVERDUE::: " + p.getTitle() + " : " + p.getDateCreated() + " : " + p.getDateDue() + " : " + p.calculateDaysTillProjectDue(p.getDateCreated(), p.getDateDue()) + "\n");
-//            }
-//        }
+
         projectListLoadingProgressBar.setVisibility(View.GONE);
 
 
@@ -272,6 +276,62 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+
+    private void createNotificationChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "ppmtoolReminderChannel";
+            String description = "Channel for ppmtool reminder";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+
+            NotificationChannel channel = new NotificationChannel("ppmtool", name, importance);
+            channel.setDescription(description);
+
+            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void setAlarmManager() {
+        Toast.makeText(ProjectFragment.this.getActivity(), "Reminder set", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ProjectFragment.this.getActivity(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(ProjectFragment.this.getActivity(), 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        long currentTimeMillis = System.currentTimeMillis();
+        // Remind 2 weeks (336 hours) (20160 minutes) (1,209,600,000 milliseconds) before due date
+        // Remind 1 week (168 hours) (10080 minutes) (604,800,000 milliseconds) before due date
+        // Remind 1 day (24 hours) (1440 minutes) (86,400,000 milliseconds) before due date
+        // Remind 1 hour (60 minutes) (3,600,000 milliseconds) before due date
+        // Remind 30 minutes (1,800,000 milliseconds) before due date
+
+
+
+        for(Project p : projectList) {
+            if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 1_209_600_00){
+
+            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 604_800_000) {
+
+            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 86_400_000) {
+
+            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 3_600_000) {
+
+            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 1_800_000) {
+
+            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 120_000){ // 2 mins
+                alarmManager.set(AlarmManager.RTC_WAKEUP, currentTimeMillis + 120_000, pendingIntent);
+            }
+            System.out.println(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()));
+        }
+
+
+
+//        long tenSeconds = projectList.get(0).getProjectRemainingTimeInMilliseconds(projectList.get(0).getDateDue());
+
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, currentTimeMillis + tenSeconds, pendingIntent);
     }
 
 }

@@ -57,7 +57,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         // getting current username through intent from LoginActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
 
-        Toast.makeText(this, "project activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "project activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         // current user id
         userId = databaseHelper.getCurrentUserId(authenticatedUser);

@@ -151,6 +151,102 @@
 
 
         <TextView
+            android:id="@+id/editProjectRemindMeTitleTextView"
+            android:layout_width="wrap_content"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_bold"
+            android:letterSpacing="-0.01"
+            android:layout_marginTop="30dp"
+            android:text="Remind me"
+            android:textColor="@color/dark_black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/editProjectRemindMeDescriptionTextView"
+            android:layout_width="wrap_content"
+            android:textAlignment="center"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/lato"
+            android:letterSpacing="-0.01"
+            android:text="Send a notification when a project is closing on a due date"
+            android:textColor="@color/dark_blue_gray"
+            android:textSize="12sp" />
+
+        <CheckBox
+            android:id="@+id/editProjectRemindMe2WeeksCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:buttonTint="@color/primary_purple"
+            android:backgroundTint="@color/primary_purple"
+            android:letterSpacing="-0.01"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            android:text="2 weeks before"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/editProjectRemindMe1WeekCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:buttonTint="@color/primary_purple"
+            android:backgroundTint="@color/primary_purple"
+            android:letterSpacing="-0.01"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            android:text="1 week before"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/editProjectRemindMe1DayCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:buttonTint="@color/primary_purple"
+            android:backgroundTint="@color/primary_purple"
+            android:letterSpacing="-0.01"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            android:text="1 day before"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/editProjectRemindMe1HourCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:buttonTint="@color/primary_purple"
+            android:backgroundTint="@color/primary_purple"
+            android:letterSpacing="-0.01"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            android:text="1 hour before"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/editProjectRemindMe30MinutesCheckbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
+            android:buttonTint="@color/primary_purple"
+            android:backgroundTint="@color/primary_purple"
+            android:letterSpacing="-0.01"
+            android:scaleX=".9"
+            android:scaleY=".9"
+            android:text="30 minutes before"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp" />
+
+
+
+        <TextView
             android:id="@+id/editProjectPriorityTitleTextView"
             android:layout_width="wrap_content"
             android:textAlignment="center"
