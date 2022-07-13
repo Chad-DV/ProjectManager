@@ -176,7 +176,7 @@
 
         <CheckBox
             android:id="@+id/editProjectRemindMe2WeeksCheckbox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
             android:buttonTint="@color/primary_purple"
@@ -184,13 +184,13 @@
             android:letterSpacing="-0.01"
             android:scaleX=".9"
             android:scaleY=".9"
-            android:text="2 weeks before"
+            android:text="@string/remindMe2Weeks"
             android:layout_marginTop="10dp"
             android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/editProjectRemindMe1WeekCheckbox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
             android:buttonTint="@color/primary_purple"
@@ -198,13 +198,13 @@
             android:letterSpacing="-0.01"
             android:scaleX=".9"
             android:scaleY=".9"
-            android:text="1 week before"
+            android:text="@string/remindMe1Week"
             android:layout_marginTop="10dp"
             android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/editProjectRemindMe1DayCheckbox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
             android:buttonTint="@color/primary_purple"
@@ -212,13 +212,13 @@
             android:letterSpacing="-0.01"
             android:scaleX=".9"
             android:scaleY=".9"
-            android:text="1 day before"
+            android:text="@string/remindMe1Day"
             android:layout_marginTop="10dp"
             android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/editProjectRemindMe1HourCheckbox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
             android:buttonTint="@color/primary_purple"
@@ -226,13 +226,13 @@
             android:letterSpacing="-0.01"
             android:scaleX=".9"
             android:scaleY=".9"
-            android:text="1 hour before"
+            android:text="@string/remindMe1Hour"
             android:layout_marginTop="10dp"
             android:textSize="16sp" />
 
         <CheckBox
             android:id="@+id/editProjectRemindMe30MinutesCheckbox"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato"
             android:buttonTint="@color/primary_purple"
@@ -240,7 +240,7 @@
             android:letterSpacing="-0.01"
             android:scaleX=".9"
             android:scaleY=".9"
-            android:text="30 minutes before"
+            android:text="@string/remindMe30Minutes"
             android:layout_marginTop="10dp"
             android:textSize="16sp" />
 
@@ -305,14 +305,6 @@
                 android:layout_height="wrap_content"
                 android:text="Low" />
 
-
-            <RadioButton
-                android:id="@+id/projectPriorityNoneRadioBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/primary_purple"
-                android:backgroundTint="@color/primary_purple"
-                android:text="None" />
         </RadioGroup>
 
 

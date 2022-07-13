@@ -25,5 +25,7 @@ public interface ProjectAndUserDAO {
     int getProjectCount(long userId);
     List<Project> sortByPriorityHighToNone(long userId);
     List<Project> sortByPriorityNoneToHigh(long userId);
+    List<Project> sortByDateNewestToOldest(long userId);
+    List<Project> sortByDateOldestToNewest(long userId);
 
 }

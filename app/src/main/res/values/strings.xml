@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">PPMToolMobile</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="remindMe2Weeks">2 weeks before</string>
+    <string name="remindMe1Week">1 week before</string>
+    <string name="remindMe1Day">1 day before</string>
+    <string name="remindMe1Hour">1 hour before</string>
+    <string name="remindMe30Minutes">30 minutes before</string>
 </resources>

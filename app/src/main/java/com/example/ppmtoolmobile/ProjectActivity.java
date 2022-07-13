@@ -45,7 +45,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
 
-        filterProjectEditText = findViewById(R.id.filterProjectEditText);
+//        filterProjectEditText = findViewById(R.id.filterProjectEditText);
         projectAddBtn1 = findViewById(R.id.projectAddBtn1);
         displayUserProjectCountTextView = findViewById(R.id.displayUserProjectCountTextView);
         welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
@@ -70,13 +70,13 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         displayUserProjectCountTextView.setText("You currently have " + projectCount + " projects");
 //
 //
-//        if(projectCount <= 0) {
-//            loadFragment(new EmptyProjectListFragment());
-//        } else {
-//            loadFragment(new ProjectFragment());
-//        }
+        if(projectCount <= 0) {
+            loadFragment(new EmptyProjectListFragment());
+        } else {
+            loadFragment(new ProjectFragment());
+        }
 
-        loadFragment(new ProjectFragment());
+//        loadFragment(new ProjectFragment());
 
         // Perform item selected listener
         bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -101,7 +101,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-        filterProjectEditText.setOnClickListener(this);
+//        filterProjectEditText.setOnClickListener(this);
         projectAddBtn1.setOnClickListener(this);
 
     }

@@ -20,6 +20,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent goToMenuActivity = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(goToMenuActivity);
             }
-        }, 5000);
+        }, 1000);
     }
 }

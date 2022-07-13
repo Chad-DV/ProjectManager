@@ -303,14 +303,6 @@
             android:layout_height="wrap_content"
             android:text="Low" />
 
-
-        <RadioButton
-            android:id="@+id/projectPriorityNoneRadioBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="@color/primary_purple"
-            android:backgroundTint="@color/primary_purple"
-            android:text="None" />
     </RadioGroup>
 
 

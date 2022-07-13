@@ -62,13 +62,14 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(long id, String title, String description, LocalDateTime dateDue, String priority) {
+    public Project(long id, String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.dateCreated = LocalDateTime.now();
         this.dateDue = dateDue;
         this.priority = priority;
+        this.remindMeInterval = remindMeInterval;
         this.checklist = checklist;
 
     }

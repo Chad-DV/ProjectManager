@@ -42,7 +42,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private TextView sortProjectsTextView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
-//    private EditText filterProjectEditText;
+    private EditText filterProjectEditText;
     private RecyclerView recyclerView;
 
     private ProgressBar projectListLoadingProgressBar;
@@ -60,7 +60,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         createNotificationChannel();
         databaseHelper = new ProjectAndUserDAOImpl(getActivity().getApplicationContext());
 
-//        filterProjectEditText = v.findViewById(R.id.filterProjectEditText);
+        filterProjectEditText = v.findViewById(R.id.filterProjectEditText);
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
 
@@ -73,18 +73,18 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         loadProjects(v);
         buildRecyclerView(v);
 
-//        filterProjectEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                filterProjects(editable.toString());
-//            }
-//        });
+        filterProjectEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filterProjects(editable.toString());
+            }
+        });
 
         setAlarmManager();
 

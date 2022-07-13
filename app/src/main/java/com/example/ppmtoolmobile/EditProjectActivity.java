@@ -36,7 +36,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private ProjectAndUserDAOImpl databaseHelper;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
-    private RadioButton editProjectPriorityRadioBtn;
+    private RadioButton editProjectPriorityRadioBtn, projectPriorityHighRadioBtn, projectPriorityMediumRadioBtn, projectPriorityLowRadioBtn;
     private RadioGroup editProjectPriorityRadioGroup;
     private static String strSeparator = ", ";
 
@@ -59,6 +59,10 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueTimeEditText = findViewById(R.id.editProjectDueTimeEditText);
         editProjectBtn = findViewById(R.id.editProjectBtn);
         editProjectPriorityRadioGroup = findViewById(R.id.editProjectPriorityRadioGroup);
+
+        projectPriorityHighRadioBtn = findViewById(R.id.projectPriorityHighRadioBtn);
+        projectPriorityMediumRadioBtn = findViewById(R.id.projectPriorityMediumRadioBtn);
+        projectPriorityLowRadioBtn = findViewById(R.id.projectPriorityLowRadioBtn);
         editProjectNavigationBack = findViewById(R.id.editProjectNavigationBack);
 
         databaseHelper = new ProjectAndUserDAOImpl(this);
@@ -130,21 +134,35 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         String time = dueDateAndTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
         String[] remindMeValues = convertStringToArray(project.getRemindMeInterval());
+        String priority = project.getPriority();
+
+        int priority_high_id = 2_131_296_703;
+        int priority_medium_id = 2_131_296_706;
+        int priority_low_id = 2_131_296_705;
+
+
+        if(priority.equalsIgnoreCase("High")) editProjectPriorityRadioGroup.check(priority_high_id);
+        if(priority.equalsIgnoreCase("Medium")) editProjectPriorityRadioGroup.check(priority_medium_id);
+        if(priority.equalsIgnoreCase("Low")) editProjectPriorityRadioGroup.check(priority_low_id);
 
         System.out.println("Project: " + project);
-        System.out.println("remind me values: ");
-        for (String s : remindMeValues) {
-            System.out.println(s);
-        }
-
-        Toast.makeText(EditProjectActivity.this, project.getRemindMeInterval(), Toast.LENGTH_SHORT).show();
 
         editProjectTitleEditText.setText(project.getTitle());
         editProjectDescriptionEditText.setText(project.getDescription());
         editProjectDueDateEditText.setText(date);
         editProjectDueTimeEditText.setText(time);
 
-        editProjectRemindMe2WeeksCheckbox.setChecked(true);
+
+        System.out.println("priority: " + priority);
+        if(remindMeValues.length > 0) {
+            if(!remindMeValues[0].equals("null")) editProjectRemindMe2WeeksCheckbox.setChecked(true);
+            if(!remindMeValues[1].equals("null")) editProjectRemindMe1WeekCheckbox.setChecked(true);
+            if(!remindMeValues[2].equals("null")) editProjectRemindMe1DayCheckbox.setChecked(true);
+            if(!remindMeValues[3].equals("null")) editProjectRemindMe1HourCheckbox.setChecked(true);
+            if(!remindMeValues[4].equals("null")) editProjectRemindMe30MinutesCheckbox.setChecked(true);
+        }
+
+
 
     }
 
@@ -180,10 +198,10 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             String dateTime = dateDue + " " + timeDue;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority);
+            Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval);
 
 
-            System.out.println(theProject);
+            System.out.println("UPDATED PROJECT: " + theProject);
 
             boolean result = databaseHelper.editProject(theProject);
 
@@ -205,6 +223,8 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private String getProjectPriorityValue() {
         int radioId = editProjectPriorityRadioGroup.getCheckedRadioButtonId();
         editProjectPriorityRadioBtn = findViewById(radioId);
+
+        System.out.println("ratiod id: " + radioId + ", " + editProjectPriorityRadioBtn.getText());
         return editProjectPriorityRadioBtn.getText().toString();
     }
 
@@ -221,19 +241,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         if(editProjectRemindMe30MinutesCheckbox.isChecked())
             msg[4] = "30 minutes";
 
-
-        String strParsed = convertArrayToString(msg);
-        String[] arrParsed = convertStringToArray(strParsed);
-
-        System.out.println("STRING VALUE: " + strParsed);
-
-        System.out.println("ARRAY VALUE:");
-
-        for(String s: arrParsed) {
-            System.out.println(s);
-        }
-
-        return strParsed;
+        return convertArrayToString(msg);
     }
 
     public static String convertArrayToString(String[] array){
@@ -249,6 +257,10 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     }
 
     public static String[] convertStringToArray(String str){
+
+        if(str == null) {
+            return new String[]{};
+        }
         return str.split(strSeparator);
 
     }

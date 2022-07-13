@@ -385,6 +385,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
     public List<Project> sortByDateNewestToOldest(long userId) {
 
         SQLiteDatabase db = getReadableDatabase();
@@ -398,6 +399,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
     public List<Project> sortByDateOldestToNewest(long userId) {
 
         SQLiteDatabase db = getReadableDatabase();
