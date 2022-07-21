@@ -16,7 +16,7 @@
         android:id="@+id/logoImageView"
         android:layout_width="wrap_content"
         android:layout_height="100dp"
-        android:layout_marginTop="20dp"
+
         android:layout_marginBottom="10dp"
         app:srcCompat="@drawable/ic_logo" />
 
@@ -150,74 +150,74 @@
         android:textSize="15sp"
         app:backgroundTint="@null" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_height="wrap_content">
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        android:layout_height="wrap_content">-->
 
 
-        <View
-            android:id="@+id/SplitLine_hor1"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height= "1dp"
-            android:layout_weight="1"
-            android:background="@color/light_blue_gray" />
+<!--        <View-->
+<!--            android:id="@+id/SplitLine_hor1"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height= "1dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@color/light_blue_gray" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
-            android:textColor="@color/dark_blue_gray"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:text="Or"/>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:paddingRight="10dp"-->
+<!--            android:paddingLeft="10dp"-->
+<!--            android:textColor="@color/dark_blue_gray"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="13sp"-->
+<!--            android:text="Or"/>-->
 
-        <View
-            android:id="@+id/SplitLine_hor2"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height= "1dp"
-            android:background="@color/light_blue_gray" />
-
-
-
-    </LinearLayout>
+<!--        <View-->
+<!--            android:id="@+id/SplitLine_hor2"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_height= "1dp"-->
+<!--            android:background="@color/light_blue_gray" />-->
 
 
 
-
-    <Button
-        android:id="@+id/loginGoogleBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/outline_button"
-        android:fontFamily="@font/lato"
-        android:textSize="13sp"
-        android:drawableStart="@drawable/ic_google_logo"
-        android:textColor="@color/dark_gray"
-        android:elevation="0dp"
-        android:letterSpacing="-0.01"
-        android:text="Continue with Google"
-        android:textAllCaps="false" />
+<!--    </LinearLayout>-->
 
 
-    <Button
-        android:id="@+id/loginFacebookBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/outline_button"
-        android:fontFamily="@font/lato"
-        android:textSize="13sp"
-        android:drawableLeft="@drawable/ic_facebook_logo"
-        android:textColor="@color/dark_gray"
-        android:elevation="0dp"
-        android:letterSpacing="-0.01"
-        android:text="Continue with Facebook"
-        android:textAllCaps="false"/>
+
+
+<!--    <Button-->
+<!--        android:id="@+id/loginGoogleBtn"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/outline_button"-->
+<!--        android:fontFamily="@font/lato"-->
+<!--        android:textSize="13sp"-->
+<!--        android:drawableStart="@drawable/ic_google_logo"-->
+<!--        android:textColor="@color/dark_gray"-->
+<!--        android:elevation="0dp"-->
+<!--        android:letterSpacing="-0.01"-->
+<!--        android:text="Continue with Google"-->
+<!--        android:textAllCaps="false" />-->
+
+
+<!--    <Button-->
+<!--        android:id="@+id/loginFacebookBtn"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:background="@drawable/outline_button"-->
+<!--        android:fontFamily="@font/lato"-->
+<!--        android:textSize="13sp"-->
+<!--        android:drawableLeft="@drawable/ic_facebook_logo"-->
+<!--        android:textColor="@color/dark_gray"-->
+<!--        android:elevation="0dp"-->
+<!--        android:letterSpacing="-0.01"-->
+<!--        android:text="Continue with Facebook"-->
+<!--        android:textAllCaps="false"/>-->
 
 
     <ProgressBar

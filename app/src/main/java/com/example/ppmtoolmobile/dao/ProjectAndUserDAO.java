@@ -15,6 +15,7 @@ public interface ProjectAndUserDAO {
     String getCurrentUserFirstName(String emailAddress);
     long getCurrentUserId(String emailAddress);
     User getUserDetails(String theEmailAddress);
+    List<Object> getUserAndAvatarDetails(String theEmailAddress);
 
     // Project
     Boolean addProject(Project project, String emailAddress);
@@ -22,9 +23,10 @@ public interface ProjectAndUserDAO {
     Boolean deleteProjectById(long id);
     List<Project> getUserProjects(long userId);
     Project getProjectById(long projectId);
+    List<Project> searchProjects(long userId, String query);
     int getProjectCount(long userId);
-    List<Project> sortByPriorityHighToNone(long userId);
-    List<Project> sortByPriorityNoneToHigh(long userId);
+    List<Project> sortByPriorityHighToLow(long userId);
+    List<Project> sortByPriorityLowToHigh(long userId);
     List<Project> sortByDateNewestToOldest(long userId);
     List<Project> sortByDateOldestToNewest(long userId);
 

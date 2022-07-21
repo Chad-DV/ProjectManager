@@ -42,7 +42,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private TextView sortProjectsTextView;
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
-    private EditText filterProjectEditText;
     private RecyclerView recyclerView;
 
     private ProgressBar projectListLoadingProgressBar;
@@ -50,6 +49,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private ProjectAndUserDAOImpl databaseHelper;
     private long theUserId;
     private String authenticatedUser;
+    private String query;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -60,7 +60,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         createNotificationChannel();
         databaseHelper = new ProjectAndUserDAOImpl(getActivity().getApplicationContext());
 
-        filterProjectEditText = v.findViewById(R.id.filterProjectEditText);
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
 
@@ -73,23 +72,25 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         loadProjects(v);
         buildRecyclerView(v);
 
-        filterProjectEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                filterProjects(editable.toString());
-            }
-        });
+//        filterProjectEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                filterProjects(editable.toString());
+//            }
+//        });
 
         setAlarmManager();
 
+
+
+
         sortProjectsTextView.setOnClickListener(this);
-//        searchProjectEditText.setOnClickListener(this);
 
 
         return v;
@@ -100,7 +101,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     @Override
     public void onStart() {
         super.onStart();
-        refreshProjects();
+        projectList = databaseHelper.getUserProjects(theUserId);
+        adapter.refreshList(projectList);
 
     }
 
@@ -109,6 +111,11 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onClick(View view) {
         if(view == sortProjectsTextView) {
             sortProjects();
+
+            if (getArguments() != null) {
+                query = getArguments().getString("query");
+            }
+            System.out.println("fragme " + query);
 
         }
     }
@@ -127,12 +134,12 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                 switch (menuItem.getItemId()) {
                     case R.id.option_priority_high_low:
                         // sort function
-                        projectList = databaseHelper.sortByPriorityHighToNone(theUserId);
+                        projectList = databaseHelper.sortByPriorityHighToLow(theUserId);
                         adapter.refreshList(projectList);
                         break;
                     case R.id.option_priority_low_high:
                         // sort function
-                        projectList = databaseHelper.sortByPriorityNoneToHigh(theUserId);
+                        projectList = databaseHelper.sortByPriorityLowToHigh(theUserId);
                         adapter.refreshList(projectList);
                         break;
                     case R.id.option_due_date_newest_to_oldest:
@@ -214,24 +221,27 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void filterProjects(String query) {
-        List<Project> filteredList = new ArrayList<>();
+    private void filterProjects() {
 
-        for (Project project : projectList) {
-            if (project.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                filteredList.add(project);
-            }
-        }
 
-        adapter.refreshList(filteredList);
+
+//        List<Project> filteredList = new ArrayList<>();
+//
+//        for (Project project : projectList) {
+//            if (project.getTitle().toLowerCase().contains(query.toLowerCase())) {
+//                filteredList.add(project);
+//            }
+//        }
+//
+//        adapter.refreshList(filteredList);
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void refreshProjects() {
-        projectList = databaseHelper.getUserProjects(theUserId);
-        adapter.refreshList(projectList);
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    private void refreshProjects() {
+//        projectList = databaseHelper.getUserProjects(theUserId);
+//        adapter.refreshList(projectList);
+//    }
 
     private void buildRecyclerView(View v) {
         recyclerView = v.findViewById(R.id.projectRecyclerView);
@@ -271,10 +281,10 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
                     recyclerView.setAdapter(adapter);
                     Toast.makeText(ProjectFragment.this.getActivity(), String.valueOf(res), Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton(android.R.string.paste_as_plain_text, (dialog, which) -> {
+                .setNegativeButton(android.R.string.no, (dialog, which) -> {
                     Toast.makeText(ProjectFragment.this.getActivity(), "Not deleted", Toast.LENGTH_SHORT).show();
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(android.R.drawable.alert_dark_frame)
                 .show();
     }
 

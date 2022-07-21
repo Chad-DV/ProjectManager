@@ -99,6 +99,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if(!databaseHelper.isEmailExists(emailAddress)) {
             databaseHelper.register(new User(firstName, lastName, emailAddress, password));
+            Toast.makeText(this, "Account created successfully! You can now login", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "User with email " + emailAddress + " already exists!", Toast.LENGTH_LONG).show();
         }

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +24,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
-public class ProjectActivity extends AppCompatActivity implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
+public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button projectAddBtn1;
     private TextView displayUserProjectCountTextView,welcomeUserTextView1;
     private EditText filterProjectEditText;
+    private LinearLayout filterProjectLinearLayout;
     private ProjectAndUserDAOImpl databaseHelper;
     private BottomNavigationView bottomNavView;
     private List<Project> projectList;
@@ -45,7 +47,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_project);
 
-//        filterProjectEditText = findViewById(R.id.filterProjectEditText);
+        filterProjectEditText = findViewById(R.id.filterProjectEditText);
         projectAddBtn1 = findViewById(R.id.projectAddBtn1);
         displayUserProjectCountTextView = findViewById(R.id.displayUserProjectCountTextView);
         welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
@@ -101,7 +103,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-//        filterProjectEditText.setOnClickListener(this);
+        filterProjectEditText.setOnClickListener(this);
         projectAddBtn1.setOnClickListener(this);
 
     }
@@ -128,7 +130,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             goToAddProjectIntent.putExtra("authenticatedUser", authenticatedUser);
             startActivity(goToAddProjectIntent);
         } else if(view == filterProjectEditText) {
-//            searchProjects();
+            searchProjects();
         }
     }
 
@@ -141,18 +143,19 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void searchProjects() {
+        String query = filterProjectEditText.getText().toString().trim();
+
+        Bundle bundle = new Bundle();
+        bundle.putString("query", query);
+        System.out.println("in prj act: " + query);
+// set MyFragment Arguments
+        ProjectFragment myObj = new ProjectFragment();
+        myObj.setArguments(bundle);
+
+
 
 
     }
 
 
-    @Override
-    public void onProjectClick(View view, int position) {
-
-    }
-
-    @Override
-    public void onProjectLongClick(View view, int position) {
-
-    }
 }

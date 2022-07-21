@@ -6,4 +6,10 @@
     <string name="remindMe1Day">1 day before</string>
     <string name="remindMe1Hour">1 hour before</string>
     <string name="remindMe30Minutes">30 minutes before</string>
+    <string name="emailAddress">Email address</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="noAccountPrompt">Don\'t have an account?</string>
+    <string name="createAccountPrompt">Create one</string>
+
 </resources>
