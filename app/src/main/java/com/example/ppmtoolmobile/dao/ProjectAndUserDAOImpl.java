@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.example.ppmtoolmobile.ProfileActivity;
 import com.example.ppmtoolmobile.model.Priority;
 import com.example.ppmtoolmobile.model.Project;
 import com.example.ppmtoolmobile.model.User;
@@ -50,6 +51,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     public static final String COLUMN_PROJECT_PRIORITY = "priority";
     public static final String COLUMN_PROJECT_CHECKLIST = "checklist";
     public static final String COLUMN_PROJECT_REMIND_ME_INTERVAL = "remind_me_interval";
+    public static final String COLUMN_PROJECT_STATUS = "status";
     public static final String COLUMN_USER_PROJECT_FK = "user_id";
 
     public static final String USER_AVATAR_TABLE = "user_avatar";
@@ -69,7 +71,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
     private String CREATE_PROJECT_TABLE_QUERY = "CREATE TABLE " + PROJECT_TABLE + "(" + COLUMN_PROJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PROJECT_TITLE + " TEXT,"
             + COLUMN_PROJECT_DESCRIPTION + " TEXT," + COLUMN_PROJECT_DATE_CREATED + " TEXT," + COLUMN_PROJECT_DATE_DUE + " TEXT,"
-            + COLUMN_PROJECT_PRIORITY + " TEXT," + COLUMN_PROJECT_REMIND_ME_INTERVAL + " TEXT," + COLUMN_PROJECT_CHECKLIST + " TEXT," + COLUMN_USER_PROJECT_FK + " INTEGER,"
+            + COLUMN_PROJECT_PRIORITY + " TEXT," + COLUMN_PROJECT_REMIND_ME_INTERVAL + " TEXT," + COLUMN_PROJECT_CHECKLIST + " TEXT," + COLUMN_PROJECT_STATUS + " INTEGER, " + COLUMN_USER_PROJECT_FK + " INTEGER,"
             + "FOREIGN KEY(" + COLUMN_USER_PROJECT_FK + ") REFERENCES " + USER_TABLE + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE ON UPDATE CASCADE)";
 
     private String CREATE_USER_AVATAR_TABLE_QUERY = "CREATE TABLE " + USER_AVATAR_TABLE + "(" + COLUMN_USER_AVATAR_NAME + " TEXT, " + COLUMN_USER_AVATAR_BLOB + " BLOB," + COLUMN_USER_AVATAR_PK + " INTEGER,"
@@ -273,6 +275,8 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             byte[] blob = cursor.getBlob(4);
             Bitmap obj = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 
+            obj = ProfileActivity.getCroppedBitmap(obj, 400);
+
 
             userDetails.add(String.valueOf(userId));
             userDetails.add(firstName);
@@ -290,6 +294,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         return userDetails;
     }
 
+    @Override
     public Boolean saveAvatar(UserAvatar userAvatar, String emailAddress) {
         try {
             SQLiteDatabase dbWrite = this.getWritableDatabase();
@@ -298,6 +303,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
             avatarOutputStream = new ByteArrayOutputStream();
             avatar.compress(Bitmap.CompressFormat.JPEG, 100, avatarOutputStream);
+
             avatarByteArray = avatarOutputStream.toByteArray();
 
             ContentValues cv = new ContentValues();
@@ -339,6 +345,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 //        Cursor cursor = dbRead.rawQuery("SELECT");
 //    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Boolean addProject(Project project, String emailAddress) {
         SQLiteDatabase dbWrite = this.getWritableDatabase();
@@ -363,6 +370,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
             cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
             cv.put(COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
+            cv.put(COLUMN_PROJECT_STATUS, project.isStatus());
             cv.put(COLUMN_USER_PROJECT_FK, userId);
         }
 
@@ -374,6 +382,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Boolean editProject(Project project) {
         SQLiteDatabase db = this.getWritableDatabase();

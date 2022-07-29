@@ -9,6 +9,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private TextView changeUserAvatarTextView;
     private ImageView userAvatarImageView;
     private BottomNavigationView bottomNavView;
+    private ProgressBar avatarProgressBar;
     private Button profileUpdateBtn;
     private ImageView profileNavigationBack;
     private ProjectAndUserDAOImpl databaseHelper;
@@ -59,12 +66,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         changeUserAvatarTextView = findViewById(R.id.changeUserAvatarTextView);
         userAvatarImageView = findViewById(R.id.userAvatarImageView);
         profileUpdateBtn = findViewById(R.id.profileUpdateBtn);
+        avatarProgressBar = findViewById(R.id.avatarProgressBar);
 
         // getting current username through intent from ProjectActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
 
         Toast.makeText(this, "profile activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
         databaseHelper = new ProjectAndUserDAOImpl(this);
+
+        avatarProgressBar.setVisibility(View.VISIBLE);
+
         loadUserDetails();
 
         profileNavigationBack.setOnClickListener(this);
@@ -73,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_profile);
+
 
 
 
@@ -131,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 avatarUri = data.getData();
                 InputStream imageStream = getContentResolver().openInputStream(avatarUri);
                 selectedAvatar = BitmapFactory.decodeStream(imageStream);
-                selectedAvatar = getResizedBitmap(selectedAvatar, 400);
+                selectedAvatar = getCroppedBitmap(selectedAvatar, 400);
 
                 userAvatarImageView.setImageBitmap(selectedAvatar);
             }
@@ -142,9 +154,26 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
+    public static Bitmap getCroppedBitmap(Bitmap bitmap, int maxSize) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+        canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+                bitmap.getWidth() / 2, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
 
         float bitmapRatio = (float)width / (float) height;
         if (bitmapRatio > 1) {
@@ -154,7 +183,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             height = maxSize;
             width = (int) (height * bitmapRatio);
         }
-        return Bitmap.createScaledBitmap(image, width, height, true);
+
+        return Bitmap.createScaledBitmap(output, width, height, false);
+//        return output;
     }
 
     private void moveToIntent(Intent intent) {
@@ -169,10 +200,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void loadUserDetails() {
         List<Object> userAndAvatarDetails = databaseHelper.getUserAndAvatarDetails(authenticatedUser);
         if(!userAndAvatarDetails.isEmpty()) {
+            avatarProgressBar.setVisibility(View.GONE);
             Bitmap bitmap = (Bitmap) userAndAvatarDetails.get(4);
             profileFirstNameEditText.setText(userAndAvatarDetails.get(1).toString());
             profileLastNameEditText.setText(userAndAvatarDetails.get(2).toString());
             profileEmailAddressEditText.setText(userAndAvatarDetails.get(3).toString());
+
             userAvatarImageView.setImageBitmap(bitmap);
 
         } else {
@@ -181,6 +214,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             profileLastNameEditText.setText(userDetails.getLastName());
             profileEmailAddressEditText.setText(userDetails.getEmailAddress());
         }
+
+
 
 
 

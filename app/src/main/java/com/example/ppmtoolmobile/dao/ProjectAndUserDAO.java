@@ -2,6 +2,7 @@ package com.example.ppmtoolmobile.dao;
 
 import com.example.ppmtoolmobile.model.Project;
 import com.example.ppmtoolmobile.model.User;
+import com.example.ppmtoolmobile.model.UserAvatar;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public interface ProjectAndUserDAO {
     long getCurrentUserId(String emailAddress);
     User getUserDetails(String theEmailAddress);
     List<Object> getUserAndAvatarDetails(String theEmailAddress);
+    Boolean saveAvatar(UserAvatar userAvatar, String emailAddress);
 
     // Project
     Boolean addProject(Project project, String emailAddress);

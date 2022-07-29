@@ -29,7 +29,7 @@ public class ViewProjectActivity extends AppCompatActivity {
 
         viewProjectTitleTextView = findViewById(R.id.viewProjectTitleTextView);
         viewProjectDescriptionTextView = findViewById(R.id.viewProjectDescriptionTextView);
-        viewProjectDueDateTextView = findViewById(R.id.viewProjectDueDateTextView);
+        viewProjectDueDateTextView = findViewById(R.id.viewProjectDateDueTextView2);
 
 
         databasehelper = new ProjectAndUserDAOImpl(this);

@@ -224,7 +224,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         int radioId = editProjectPriorityRadioGroup.getCheckedRadioButtonId();
         editProjectPriorityRadioBtn = findViewById(radioId);
 
-        System.out.println("ratiod id: " + radioId + ", " + editProjectPriorityRadioBtn.getText());
+//        System.out.println("ratiod id: " + radioId + ", " + editProjectPriorityRadioBtn.getText());
         return editProjectPriorityRadioBtn.getText().toString();
     }
 

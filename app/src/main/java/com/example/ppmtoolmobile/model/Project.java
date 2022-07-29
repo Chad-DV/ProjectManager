@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class Project {
     private long id;
     private String title;
@@ -30,6 +31,7 @@ public class Project {
     private String checklist;
     private String remindMeInterval;
     private long userId;
+    private boolean status = false;
 
     public Project() {
 
@@ -91,10 +93,8 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean isProjectExpired(LocalDateTime dateDue) {
+    public boolean isProjectExpired() {
         LocalDateTime current = LocalDateTime.now();
-        long minutes = ChronoUnit.MINUTES.between(current, dateDue);
-
 
         // Here, notify the user when 1 hour is left till the project due date
 //        if(minutes == 60) {
@@ -194,11 +194,28 @@ public class Project {
         this.remindMeInterval = remindMeInterval;
     }
 
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
 
-    @NonNull
     @Override
     public String toString() {
-        return id + ", " + title + ", " + description + ", " + dateCreated + ", " + dateDue + ", " + priority + ", " + checklist + ", " + remindMeInterval + "\n";
+        return "Project{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", dateCreated=" + dateCreated +
+                ", dateDue=" + dateDue +
+                ", priority='" + priority + '\'' +
+                ", checklist='" + checklist + '\'' +
+                ", remindMeInterval='" + remindMeInterval + '\'' +
+                ", userId=" + userId +
+                ", status=" + status +
+                '}';
     }
 }

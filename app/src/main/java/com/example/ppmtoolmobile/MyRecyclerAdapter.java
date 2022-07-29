@@ -73,7 +73,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
         holder.projectListDescriptionTextView.setText(project.getDescription());
 
 //        String dateDue = due.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        boolean isExpired = project.isProjectExpired(project.getDateDue());
+        boolean isExpired = project.isProjectExpired();
         holder.projectDueStatusInfoBtn.setText(String.valueOf(isExpired ? "expired" : "not expired"));
 
 
