@@ -143,7 +143,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 avatarUri = data.getData();
                 InputStream imageStream = getContentResolver().openInputStream(avatarUri);
                 selectedAvatar = BitmapFactory.decodeStream(imageStream);
-                selectedAvatar = getCroppedBitmap(selectedAvatar, 400);
+                selectedAvatar = getCroppedBitmap(selectedAvatar, 500);
 
                 userAvatarImageView.setImageBitmap(selectedAvatar);
             }

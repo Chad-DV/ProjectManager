@@ -47,7 +47,7 @@
                 android:id="@+id/viewProjectTitleTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato_bold"
+                android:fontFamily="@font/roboto_bold"
                 android:letterSpacing="-0.01"
                 android:text="Create an account"
                 android:layout_marginTop="300dp"
@@ -58,7 +58,7 @@
                 android:id="@+id/viewProjectDescriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato"
+                android:fontFamily="@font/roboto"
                 android:layout_marginTop="10dp"
                 android:letterSpacing="-0.01"
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor purus non enim praesent elementum facilisis leo."
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:letterSpacing="-0.01"
 
                     android:text="Date created: "
@@ -86,7 +86,7 @@
                     android:id="@+id/viewProjectDateCreatedTextView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato"
+                    android:fontFamily="@font/roboto"
                     android:layout_marginTop="30dp"
 
                     android:letterSpacing="-0.01"
@@ -106,7 +106,7 @@
                     android:id="@+id/viewProjectDateDueTextView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:layout_marginTop="30dp"
                     android:letterSpacing="-0.01"
 
@@ -118,7 +118,7 @@
                     android:id="@+id/viewProjectDateDueTextView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato"
+                    android:fontFamily="@font/roboto"
                     android:layout_marginTop="30dp"
 
                     android:letterSpacing="-0.01"
@@ -138,7 +138,7 @@
                     android:id="@+id/viewProjectPriorityTextView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:layout_marginTop="30dp"
                     android:letterSpacing="-0.01"
 
@@ -150,7 +150,7 @@
                     android:id="@+id/viewProjectPriorityTextView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato"
+                    android:fontFamily="@font/roboto"
                     android:layout_marginTop="30dp"
 
                     android:letterSpacing="-0.01"
@@ -169,7 +169,7 @@
                     android:id="@+id/viewProjectChecklistTextView1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:layout_marginTop="30dp"
                     android:letterSpacing="-0.01"
 
@@ -181,7 +181,7 @@
                     android:id="@+id/viewProjectChecklistTextView2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato"
+                    android:fontFamily="@font/roboto"
                     android:layout_marginTop="30dp"
 
                     android:letterSpacing="-0.01"

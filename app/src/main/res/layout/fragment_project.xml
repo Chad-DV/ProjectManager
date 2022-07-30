@@ -6,6 +6,7 @@
         android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         tools:context=".ProjectFragment"
         android:orientation="vertical">
 
@@ -21,7 +22,7 @@
 <!--                android:background="@drawable/search_input"-->
 <!--                android:drawableLeft="@drawable/ic_search_icon"-->
 <!--                android:drawablePadding="15sp"-->
-<!--                android:fontFamily="@font/lato"-->
+<!--                android:fontFamily="@font/roboto"-->
 <!--                android:hint="Search for a project"-->
 <!--                android:letterSpacing="-0.01"-->
 <!--                android:textColor="@color/dark_black"-->
@@ -46,19 +47,20 @@
                     android:id="@+id/loginTextView1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:layout_weight="1"
-                    android:letterSpacing="-0.03"
+                    android:letterSpacing="-0.01"
                     android:text="My projects"
+
                     android:textAlignment="textStart"
                     android:textColor="@color/dark_black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/sortProjectsTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:layout_gravity="center"
                     android:letterSpacing="-0.03"
                     android:text="Sort by"
@@ -88,7 +90,7 @@
 <!--                android:background="@drawable/search_input"-->
 <!--                android:drawableLeft="@drawable/ic_search_icon"-->
 <!--                android:drawablePadding="15sp"-->
-<!--                android:fontFamily="@font/lato"-->
+<!--                android:fontFamily="@font/roboto"-->
 <!--                android:hint="Search for a project"-->
 <!--                android:letterSpacing="-0.01"-->
 <!--                android:textColor="@color/dark_black"-->

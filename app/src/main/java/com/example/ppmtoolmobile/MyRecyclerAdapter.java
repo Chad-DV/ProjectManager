@@ -57,16 +57,18 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
 
 
+
+
         if(project.getPriority().equals("High") || project.getPriority().equals("None")) {
-//            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_red);
-//            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_red);
+            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_red);
+            holder.projectPriorityInfoBtn.setBackgroundResource(R.drawable.btn_prj_high_priority);
         } else if(project.getPriority().equals("Medium")) {
-//            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_orange);
-//            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_orange);
+            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_orange);
+            holder.projectPriorityInfoBtn.setBackgroundResource(R.drawable.btn_prj_medium_priority);
 
         } else if(project.getPriority().equals("Low")) {
-//            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_green);
-//            holder.projectPriorityInfoBtn.setBackgroundResource(R.color.light_green);
+            holder.projectPriorityInfoBtn.setTextColor(R.color.white);
+            holder.projectPriorityInfoBtn.setBackgroundResource(R.drawable.btn_prj_low_priority);
         }
 
         holder.projectListTitleTextView.setText(project.getTitle());
@@ -74,7 +76,15 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.My
 
 //        String dateDue = due.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         boolean isExpired = project.isProjectExpired();
-        holder.projectDueStatusInfoBtn.setText(String.valueOf(isExpired ? "expired" : "not expired"));
+
+        if(isExpired) {
+            holder.projectDueStatusInfoBtn.setText("Expired");
+            holder.projectDueStatusInfoBtn.setBackgroundResource(R.drawable.btn_prj_status_expired);
+        } else {
+            holder.projectDueStatusInfoBtn.setText("Not Expired");
+            holder.projectDueStatusInfoBtn.setBackgroundResource(R.drawable.btn_prj_status_not_expired);
+        }
+
 
 
 

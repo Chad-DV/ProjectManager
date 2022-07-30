@@ -40,6 +40,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private RadioGroup editProjectPriorityRadioGroup;
     private static String strSeparator = ", ";
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,10 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         projectPriorityMediumRadioBtn = findViewById(R.id.projectPriorityMediumRadioBtn);
         projectPriorityLowRadioBtn = findViewById(R.id.projectPriorityLowRadioBtn);
         editProjectNavigationBack = findViewById(R.id.editProjectNavigationBack);
+
+//        projectPriorityHighRadioBtn.setId(RB1_ID);
+//        projectPriorityMediumRadioBtn.setId(RB2_ID);
+//        projectPriorityLowRadioBtn.setId(RB3_ID);
 
         databaseHelper = new ProjectAndUserDAOImpl(this);
 
@@ -136,14 +141,41 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         String[] remindMeValues = convertStringToArray(project.getRemindMeInterval());
         String priority = project.getPriority();
 
-        int priority_high_id = 2_131_296_703;
-        int priority_medium_id = 2_131_296_706;
-        int priority_low_id = 2_131_296_705;
+        int selected = -1;
+        System.out.println("projectPriorityHighRadioBtn: " + R.id.projectPriorityHighRadioBtn);
+        System.out.println("projectPriorityMediumRadioBtn: " + R.id.projectPriorityMediumRadioBtn);
+        System.out.println("projectPriorityLowRadioBtn: " + R.id.projectPriorityLowRadioBtn);
+
+        System.out.println("checked radio btn id: " + editProjectPriorityRadioGroup.getCheckedRadioButtonId());
 
 
-        if(priority.equalsIgnoreCase("High")) editProjectPriorityRadioGroup.check(priority_high_id);
-        if(priority.equalsIgnoreCase("Medium")) editProjectPriorityRadioGroup.check(priority_medium_id);
-        if(priority.equalsIgnoreCase("Low")) editProjectPriorityRadioGroup.check(priority_low_id);
+        if(priority.equalsIgnoreCase("High")) {
+            selected = 0;
+        } else if(priority.equalsIgnoreCase("Medium")) {
+            selected = 1;
+        } else {
+            selected = 2;
+        }
+
+
+        System.out.println("SELECTED VALUE IS: " + selected);
+
+        switch (selected) {
+            case 0:
+                editProjectPriorityRadioGroup.check(R.id.projectPriorityHighRadioBtn);
+                break;
+            case 1:
+                editProjectPriorityRadioGroup.check(R.id.projectPriorityMediumRadioBtn);
+                break;
+            case 2:
+                editProjectPriorityRadioGroup.check(R.id.projectPriorityLowRadioBtn);
+                break;
+        }
+
+
+//        if(priority.equalsIgnoreCase("High")) editProjectPriorityRadioGroup.check(999);
+//        if(priority.equalsIgnoreCase("Medium")) editProjectPriorityRadioGroup.check(priority_medium_id);
+//        if(priority.equalsIgnoreCase("Low")) editProjectPriorityRadioGroup.check(priority_low_id);
 
         System.out.println("Project: " + project);
 
@@ -152,8 +184,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueDateEditText.setText(date);
         editProjectDueTimeEditText.setText(time);
 
-
-        System.out.println("priority: " + priority);
         if(remindMeValues.length > 0) {
             if(!remindMeValues[0].equals("null")) editProjectRemindMe2WeeksCheckbox.setChecked(true);
             if(!remindMeValues[1].equals("null")) editProjectRemindMe1WeekCheckbox.setChecked(true);
@@ -202,6 +232,9 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
 
 
             System.out.println("UPDATED PROJECT: " + theProject);
+
+
+            System.out.println("PROJECT PRIORITY " + getProjectPriorityValue() + " editProjectPriorityRadioGroup.getCheckedRadioButtonId(): " + editProjectPriorityRadioGroup.getCheckedRadioButtonId() + "editProjectPriorityRadioGroup.getId(): " + editProjectPriorityRadioGroup.getId());
 
             boolean result = databaseHelper.editProject(theProject);
 

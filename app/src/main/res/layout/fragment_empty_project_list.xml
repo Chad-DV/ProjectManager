@@ -5,6 +5,7 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_gravity="center"
+        android:layout_marginTop="40dp"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -24,18 +25,18 @@
                 android:layout_height="wrap_content"
 
 
-                android:fontFamily="@font/lato_bold"
-                android:letterSpacing="-0.01"
+                android:fontFamily="@font/roboto_bold"
+                android:letterSpacing="-0.03"
                 android:text="You currently have no projects to manage"
                 android:textAlignment="center"
                 android:textColor="@color/dark_black"
-                android:textSize="24sp" />
+                android:textSize="26sp" />
 
             <TextView
                 android:id="@+id/d33"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/lato"
+                android:fontFamily="@font/roboto"
                 android:letterSpacing="-0.01"
                 android:layout_marginTop="5dp"
 

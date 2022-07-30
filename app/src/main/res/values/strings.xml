@@ -8,8 +8,13 @@
     <string name="remindMe30Minutes">30 minutes before</string>
     <string name="emailAddress">Email address</string>
     <string name="password">Password</string>
+    <string name="register">Register</string>
     <string name="login">Login</string>
+    <string name="accountPrompt">Already have an account?</string>
     <string name="noAccountPrompt">Don\'t have an account?</string>
-    <string name="createAccountPrompt">Create one</string>
-
+    <string name="settings">Settings</string>
+    <string name="my_profile">My Profile</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="change">Change</string>
 </resources>

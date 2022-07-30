@@ -50,6 +50,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private long theUserId;
     private String authenticatedUser;
     private String query;
+    private ProjectViewModel projectViewModel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -60,10 +61,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         createNotificationChannel();
         databaseHelper = new ProjectAndUserDAOImpl(getActivity().getApplicationContext());
 
+        projectViewModel = new ProjectViewModel();
+
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
 
 //        Toast.makeText(ProjectFragment.this.getActivity(), "project fragment: " + authenticatedUser, Toast.LENGTH_SHORT).show();
+
 
 
 
@@ -84,8 +88,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 //                filterProjects(editable.toString());
 //            }
 //        });
-
-        setAlarmManager();
 
 
 
@@ -301,47 +303,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
             NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void setAlarmManager() {
-        Toast.makeText(ProjectFragment.this.getActivity(), "Reminder set", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(ProjectFragment.this.getActivity(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(ProjectFragment.this.getActivity(), 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-
-        long currentTimeMillis = System.currentTimeMillis();
-        // Remind 2 weeks (336 hours) (20160 minutes) (1,209,600,000 milliseconds) before due date
-        // Remind 1 week (168 hours) (10080 minutes) (604,800,000 milliseconds) before due date
-        // Remind 1 day (24 hours) (1440 minutes) (86,400,000 milliseconds) before due date
-        // Remind 1 hour (60 minutes) (3,600,000 milliseconds) before due date
-        // Remind 30 minutes (1,800,000 milliseconds) before due date
-
-
-
-        for(Project p : projectList) {
-            if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 1_209_600_00){
-
-            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 604_800_000) {
-
-            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 86_400_000) {
-
-            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 3_600_000) {
-
-            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 1_800_000) {
-
-            } else if(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()) == 120_000){ // 2 mins
-                alarmManager.set(AlarmManager.RTC_WAKEUP, currentTimeMillis + 120_000, pendingIntent);
-            }
-            System.out.println(p.getProjectRemainingTimeInMilliseconds(p.getDateDue()));
-        }
-
-
-
-//        long tenSeconds = projectList.get(0).getProjectRemainingTimeInMilliseconds(projectList.get(0).getDateDue());
-
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, currentTimeMillis + tenSeconds, pendingIntent);
     }
 
 }

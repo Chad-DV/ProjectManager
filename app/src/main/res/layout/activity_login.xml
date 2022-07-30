@@ -31,7 +31,7 @@
             android:id="@+id/loginTextView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
+            android:fontFamily="@font/roboto"
             android:layout_weight="1"
             android:letterSpacing="-0.03"
             android:text="Login with "
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato_bold"
+            android:fontFamily="@font/roboto_bold"
             android:letterSpacing="-0.03"
             android:text="PPMTool"
             android:textAlignment="textStart"
@@ -58,7 +58,7 @@
         android:id="@+id/loginTextView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/lato"
+        android:fontFamily="@font/roboto"
         android:letterSpacing="-0.01"
         android:layout_marginTop="3dp"
         android:text="We do not share or collect your data"
@@ -80,7 +80,7 @@
         android:hint="@string/emailAddress"
         android:textColorHint="@color/dark_blue_gray"
         android:textColor="@color/dark_black"
-        android:fontFamily="@font/lato"/>
+        android:fontFamily="@font/roboto"/>
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -100,28 +100,12 @@
             android:hint="@string/password"
             android:textColorHint="@color/dark_blue_gray"
             android:textColor="@color/dark_black"
-            android:fontFamily="@font/lato"/>
+            android:fontFamily="@font/roboto"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="10dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/primary_button"
-        android:fontFamily="@font/lato_bold"
-        android:textSize="15sp"
-        android:textColor="@color/white"
-        android:elevation="10dp"
-        android:letterSpacing="-0.01"
-        android:hint="Login"
-        android:textAllCaps="false"
-        app:backgroundTint="@null" />
 
-
-<!--    <LinearLayout-->
+    <!--    <LinearLayout-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_marginTop="10dp"-->
 <!--        android:layout_marginBottom="10dp"-->
@@ -167,7 +151,7 @@
 <!--        android:paddingRight="10dp"-->
 
 <!--        android:background="@drawable/outline_button"-->
-<!--        android:fontFamily="@font/lato"-->
+<!--        android:fontFamily="@font/roboto"-->
 <!--        android:textSize="13sp"-->
 <!--        android:drawableLeft="@drawable/ic_google_logo"-->
 <!--        android:drawablePadding="50dp"-->
@@ -185,7 +169,7 @@
 <!--        android:paddingRight="10dp"-->
 <!--        android:layout_marginTop="8dp"-->
 <!--        android:background="@drawable/outline_button"-->
-<!--        android:fontFamily="@font/lato"-->
+<!--        android:fontFamily="@font/roboto"-->
 <!--        android:textSize="13sp"-->
 <!--        android:drawableLeft="@drawable/ic_facebook_logo"-->
 <!--        android:drawablePadding="50dp"-->
@@ -197,6 +181,19 @@
 <!--        app:backgroundTint="@null" />-->
 
 
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/primary_button"
+        android:fontFamily="@font/roboto_bold"
+        android:letterSpacing="-0.01"
+        android:stateListAnimator="@null"
+        android:text="@string/login"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
 
     <ProgressBar
         android:id="@+id/loginProgressBar"
@@ -221,25 +218,25 @@
             android:id="@+id/registerPromptTextView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
+            android:fontFamily="@font/roboto"
             android:letterSpacing="-0.02"
-            android:hint="Don't have an account? "
+            android:text="@string/noAccountPrompt"
             android:textAlignment="textStart"
-            android:textColor="@color/dark_gray"
+            android:textColor="@color/dark_blue_gray"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/registerPromptTextView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/lato_bold"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_bold"
             android:letterSpacing="-0.02"
-            android:hint="Create one"
+            android:text="@string/register"
+            android:textAlignment="textStart"
             android:textColor="@color/primary_purple"
             android:textSize="13sp" />
 
     </LinearLayout>
-
 
 
 

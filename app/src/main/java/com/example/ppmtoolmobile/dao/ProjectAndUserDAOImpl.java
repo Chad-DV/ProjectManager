@@ -275,7 +275,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             byte[] blob = cursor.getBlob(4);
             Bitmap obj = BitmapFactory.decodeByteArray(blob, 0, blob.length);
 
-            obj = ProfileActivity.getCroppedBitmap(obj, 400);
+            obj = ProfileActivity.getCroppedBitmap(obj, 500);
 
 
             userDetails.add(String.valueOf(userId));

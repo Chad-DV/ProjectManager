@@ -2,7 +2,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="@color/light_blue_gray"
     android:orientation="vertical">
 
 
@@ -31,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/lato_black"
+                    android:fontFamily="@font/roboto_bold"
                     android:letterSpacing="-0.01"
                     android:text="Welcome john"
                     android:textColor="@color/white"
@@ -45,9 +45,9 @@
                     android:layout_weight="1"
                     android:background="@drawable/primary_button"
                     android:backgroundTint="@color/white"
-                    android:elevation="10dp"
-                    android:fontFamily="@font/lato_black"
+                    android:fontFamily="@font/roboto_bold"
                     android:letterSpacing="-0.01"
+                    android:stateListAnimator="@null"
                     android:text="Add new"
                     android:textAllCaps="false"
                     android:textColor="@color/primary_purple"
@@ -58,10 +58,9 @@
                 android:id="@+id/displayUserProjectCountTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-12dp"
-                android:fontFamily="@font/lato"
+                android:layout_marginTop="-15dp"
+                android:fontFamily="@font/roboto"
                 android:letterSpacing="-0.01"
-                android:text="You havr 3 projects"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
 
@@ -74,7 +73,7 @@
             <!--                    android:background="@drawable/search_input"-->
             <!--                    android:drawableLeft="@drawable/ic_search_icon"-->
             <!--                    android:drawablePadding="15sp"-->
-            <!--                    android:fontFamily="@font/lato"-->
+            <!--                    android:fontFamily="@font/roboto"-->
             <!--                    android:hint="Search for a project"-->
             <!--                    android:letterSpacing="-0.01"-->
             <!--                    android:textColor="@color/dark_black"-->
@@ -101,12 +100,12 @@
                 android:background="@drawable/search_input"
                 android:drawableLeft="@drawable/ic_search_icon"
                 android:drawablePadding="15sp"
-                android:fontFamily="@font/lato"
+                android:fontFamily="@font/roboto"
                 android:hint="Search for a project"
                 android:letterSpacing="-0.01"
                 android:textColor="@color/dark_black"
                 android:textColorHint="@color/dark_blue_gray"
-                android:textSize="16sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 

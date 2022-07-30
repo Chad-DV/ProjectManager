@@ -21,21 +21,20 @@
             <ImageView
                 android:id="@+id/settingsNavigationBack"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
+                android:layout_height="23dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="20dp"
-                app:srcCompat="@drawable/ic_navigation_back"></ImageView>
+                app:srcCompat="@drawable/ic_navigation_back" />
 
 
             <TextView
                 android:id="@+id/settingsTitleTextView"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/lato_bold"
+                android:fontFamily="@font/roboto_bold"
                 android:letterSpacing="-0.01"
-                android:text="My Account"
+                android:text="@string/settings"
                 android:textAlignment="center"
                 android:textColor="@color/dark_black"
                 android:textSize="20sp" />
@@ -56,7 +55,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:background="@drawable/input_outline"
                 android:elevation="0dp"
                 android:padding="10dp">
 
@@ -83,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato_bold"
+                        android:fontFamily="@font/roboto_bold"
                         android:letterSpacing="-0.01"
                         android:text="Profile"
                         android:textColor="@color/dark_black"
@@ -95,7 +94,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato"
+                        android:fontFamily="@font/roboto"
                         android:letterSpacing="-0.01"
                         android:text="Settings related to your account  and profile details"
                         android:textColor="@color/dark_blue_gray"
@@ -120,7 +119,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:background="@drawable/input_outline"
                 android:elevation="0dp"
                 android:padding="10dp">
 
@@ -147,7 +146,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato_bold"
+                        android:fontFamily="@font/roboto_bold"
                         android:letterSpacing="-0.01"
                         android:text="My Projects"
                         android:textColor="@color/dark_black"
@@ -159,7 +158,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato"
+                        android:fontFamily="@font/roboto"
                         android:letterSpacing="-0.01"
                         android:text="View your projects"
                         android:textColor="@color/dark_blue_gray"
@@ -184,7 +183,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:background="@drawable/input_outline"
                 android:elevation="0dp"
                 android:padding="10dp">
 
@@ -211,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato_bold"
+                        android:fontFamily="@font/roboto_bold"
                         android:letterSpacing="-0.01"
                         android:text="Notifications"
                         android:textColor="@color/dark_black"
@@ -223,7 +222,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato"
+                        android:fontFamily="@font/roboto"
                         android:letterSpacing="-0.01"
                         android:text="Manage push notifications"
                         android:textColor="@color/dark_blue_gray"
@@ -248,7 +247,7 @@
 
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:background="@drawable/input_outline"
                 android:elevation="0dp"
                 android:padding="10dp">
 
@@ -275,7 +274,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato_bold"
+                        android:fontFamily="@font/roboto_bold"
                         android:letterSpacing="-0.01"
                         android:text="Logout"
                         android:textColor="@color/dark_black"
@@ -287,7 +286,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/lato"
+                        android:fontFamily="@font/roboto"
                         android:letterSpacing="-0.01"
                         android:text="Logout of your account"
                         android:textColor="@color/dark_blue_gray"

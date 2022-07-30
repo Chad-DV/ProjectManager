@@ -5,11 +5,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -40,11 +44,13 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private int projectCount;
     private long userId;
     private String userFirstName;
+    private ProjectViewModel projectViewModel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_project);
 
         filterProjectEditText = findViewById(R.id.filterProjectEditText);
@@ -53,6 +59,9 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_home);
+
+        projectViewModel = new ProjectViewModel();
+        Log.i("ProjectActivity", "projectViewModel is initialized");
 
         databaseHelper = new ProjectAndUserDAOImpl(this);
 
@@ -102,6 +111,23 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+
+        filterProjectEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                projectViewModel.setText(editable);
+            }
+        });
 
         filterProjectEditText.setOnClickListener(this);
         projectAddBtn1.setOnClickListener(this);

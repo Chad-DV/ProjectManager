@@ -12,9 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".ShowImagesActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -40,9 +37,6 @@
             android:exported="false" />
         <activity
             android:name=".AddProjectActivity"
-            android:exported="false" />
-        <activity
-            android:name=".NavActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

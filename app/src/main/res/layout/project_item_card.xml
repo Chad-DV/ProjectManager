@@ -7,43 +7,30 @@
 <!--    xmlns:app="http://schemas.android.com/apk/res-auto">-->
 
 
-<androidx.cardview.widget.CardView
-    android:background="@drawable/card_vector"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="0dp"
-    app:cardElevation="2dp"
-    app:cardUseCompatPadding="true"
-    android:layout_marginBottom="-2dp"
-    app:cardCornerRadius="9dp"
-
-    >
-
-
         <LinearLayout
-            android:background="@color/white"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-
+            android:layout_height="90dp"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:background="@drawable/card_vector"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp">
 
 
-            <ImageView
-                android:id="@+id/scheduleThumbnailImageView"
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
+    <ImageView
+        android:id="@+id/scheduleThumbnailImageView"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center_vertical"
+        android:background="@drawable/project_cover" />
 
-                android:background="@drawable/project_cover" />
-
-            <LinearLayout
+    <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="72dp"
 
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -51,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/roboto_bold"
                     android:letterSpacing="-0.03"
                     android:layout_marginRight="30dp"
                     android:maxLines="1"
@@ -59,7 +46,7 @@
                     android:ellipsize="end"
                     android:textAlignment="textStart"
                     android:textColor="@color/dark_black"
-                    android:textSize="17sp" />
+                    android:textSize="16sp" />
 
 
                 <LinearLayout
@@ -73,21 +60,22 @@
                         android:id="@+id/projectListDescriptionTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:layout_marginEnd="20dp"
                         android:layout_marginBottom="2dp"
                         android:layout_weight="1"
+                        android:lineHeight="12dp"
                         android:ellipsize="end"
-                        android:fontFamily="@font/lato"
+                        android:fontFamily="@font/roboto"
                         android:letterSpacing="-0.03"
                         android:maxLines="2"
                         android:text="Lorem ipsum dolor sit amet, conLorem ipsum dolor sit amet, consectetur adisectetur adipisci ng eleee"
                         android:textColor="@color/dark_blue_gray"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="16dp"
+                        android:layout_gravity="center_vertical"
                         android:src="@drawable/ic_arrow_right_soft" />
 
 
@@ -105,14 +93,14 @@
                         android:layout_width="100dp"
                         android:layout_height="22dp"
                         android:background="@drawable/project_card_small_button"
-                        android:backgroundTint="@color/dark_red"
-                        android:fontFamily="@font/lato_bold"
+                        android:fontFamily="@font/roboto_bold"
                         android:letterSpacing="-0.01"
                         android:text="Not started"
+                        android:stateListAnimator="@null"
                         android:textAlignment="center"
-                        android:elevation="0dp"
+
                         android:textAllCaps="false"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginEnd="15dp"
                         android:textColor="@color/white"
                         android:textSize="11sp" />
 
@@ -120,18 +108,16 @@
                         android:id="@+id/projectPriorityInfoBtn"
                         android:layout_width="100dp"
                         android:layout_height="22dp"
+                        android:layout_marginEnd="20dp"
                         android:background="@drawable/project_card_small_button"
-                        android:backgroundTint="@color/dark_black"
-                        android:fontFamily="@font/lato_bold"
+                        android:fontFamily="@font/roboto_bold"
                         android:letterSpacing="-0.01"
+                        android:stateListAnimator="@null"
                         android:text="High priority"
                         android:textAlignment="center"
-                        android:elevation="0dp"
                         android:textAllCaps="false"
-                        android:layout_marginRight="20dp"
-                        android:textColor="@color/white"
-                        android:textSize="11sp" />
 
+                        android:textSize="11sp" />
 
 
                 </LinearLayout>
@@ -139,9 +125,6 @@
 
 
         </LinearLayout>
-
-
-</androidx.cardview.widget.CardView>
 
 
     <!--</RelativeLayout>-->
