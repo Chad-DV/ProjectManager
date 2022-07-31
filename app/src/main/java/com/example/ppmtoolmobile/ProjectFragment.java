@@ -65,12 +65,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
-
-//        Toast.makeText(ProjectFragment.this.getActivity(), "project fragment: " + authenticatedUser, Toast.LENGTH_SHORT).show();
-
-
-
-
         theUserId = databaseHelper.getCurrentUserId(authenticatedUser);
 
         loadProjects(v);

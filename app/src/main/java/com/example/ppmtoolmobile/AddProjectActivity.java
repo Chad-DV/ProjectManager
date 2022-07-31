@@ -136,10 +136,13 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             addProjectChecklistEditText.setTypeface(getResources().getFont(R.font.lato));
             addProjectChecklistEditText.setTextSize(15);
             addProjectChecklistEditText.setId(count);
-
-
-
             ll.addView(addProjectChecklistEditText);
+
+
+            if(!TextUtils.isEmpty(addProjectChecklistEditText.getText())) {
+                ll.addView(addProjectChecklistEditText);
+            }
+
 
 
             Toast.makeText(AddProjectActivity.this, addProjectChecklistEditText.getText(), Toast.LENGTH_SHORT).show();
@@ -161,6 +164,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             } else {
 
                 checklistItemList.add(addProjectChecklistEditText.getText().toString());
+                addProjectChecklistEditText.setFocusable(false);
+
             }
         }
 
@@ -170,7 +175,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
 
         String[] checklistItemArray = checklistItemList.toArray(new String[checklistItemList.size()]);
-        System.out.println(checklistItemList);
+
 //        for(String s : checklistItemArray) {
 //            System.out.print(s + ", ");
 //        }
@@ -182,8 +187,10 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         String timeDue = addProjectTimeEditText.getText().toString().trim();
         String priority = getProjectPriorityValue();
         String remindMeInterval = getProjectRemindMeValues();
-        String checkList;
+        String checkList = convertArrayToString(checklistItemArray);
         String authenticatedUser = getIntent().getStringExtra("authenticatedUser");
+
+        System.out.println("checkList: " + checkList);
 
         if (TextUtils.isEmpty(dateDue)) {
             addProjectDueDateEditText.setError("Due date is required");
@@ -202,7 +209,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             String dateTime = dateDue + " " + timeDue;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval);
+            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList);
 
             boolean result = databaseHelper.addProject(theProject, authenticatedUser);
 

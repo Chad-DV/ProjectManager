@@ -40,7 +40,7 @@ import java.util.UUID;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText profileFirstNameEditText, profileLastNameEditText, profileEmailAddressEditText;
+    private EditText profileFirstNameEditText, profileLastNameEditText, profileEmailAddressEditText, profilePasswordEditText;
     private TextView changeUserAvatarTextView;
     private ImageView userAvatarImageView;
     private BottomNavigationView bottomNavView;
@@ -48,6 +48,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private Button profileUpdateBtn;
     private ImageView profileNavigationBack;
     private ProjectAndUserDAOImpl databaseHelper;
+    private long theUserId;
     private String authenticatedUser;
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
@@ -62,6 +63,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         profileFirstNameEditText = findViewById(R.id.profileFirstNameEditText);
         profileLastNameEditText = findViewById(R.id.profileLastNameEditText);
         profileEmailAddressEditText = findViewById(R.id.profileEmailAddressEditText);
+        profilePasswordEditText = findViewById(R.id.profilePasswordEditText);
         profileNavigationBack = findViewById(R.id.profileNavigationBack);
         changeUserAvatarTextView = findViewById(R.id.changeUserAvatarTextView);
         userAvatarImageView = findViewById(R.id.userAvatarImageView);
@@ -71,10 +73,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         // getting current username through intent from ProjectActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
 
+
+
+
+
         Toast.makeText(this, "profile activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
         databaseHelper = new ProjectAndUserDAOImpl(this);
 
-        avatarProgressBar.setVisibility(View.VISIBLE);
+//        avatarProgressBar.setVisibility(View.VISIBLE);
 
         loadUserDetails();
 
@@ -143,7 +149,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 avatarUri = data.getData();
                 InputStream imageStream = getContentResolver().openInputStream(avatarUri);
                 selectedAvatar = BitmapFactory.decodeStream(imageStream);
-                selectedAvatar = getCroppedBitmap(selectedAvatar, 500);
+                selectedAvatar = getCroppedBitmap(selectedAvatar, 650);
 
                 userAvatarImageView.setImageBitmap(selectedAvatar);
             }
@@ -198,21 +204,41 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void loadUserDetails() {
-        List<Object> userAndAvatarDetails = databaseHelper.getUserAndAvatarDetails(authenticatedUser);
-        if(!userAndAvatarDetails.isEmpty()) {
-            avatarProgressBar.setVisibility(View.GONE);
-            Bitmap bitmap = (Bitmap) userAndAvatarDetails.get(4);
-            profileFirstNameEditText.setText(userAndAvatarDetails.get(1).toString());
-            profileLastNameEditText.setText(userAndAvatarDetails.get(2).toString());
-            profileEmailAddressEditText.setText(userAndAvatarDetails.get(3).toString());
+        theUserId = databaseHelper.getCurrentUserId(authenticatedUser);
+        Toast.makeText(this, "USER : " + authenticatedUser, Toast.LENGTH_SHORT).show();
+        Bitmap userAvatar = databaseHelper.getAvatar(theUserId);
 
-            userAvatarImageView.setImageBitmap(bitmap);
+        if(userAvatar == null) {
+            System.out.println("No avatar for user: " + authenticatedUser);
+        } else {
+            System.out.println("User has a avatar: " + authenticatedUser);
+        }
+        System.out.println("current user no avatar: " + databaseHelper.getUserDetails(authenticatedUser));
+        System.out.println("current user avatar: " + userAvatar);
+
+        if(userAvatar != null) {
+            avatarProgressBar.setVisibility(View.GONE);
+            User userDetails = databaseHelper.getUserDetails(authenticatedUser);
+            profileFirstNameEditText.setText(userDetails.getFirstName());
+            profileLastNameEditText.setText(userDetails.getLastName());
+            profileEmailAddressEditText.setText(userDetails.getEmailAddress());
+            profilePasswordEditText.setText(userDetails.getPassword());
+            userAvatarImageView.setImageBitmap(userAvatar);
+
+
+//            Bitmap bitmap = (Bitmap) userAndAvatarDetails.get(4);
+//            profileFirstNameEditText.setText(userAndAvatarDetails.get(1).toString());
+//            profileLastNameEditText.setText(userAndAvatarDetails.get(2).toString());
+//            profileEmailAddressEditText.setText(userAndAvatarDetails.get(3).toString());
+//
+//            userAvatarImageView.setImageBitmap(bitmap);
 
         } else {
             User userDetails = databaseHelper.getUserDetails(authenticatedUser);
             profileFirstNameEditText.setText(userDetails.getFirstName());
             profileLastNameEditText.setText(userDetails.getLastName());
             profileEmailAddressEditText.setText(userDetails.getEmailAddress());
+            profilePasswordEditText.setText(userDetails.getPassword());
         }
 
 
@@ -227,24 +253,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         String firstName = profileFirstNameEditText.getText().toString().trim();
         String lastName = profileLastNameEditText.getText().toString().trim();
         String emailAddress = profileEmailAddressEditText.getText().toString().trim();
+        String password = profilePasswordEditText.getText().toString().trim();
+
         long userId = databaseHelper.getCurrentUserId(authenticatedUser);
+
+        User user = new User(userId, firstName, lastName, emailAddress, password);
+
+        boolean res = databaseHelper.editUserDetails(user);
+
+        if(res){
+            Toast.makeText(this, "Successfully updated", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Failure to update", Toast.LENGTH_SHORT).show();
+        }
 
 
         if(userAvatarImageView.getDrawable() != null && selectedAvatar != null) {
             UUID uuid = UUID. randomUUID();
 
-            UserAvatar user = new UserAvatar(String.valueOf(uuid), selectedAvatar);
-            boolean result = databaseHelper.saveAvatar(user, authenticatedUser);
+            UserAvatar userAvatar = new UserAvatar(String.valueOf(uuid), selectedAvatar);
 
 
-            System.out.println(user.getAvatar());
+            boolean result = databaseHelper.saveAvatar(userAvatar, authenticatedUser);
 
 
-            if(result) {
-                Toast.makeText(this, "Avatar uploaded with user: " + authenticatedUser, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Error adding avatar", Toast.LENGTH_SHORT).show();
-            }
+
+            Toast.makeText(this, "Avatar uploaded with user: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         } else {
             Toast.makeText(this, "Please select image" + authenticatedUser, Toast.LENGTH_SHORT).show();

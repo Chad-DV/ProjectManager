@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -74,7 +76,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             + COLUMN_PROJECT_PRIORITY + " TEXT," + COLUMN_PROJECT_REMIND_ME_INTERVAL + " TEXT," + COLUMN_PROJECT_CHECKLIST + " TEXT," + COLUMN_PROJECT_STATUS + " INTEGER, " + COLUMN_USER_PROJECT_FK + " INTEGER,"
             + "FOREIGN KEY(" + COLUMN_USER_PROJECT_FK + ") REFERENCES " + USER_TABLE + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE ON UPDATE CASCADE)";
 
-    private String CREATE_USER_AVATAR_TABLE_QUERY = "CREATE TABLE " + USER_AVATAR_TABLE + "(" + COLUMN_USER_AVATAR_NAME + " TEXT, " + COLUMN_USER_AVATAR_BLOB + " BLOB," + COLUMN_USER_AVATAR_PK + " INTEGER,"
+    private String CREATE_USER_AVATAR_TABLE_QUERY = "CREATE TABLE " + USER_AVATAR_TABLE + "(" + COLUMN_USER_AVATAR_NAME + " TEXT, " + COLUMN_USER_AVATAR_BLOB + " BLOB," + COLUMN_USER_AVATAR_PK + " INTEGER UNIQUE,"
             + "FOREIGN KEY(" + COLUMN_USER_AVATAR_PK + ") REFERENCES " + USER_TABLE + "(" + COLUMN_USER_ID + ") ON DELETE CASCADE ON UPDATE CASCADE)";
 
 
@@ -248,7 +250,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     }
 
     @Override
-    public List<Object> getUserAndAvatarDetails(String theEmailAddress) {
+    public Bitmap getAvatar(long theUserId) {
         SQLiteDatabase db = this.getReadableDatabase();
         User user = null;
         List<Object> userDetails = new ArrayList<>();
@@ -262,45 +264,61 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         /*SELECT user_id, first_name, last_name, email_address,avatar from user_avatar
           INNER JOIN user ON user.id = user_avatar.user_id;*/
 
-        Cursor cursor = db.rawQuery("SELECT " + COLUMN_USER_ID + ", " + COLUMN_USER_FIRST_NAME + ", " + COLUMN_USER_LAST_NAME
-            + ", " + COLUMN_USER_EMAIL_ADDRESS + ", " + COLUMN_USER_AVATAR_BLOB + " FROM " + USER_AVATAR_TABLE
-            + " INNER JOIN " + USER_TABLE + " ON " + COLUMN_USER_ID + " = " + COLUMN_USER_AVATAR_PK, null);
+        Bitmap obj = null;
 
+
+        Cursor cursor = db.query(USER_AVATAR_TABLE,// Selecting Table
+                new String[]{COLUMN_USER_AVATAR_BLOB},//Selecting columns want to query
+                COLUMN_USER_AVATAR_PK + " = ?",
+                new String[]{String.valueOf(theUserId)},//Where clause
+                null, null, null);
 
         if(cursor.moveToNext()) {
-            long userId = cursor.getLong(0);
-            String firstName = cursor.getString(1);
-            String lastName = cursor.getString(2);
-            String emailAddress = cursor.getString(3);
-            byte[] blob = cursor.getBlob(4);
-            Bitmap obj = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-
-            obj = ProfileActivity.getCroppedBitmap(obj, 500);
-
-
-            userDetails.add(String.valueOf(userId));
-            userDetails.add(firstName);
-            userDetails.add(lastName);
-            userDetails.add(emailAddress);
-            userDetails.add(obj);
-            System.out.println("avatar count: " + cursor.getCount());
+            byte[] blob = cursor.getBlob(0);
+            obj = BitmapFactory.decodeByteArray(blob, 0, blob.length);
+            obj = ProfileActivity.getCroppedBitmap(obj, 650);
 
         }
 
+        return obj;
+    }
 
-        System.out.println("USER JOINED DETAILS: " + userDetails);
+    @Override
+    public Boolean editUserDetails(User user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
 
+        cv.put(COLUMN_USER_FIRST_NAME, user.getFirstName());
+        cv.put(COLUMN_USER_LAST_NAME, user.getLastName());
+        cv.put(COLUMN_USER_EMAIL_ADDRESS, user.getEmailAddress());
+        cv.put(COLUMN_USER_PASSWORD, user.getPassword());
 
-        return userDetails;
+        Cursor cursor = db.rawQuery("SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
+
+        Cursor cursor2 = db.rawQuery("SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{user.getEmailAddress()});
+
+        if(cursor2.getCount() > 0) {
+            System.out.println("ALREADY EXISTS A USER WITH THIS EMAIL ... IDIOT");
+            return false;
+        }
+
+        if (cursor.getCount() > 0) {
+            long result = db.update(USER_TABLE, cv, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
+            return result == -1 ? false : true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public Boolean saveAvatar(UserAvatar userAvatar, String emailAddress) {
-        try {
+
             SQLiteDatabase dbWrite = this.getWritableDatabase();
             SQLiteDatabase dbRead = this.getReadableDatabase();
             Bitmap avatar = userAvatar.getAvatar();
+            long userId = 0;
 
+            boolean success = true;
             avatarOutputStream = new ByteArrayOutputStream();
             avatar.compress(Bitmap.CompressFormat.JPEG, 100, avatarOutputStream);
 
@@ -310,32 +328,31 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             Cursor cursor = dbRead.rawQuery("SELECT " + COLUMN_USER_ID + " FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{emailAddress});
 
             while(cursor.moveToNext()) {
-                long userId = cursor.getLong(0);
-
+                userId = cursor.getLong(0);
                 cv.put(COLUMN_USER_AVATAR_NAME, userAvatar.getAvatarName());
                 cv.put(COLUMN_USER_AVATAR_BLOB, avatarByteArray);
                 cv.put(COLUMN_USER_AVATAR_PK, userId);
             }
 
-            Cursor cursor2 = dbRead.rawQuery("SELECT " + COLUMN_USER_ID + ", " + COLUMN_USER_FIRST_NAME + ", " + COLUMN_USER_LAST_NAME
-                    + ", " + COLUMN_USER_EMAIL_ADDRESS + ", " + COLUMN_USER_AVATAR_BLOB + " FROM " + USER_AVATAR_TABLE
-                    + " INNER JOIN " + USER_TABLE + " ON " + COLUMN_USER_ID + " = " + COLUMN_USER_AVATAR_PK, null);
+            Cursor cursor2 = dbRead.rawQuery("SELECT " + COLUMN_USER_AVATAR_NAME + " FROM " + USER_AVATAR_TABLE + " WHERE " + COLUMN_USER_AVATAR_PK + " = ?", new String[]{String.valueOf(userId)});
 
 
-            if(cursor2.getCount() > 0) {
-                System.out.println("YOU CANNOT HAVE MORE THAN 1 PROFILE PICTURE");
-                return false;
+            try {
+
+                if(cursor2.getCount() > 0) {
+                    dbWrite.update(USER_AVATAR_TABLE, cv,COLUMN_USER_AVATAR_PK + " = " + userId, null);
+                } else {
+                    long resultCode = dbWrite.insert(USER_AVATAR_TABLE,null, cv);
+                }
+            } catch (SQLiteConstraintException e) {
+                success = false;
+                System.out.println(e.getMessage());
             }
 
-            long result = dbWrite.insert(USER_AVATAR_TABLE, null, cv);
+            return success;
 
 
-            return result == -1 ? false : true;
 
-        } catch(Exception e) {
-            Toast.makeText(context, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-        }
-        return null;
     }
 
 //    public void getAvatar(String emailAddress) {

@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void loginUser() {
 
 //        String emailAddress = loginEmailAddressEditText.getText().toString().trim();
-        String emailAddress = "john@gmail.com";
+        String emailAddress = "johnz@gmail.com";
         String password = loginPasswordEditText.getText().toString().trim();
 //
 //        if(TextUtils.isEmpty(emailAddress)) {

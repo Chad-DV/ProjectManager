@@ -1,5 +1,7 @@
 package com.example.ppmtoolmobile.dao;
 
+import android.graphics.Bitmap;
+
 import com.example.ppmtoolmobile.model.Project;
 import com.example.ppmtoolmobile.model.User;
 import com.example.ppmtoolmobile.model.UserAvatar;
@@ -15,8 +17,9 @@ public interface ProjectAndUserDAO {
     Boolean isEmailExists(String email);
     String getCurrentUserFirstName(String emailAddress);
     long getCurrentUserId(String emailAddress);
-    User getUserDetails(String theEmailAddress);
-    List<Object> getUserAndAvatarDetails(String theEmailAddress);
+    User getUserDetails(String emailAddress);
+    Bitmap getAvatar(long userId);
+    Boolean editUserDetails(User user);
     Boolean saveAvatar(UserAvatar userAvatar, String emailAddress);
 
     // Project
