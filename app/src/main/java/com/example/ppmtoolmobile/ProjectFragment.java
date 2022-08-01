@@ -257,8 +257,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         projectList = databaseHelper.getUserProjects(theUserId);
 
-
-
         projectListLoadingProgressBar.setVisibility(View.GONE);
 
 

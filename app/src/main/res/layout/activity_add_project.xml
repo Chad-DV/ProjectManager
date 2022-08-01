@@ -11,7 +11,7 @@
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:padding="20dp"
     tools:context=".ProfileFragment"
     android:orientation="vertical">
@@ -307,13 +307,6 @@
     </RadioGroup>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="horizontal">
-
-
 
 
         <TextView
@@ -323,28 +316,28 @@
             android:fontFamily="@font/roboto_bold"
             android:letterSpacing="-0.01"
             android:layout_weight="1"
+            android:layout_marginTop="30dp"
             android:text="Project checklist"
             android:textColor="@color/dark_black"
             android:textSize="18sp" />
 
 
 
-        <ImageButton
-            android:id="@+id/generateAddProjectChecklistEditText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@null"
-            android:src="@drawable/ic_checklist_add" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/generateAddProjectChecklistEditText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:background="@null"-->
+<!--            android:src="@drawable/ic_checklist_add" />-->
 
-    </LinearLayout>
 
     <TextView
         android:id="@+id/addProjectChecklistDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
-        android:layout_marginTop="-7dp"
+        android:layout_marginTop="2dp"
         android:letterSpacing="-0.01"
         android:text="Create tasks to easily manage your project "
         android:textColor="@color/dark_blue_gray"
@@ -353,14 +346,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="horizontal">
 
 
         <EditText
-            android:id="@+id/ee"
+            android:id="@+id/addProjectChecklistEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
@@ -373,24 +366,45 @@
             android:textSize="15sp" />
 
         <ImageButton
-            android:id="@+id/addProjectChecklistAddSuccessBtn"
+            android:id="@+id/addProjectChecklistBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@null"
-            android:src="@drawable/ic_checklist_add_success" />
+            android:src="@drawable/ic_checklist_add" />
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/addProjectChecklistBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:background="@null"-->
+<!--            android:src="@drawable/ic_checklist_add_success" />-->
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:id="@+id/addChecklistLinearLayout">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+    <ListView
+        android:id="@+id/addProjectChecklistListView"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_marginBottom="12dp" />
 
     </LinearLayout>
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:id="@+id/addChecklistLinearLayout">-->
+
+
+<!--    </LinearLayout>-->
 
 
 

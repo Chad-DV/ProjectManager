@@ -50,6 +50,19 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    public Project(long id, String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dateCreated = LocalDateTime.now();
+        this.dateDue = dateDue;
+        this.priority = priority;
+        this.remindMeInterval = remindMeInterval;
+        this.checklist = checklist;
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, String remindMeInterval, long userId) {
         this.id = id;
         this.title = title;
@@ -57,6 +70,7 @@ public class Project {
         this.dateCreated = dateCreated;
         this.dateDue = dateDue;
         this.priority = priority;
+        this.checklist = checklist;
         this.remindMeInterval = remindMeInterval;
         this.userId = userId;
 
@@ -216,6 +230,6 @@ public class Project {
                 ", remindMeInterval='" + remindMeInterval + '\'' +
                 ", userId=" + userId +
                 ", status=" + status +
-                '}';
+                '}' + "\n";
     }
 }

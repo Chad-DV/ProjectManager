@@ -387,6 +387,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
             cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
             cv.put(COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
+            cv.put(COLUMN_PROJECT_CHECKLIST, project.getChecklist());
             cv.put(COLUMN_PROJECT_STATUS, project.isStatus());
             cv.put(COLUMN_USER_PROJECT_FK, userId);
         }
@@ -411,14 +412,16 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         cv.put(COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
         cv.put(COLUMN_PROJECT_PRIORITY, project.getPriority());
         cv.put(COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
+        cv.put(COLUMN_PROJECT_CHECKLIST, project.getChecklist());
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
 
 
         if (cursor.getCount() > 0) {
             long result = db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
-            return result == -1 ? false : true;
+            return result != -1;
         } else {
+            System.out.println("error");
             return false;
         }
 
@@ -454,7 +457,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(projectId)});
 
-        while(cursor.moveToNext()) {
+        if(cursor.moveToNext()) {
             long id = cursor.getLong(0);
             String title = cursor.getString(1);
             String description = cursor.getString(2);
@@ -589,6 +592,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             String remindMeInterval = cursor.getString(6);
             String checklist = cursor.getString(7);
             int theUserId = cursor.getInt(8);
+
             Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, theUserId);
 
             projectList.add(project);
