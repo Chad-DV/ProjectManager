@@ -21,9 +21,12 @@ import com.example.ppmtoolmobile.model.Priority;
 import com.example.ppmtoolmobile.model.Project;
 import com.example.ppmtoolmobile.model.User;
 import com.example.ppmtoolmobile.model.UserAvatar;
+import com.example.ppmtoolmobile.utils.PasswordUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,6 +46,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     public static final String COLUMN_USER_LAST_NAME = "last_name";
     public static final String COLUMN_USER_EMAIL_ADDRESS = "email_address";
     public static final String COLUMN_USER_PASSWORD = "password";
+    public static final String COLUMN_USER_PASSWORD_SALT = "salt";
 
     public static final String PROJECT_TABLE = "project";
     public static final String COLUMN_PROJECT_ID = "id";
@@ -65,11 +69,11 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     private ByteArrayOutputStream avatarOutputStream;
     private byte[] avatarByteArray;
 
-    private static int DATABASE_VERSION = 6;
+    private static int DATABASE_VERSION = 7;
 
 
     private String CREATE_USER_TABLE_QUERY = "CREATE TABLE " + USER_TABLE + "(" + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_FIRST_NAME + " TEXT,"
-            + COLUMN_USER_LAST_NAME + " TEXT," + COLUMN_USER_EMAIL_ADDRESS + " TEXT," + COLUMN_USER_PASSWORD + " TEXT" + ")";
+            + COLUMN_USER_LAST_NAME + " TEXT," + COLUMN_USER_EMAIL_ADDRESS + " TEXT," + COLUMN_USER_PASSWORD + " TEXT," + COLUMN_USER_PASSWORD_SALT + " TEXT)";
 
     private String CREATE_PROJECT_TABLE_QUERY = "CREATE TABLE " + PROJECT_TABLE + "(" + COLUMN_PROJECT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_PROJECT_TITLE + " TEXT,"
             + COLUMN_PROJECT_DESCRIPTION + " TEXT," + COLUMN_PROJECT_DATE_CREATED + " TEXT," + COLUMN_PROJECT_DATE_DUE + " TEXT,"
@@ -112,17 +116,27 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         onCreate(db);
     }
 
-
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Boolean register(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
+        String password = user.getPassword();
+        String salt = PasswordUtils.getSalt(30);
+
+        String mySecurePassword = PasswordUtils.generateSecurePassword(password, salt);
+
+        // Print out protected password
+        System.out.println("My secure password = " + mySecurePassword);
+        System.out.println("Salt value = " + salt);
+
 
         cv.put(COLUMN_USER_FIRST_NAME, user.getFirstName());
         cv.put(COLUMN_USER_LAST_NAME, user.getLastName());
         cv.put(COLUMN_USER_EMAIL_ADDRESS, user.getEmailAddress());
-        cv.put(COLUMN_USER_PASSWORD, user.getPassword());
+        cv.put(COLUMN_USER_PASSWORD, mySecurePassword);
+        cv.put(COLUMN_USER_PASSWORD_SALT, salt);
 
         long result = db.insert(USER_TABLE, null, cv);
         return result == -1 ? false : true;
@@ -130,14 +144,16 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     }
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Boolean login(User user) {
         SQLiteDatabase db = this.getReadableDatabase();
         boolean valid = false;
 
-
+        String password = user.getPassword();
         Cursor cursor = db.query(USER_TABLE,// Selecting Table
-                new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
+                new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD, COLUMN_USER_PASSWORD_SALT},//Selecting columns want to query
                 COLUMN_USER_EMAIL_ADDRESS + " = ? ",
                 new String[]{user.getEmailAddress()},//Where clause
                 null, null, null);
@@ -147,12 +163,18 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             //if cursor has value then in user database there is user associated with this given email
             User user1 = new User(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
 
-            //Match both passwords check they are same or not
-            if (user.getPassword().equalsIgnoreCase(user1.getPassword())) {
+            String securePassword  = user1.getPassword();
+            String salt = cursor.getString(5);
+
+            boolean passwordMatch = PasswordUtils.verifyUserPassword(password, securePassword, salt);
+
+            if(passwordMatch) {
+                System.out.println("Provided user password " + password + " is correct.");
                 valid = true;
             } else {
-                valid = false;
+                System.out.println("Provided password is incorrect");
             }
+
         }
 
         cursor.close();

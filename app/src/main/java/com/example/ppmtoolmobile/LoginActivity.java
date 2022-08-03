@@ -50,8 +50,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void loginUser() {
 
 //        String emailAddress = loginEmailAddressEditText.getText().toString().trim();
-        String emailAddress = "johnz@gmail.com";
-        String password = loginPasswordEditText.getText().toString().trim();
+        String emailAddress = "jake@gmail.com";
+        String password = "password";
 //
 //        if(TextUtils.isEmpty(emailAddress)) {
 //            loginEmailAddressEditText.setError("Please enter a value");
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            return;
 //        }
 
-        boolean isValid = databaseHelper.login(new User(emailAddress, "password"));
+        boolean isValid = databaseHelper.login(new User(emailAddress, password));
 
         if(isValid) {
             Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);

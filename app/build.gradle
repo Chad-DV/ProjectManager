@@ -45,7 +45,7 @@ dependencies {
 
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata:2.2.0"
-
+    implementation "androidx.work:work-runtime:2.7.1"
     testImplementation 'junit:junit:4.13.2'
 
 

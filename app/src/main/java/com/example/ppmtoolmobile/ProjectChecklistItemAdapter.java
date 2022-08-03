@@ -5,31 +5,33 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectChecklistItemAdapter extends BaseAdapter {
-    Context context;
-    List<String> textArray;
-    LayoutInflater inflater;
 
-    public ProjectChecklistItemAdapter(Context context, List<String> textarray) {
+    private Context context;
+    private List<String> checklist;
+    private LayoutInflater inflater;
+
+    public ProjectChecklistItemAdapter(Context context, List<String> checklist) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        this.textArray = textarray;
-
+        this.checklist = checklist;
     }
 
     @Override
     public int getCount() {
-        return textArray.size();
+        return checklist.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return textArray.get(position);
+        return checklist.get(position);
     }
 
     @Override
@@ -47,9 +49,11 @@ public class ProjectChecklistItemAdapter extends BaseAdapter {
             vg = (ViewGroup) inflater.inflate(R.layout.project_checklist_list_item, null);
         }
 
-        String text = textArray.get(position);
+        String item = checklist.get(position);
 
         final TextView projectChecklistItemTextView = ((TextView) vg.findViewById(R.id.projectChecklistItemTextView));
+        projectChecklistItemTextView.setText(item);
 
         return vg;
-    } }
+    }
+}

@@ -9,7 +9,8 @@ public class User {
     private String lastName;
     private String emailAddress;
     private String password;
-    private List<Project> projectList;
+    private String salt;
+
 
     public User() {
 
@@ -30,6 +31,7 @@ public class User {
         this.password = password;
     }
 
+
     public User(String emailAddress, String password) {
         this.emailAddress = emailAddress;
         this.password = password;
@@ -39,7 +41,7 @@ public class User {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -75,12 +77,12 @@ public class User {
         this.password = password;
     }
 
-    public List<Project> getProjectList() {
-        return projectList;
+    public String getSalt() {
+        return salt;
     }
 
-    public void setProjectList(List<Project> projectList) {
-        this.projectList = projectList;
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     @Override

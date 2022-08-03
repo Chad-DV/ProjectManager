@@ -55,8 +55,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private List<String> checklistItemList;
     private ProjectChecklistItemAdapter checklistItemAdapter;
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,6 +253,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         for (String s : checklistItemArray) {
             System.out.println("check list item: " + s);
         }
+
 
         checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
         editProjectChecklistListView.setAdapter(checklistItemAdapter);

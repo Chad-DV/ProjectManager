@@ -15,6 +15,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,6 +39,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class ProjectFragment extends Fragment implements View.OnClickListener, MyRecyclerAdapter.OnProjectClickListener {
 
@@ -58,7 +62,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
         View v = inflater.inflate(R.layout.fragment_project, null);
 
-        createNotificationChannel();
+//        buttonShowNotification();
         databaseHelper = new ProjectAndUserDAOImpl(getActivity().getApplicationContext());
 
         projectViewModel = new ProjectViewModel();
@@ -283,18 +287,13 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     }
 
 
-    private void createNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            CharSequence name = "ppmtoolReminderChannel";
-            String description = "Channel for ppmtool reminder";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+    public void buttonShowNotification() {
+        //Notification Request
+        WorkRequest request = new PeriodicWorkRequest.Builder(NotificationWorker.class, 15, TimeUnit.MINUTES)
+                .setInitialDelay(1, TimeUnit.SECONDS)
+                .build();
 
-            NotificationChannel channel = new NotificationChannel("ppmtool", name, importance);
-            channel.setDescription(description);
-
-            NotificationManager notificationManager = getActivity().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        WorkManager.getInstance(getActivity().getApplicationContext()).enqueue(request);
     }
 
 }
