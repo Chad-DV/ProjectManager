@@ -10,8 +10,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,9 +35,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-
-        buildNotificationChannel();
 
         bottomNavView = findViewById(R.id.bottomNavView);
         settingsNavigationBack = findViewById(R.id.settingsNavigationBack);
@@ -100,28 +99,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             Intent goToProjectActivityIntent = new Intent(SettingsActivity.this, ProjectActivity.class);
             moveToIntent(goToProjectActivityIntent);
         } else if(view == settingsNotificationsCardView) {
-            if(51 < 11) {
-                notificationManagerCompat.notify(1, notification);
-            }
+
         } else if(view == settingsLogoutCardView) {
-
+            logout();
         }
     }
 
-    private void buildNotificationChannel() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("myCh", "My Channel", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(channel);
-        }
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "myCh")
-                .setSmallIcon(android.R.drawable.stat_notify_sync)
-                .setContentTitle("First notification")
-                .setContentText("This is the body");
-
-        notification = builder.build();
-
-        notificationManagerCompat = NotificationManagerCompat.from(this);
+    private void logout() {
+        SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("saveLogin", false);
+        editor.apply();
+        startActivity(new Intent(this, LoginActivity.class));
     }
+
+
 }

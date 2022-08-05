@@ -208,11 +208,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(this, "USER : " + authenticatedUser, Toast.LENGTH_SHORT).show();
         Bitmap userAvatar = databaseHelper.getAvatar(theUserId);
 
-        if(userAvatar == null) {
-            System.out.println("No avatar for user: " + authenticatedUser);
-        } else {
-            System.out.println("User has a avatar: " + authenticatedUser);
-        }
         System.out.println("current user no avatar: " + databaseHelper.getUserDetails(authenticatedUser));
         System.out.println("current user avatar: " + userAvatar);
 
