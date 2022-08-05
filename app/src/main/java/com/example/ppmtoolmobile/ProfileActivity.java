@@ -2,6 +2,8 @@ package com.example.ppmtoolmobile;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -23,6 +25,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private BottomNavigationView bottomNavView;
     private ProgressBar avatarProgressBar;
     private Button profileUpdateBtn;
-    private ImageView profileNavigationBack;
+    private ImageView profileNavigationBack, profileMenu;
     private ProjectAndUserDAOImpl databaseHelper;
     private long theUserId;
     private String authenticatedUser;
@@ -69,6 +72,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         userAvatarImageView = findViewById(R.id.userAvatarImageView);
         profileUpdateBtn = findViewById(R.id.profileUpdateBtn);
         avatarProgressBar = findViewById(R.id.avatarProgressBar);
+        profileMenu = findViewById(R.id.profileMenu);
 
         // getting current username through intent from ProjectActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
@@ -87,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         profileNavigationBack.setOnClickListener(this);
         changeUserAvatarTextView.setOnClickListener(this);
         profileUpdateBtn.setOnClickListener(this);
+        profileMenu.setOnClickListener(this);
 
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_profile);
@@ -126,6 +131,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             chooseImage(view);
         } else if(view == profileUpdateBtn) {
             updateUserDetails();
+        } else if(view == profileMenu) {
+            showMenu();
         }
     }
 
@@ -158,6 +165,52 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
 
+    }
+
+    private void showMenu() {
+        PopupMenu popupMenu = new PopupMenu(ProfileActivity.this, profileMenu);
+
+        // Inflating popup menu from popup_menu.xml file
+        popupMenu.getMenuInflater().inflate(R.menu.profile_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.option_remove_avatar:
+                        removeAvatar();
+                        break;
+                    case R.id.option_delete_account:
+                        deleteAccount();
+                        break;
+                }
+
+
+                return true;
+            }
+
+        });
+        // Showing the popup menu
+        popupMenu.show();
+    }
+
+    private void removeAvatar() {
+
+    }
+
+    private void deleteAccount() {
+        new AlertDialog.Builder(ProfileActivity.this)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                    Toast.makeText(ProfileActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(android.R.string.no, (dialog, which) -> {
+                    Toast.makeText(ProfileActivity.this, "Not deleted", Toast.LENGTH_SHORT).show();
+                })
+                .setIcon(android.R.drawable.alert_dark_frame)
+                .show();
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bitmap, int maxSize) {

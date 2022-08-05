@@ -43,6 +43,12 @@
                 android:textColor="@color/dark_black"
                 android:textSize="20sp" />
 
+            <ImageView
+                android:id="@+id/profileMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_dotted_menu"/>
+
 
         </LinearLayout>
 
@@ -93,7 +99,7 @@
             android:id="@+id/profileLastNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/input_default"
             android:fontFamily="@font/roboto"
             android:hint="Last name"
@@ -106,7 +112,7 @@
             android:id="@+id/profileEmailAddressEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/input_default"
             android:fontFamily="@font/roboto"
             android:hint="Email address"
@@ -115,45 +121,42 @@
             android:textSize="15sp" />
 
 
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-3dp"
             android:hint=" "
-            android:layout_marginTop="-4dp"
-
-            app:passwordToggleTint="@color/dark_blue_gray"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/dark_blue_gray">
 
 
             <EditText
                 android:id="@+id/profilePasswordEditText"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:background="@drawable/input_default"
-                android:textSize="15sp"
-                android:letterSpacing="-0.01"
-                android:inputType="textPassword"
+                android:fontFamily="@font/roboto"
                 android:hint="Password"
-                android:textColorHint="@color/dark_blue_gray"
+                android:inputType="textPassword"
+                android:letterSpacing="-0.01"
                 android:textColor="@color/dark_black"
-                android:fontFamily="@font/roboto"/>
+                android:textColorHint="@color/dark_blue_gray"
+                android:textSize="15sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
-
-<!--        <EditText-->
-<!--            android:id="@+id/profilePasswordEditText"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="15dp"-->
-<!--            android:background="@drawable/input_default"-->
-<!--            android:fontFamily="@font/roboto"-->
-<!--            android:hint="Password"-->
-<!--            android:textColor="@color/dark_black"-->
-<!--            android:textColorHint="@color/dark_blue_gray"-->
-<!--            android:textSize="15sp" />-->
+        <!--        <EditText-->
+        <!--            android:id="@+id/profilePasswordEditText"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="15dp"-->
+        <!--            android:background="@drawable/input_default"-->
+        <!--            android:fontFamily="@font/roboto"-->
+        <!--            android:hint="Password"-->
+        <!--            android:textColor="@color/dark_black"-->
+        <!--            android:textColorHint="@color/dark_blue_gray"-->
+        <!--            android:textSize="15sp" />-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -195,8 +198,6 @@
 
 
         </LinearLayout>
-
-
 
 
     </LinearLayout>

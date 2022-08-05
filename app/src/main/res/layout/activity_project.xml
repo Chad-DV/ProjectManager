@@ -2,7 +2,7 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/light_blue_gray"
+    android:background="@color/white"
     android:orientation="vertical">
 
 
@@ -14,10 +14,11 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="210dp"
+
             android:background="@drawable/gradient_card_background"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="30dp">
 
 
             <LinearLayout
@@ -32,10 +33,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:fontFamily="@font/roboto_bold"
-                    android:letterSpacing="-0.01"
+                    android:letterSpacing="-0.02"
                     android:text="Welcome john"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="28sp" />
 
                 <Button
                     android:id="@+id/projectAddBtn1"
@@ -61,62 +62,47 @@
                 android:layout_marginTop="-15dp"
                 android:fontFamily="@font/roboto"
                 android:letterSpacing="-0.01"
-                android:textColor="@color/white"
+                android:text="You have 4 projects"
+                android:textColor="@color/light_blue_gray"
                 android:textSize="14sp" />
 
-            <!--                <EditText-->
-
-            <!--                    android:id="@+id/filterProjectEditText"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="55dp"-->
-            <!--                    android:layout_marginTop="20dp"-->
-            <!--                    android:background="@drawable/search_input"-->
-            <!--                    android:drawableLeft="@drawable/ic_search_icon"-->
-            <!--                    android:drawablePadding="15sp"-->
-            <!--                    android:fontFamily="@font/roboto"-->
-            <!--                    android:hint="Search for a project"-->
-            <!--                    android:letterSpacing="-0.01"-->
-            <!--                    android:textColor="@color/dark_black"-->
-            <!--                    android:textColorHint="@color/dark_blue_gray"-->
-            <!--                    android:textSize="16sp" />-->
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-50dp"
-            android:orientation="horizontal"
-            android:padding="20dp">
-
             <EditText
-
                 android:id="@+id/filterProjectEditText"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-
+                android:layout_marginTop="35dp"
                 android:background="@drawable/search_input"
-                android:drawableLeft="@drawable/ic_search_icon"
+                android:drawableRight="@drawable/ic_search_icon"
                 android:drawablePadding="15sp"
                 android:fontFamily="@font/roboto"
-                android:hint="Search for a project"
+                android:hint="Search for a project..."
                 android:letterSpacing="-0.01"
-                android:textColor="@color/dark_black"
+                android:textColor="@color/white"
                 android:textColorHint="@color/dark_blue_gray"
-                android:textSize="15sp" />
+                android:textSize="15sp">
+
+
+            </EditText>
+
 
         </LinearLayout>
+
+
+        <!--        <LinearLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:orientation="horizontal"-->
+        <!--            android:padding="20dp">-->
+
+        <!--  -->
+
+        <!--        </LinearLayout>-->
 
 
         <FrameLayout
             android:id="@+id/projectFrameLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-
-            />
+            android:layout_height="wrap_content" />
 
 
     </LinearLayout>

@@ -49,12 +49,12 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
                     android:layout_weight="1"
-                    android:letterSpacing="-0.01"
-                    android:text="My projects"
+                    android:letterSpacing="-0.02"
+                    android:text="My Projects"
 
                     android:textAlignment="textStart"
-                    android:textColor="@color/dark_black"
-                    android:textSize="20sp" />
+                    android:textColor="@color/dark_purple"
+                    android:textSize="22sp" />
 
                 <TextView
                     android:id="@+id/sortProjectsTextView"
@@ -66,7 +66,7 @@
                     android:text="Sort by"
                     android:drawableRight="@drawable/ic_sort_icon"
                     android:drawablePadding="5dp"
-                    android:textColor="@color/dark_blue_gray"
+                    android:textColor="@color/primary_purple"
                     android:textSize="13sp" />
 
 

@@ -181,7 +181,6 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
     private void addProject() {
 
 
-
         String title = addProjectTitleEditText.getText().toString().trim();
         String description = addProjectDescriptionEditText.getText().toString().trim();
         String dateDue = addProjectDueDateEditText.getText().toString().trim();
