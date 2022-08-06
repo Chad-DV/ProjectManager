@@ -43,7 +43,7 @@
             android:exported="false" />
         <activity
             android:name=".RegisterActivity"
-            android:exported="true"></activity> <!-- For broadcast receiver -->
+            android:exported="true" /> <!-- For broadcast receiver -->
         <receiver android:name=".AlarmReceiver" />
     </application>
 

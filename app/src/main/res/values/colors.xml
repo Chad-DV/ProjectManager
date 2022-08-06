@@ -5,7 +5,7 @@
     <color name="light_blue_gray">#F9FBFF</color>
     <color name="dark_blue_gray">#ADB3C8</color>
     <color name="primary_purple">#AA55FF</color>
-    <color name="dark_purple">#500c69</color>
+    <color name="dark_purple">#5E02A6</color>
     <color name="white">#ffffff</color>
 
     <!-- CARD COLOURS -->
@@ -17,4 +17,8 @@
 
     <color name="light_green">#ECFFEB</color>
     <color name="dark_green">#54F577</color>
+
+
+    <color name="light_blue">#F0FBFF</color>
+    <color name="dark_blue">#55B8FF</color>
 </resources>

@@ -3,12 +3,11 @@ package com.example.ppmtoolmobile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -19,9 +18,9 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,14 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
-import com.example.ppmtoolmobile.model.Project;
 import com.example.ppmtoolmobile.model.User;
 import com.example.ppmtoolmobile.model.UserAvatar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
@@ -57,6 +53,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private static final int PERMISSION_CODE = 1001;
     private Uri avatarUri;
     Bitmap selectedAvatar;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +70,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         profileUpdateBtn = findViewById(R.id.profileUpdateBtn);
         avatarProgressBar = findViewById(R.id.avatarProgressBar);
         profileMenu = findViewById(R.id.profileMenu);
+        dialog = new Dialog(this);
+
+
+
+
+
 
         // getting current username through intent from ProjectActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
@@ -179,6 +182,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.option_remove_avatar:
+                        displayDialog(R.layout.caution_dialog_layout);
                         removeAvatar();
                         break;
                     case R.id.option_delete_account:
@@ -200,17 +204,44 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void deleteAccount() {
-        new AlertDialog.Builder(ProfileActivity.this)
-                .setTitle("Delete entry")
-                .setMessage("Are you sure you want to delete this entry?")
-                .setPositiveButton(android.R.string.yes, (dialog, which) -> {
-                    Toast.makeText(ProfileActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton(android.R.string.no, (dialog, which) -> {
-                    Toast.makeText(ProfileActivity.this, "Not deleted", Toast.LENGTH_SHORT).show();
-                })
-                .setIcon(android.R.drawable.alert_dark_frame)
-                .show();
+
+        displayDialog(R.layout.caution_dialog_layout);
+
+
+    }
+
+    private void displayDialog(int v) {
+        dialog.setContentView(v);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.custom_dialog_background));
+        }
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false); //Optional
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
+
+        Button Okay = dialog.findViewById(R.id.btn_okay);
+        Button Cancel = dialog.findViewById(R.id.btn_cancel);
+
+        Okay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(ProfileActivity.this, "Okay", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(ProfileActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bitmap, int maxSize) {

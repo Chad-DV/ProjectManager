@@ -184,37 +184,33 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onProjectLongClick(View view, int position) {
 
 
-        Project project = projectList.get(position);
-        projectId = projectList.get(position).getId();
-
-
-        Toast.makeText(ProjectFragment.this.getActivity(), project.toString(), Toast.LENGTH_SHORT).show();
-
-        PopupMenu popupMenu = new PopupMenu(ProjectFragment.this.getActivity(), sortProjectsTextView);
-
-        // Inflating popup menu from popup_menu.xml file
-        popupMenu.getMenuInflater().inflate(R.menu.project_menu, popupMenu.getMenu());
-
-        popupMenu.setOnMenuItemClickListener(menuItem -> {
-            switch (menuItem.getItemId()) {
-                case R.id.option_delete:
-
-                    deleteProject(projectId);
-                    break;
-                case R.id.option_edit:
-                    Intent getProjectIdIntent = new Intent(ProjectFragment.this.getActivity(), EditProjectActivity.class);
-                    getProjectIdIntent.putExtra("projectId", projectId);
-                    startActivity(getProjectIdIntent);
-
-//                    Project theProject =  daoHelper.getProjectById(projectId);
-//                    Toast.makeText(ProjectFragment.this.getActivity(), theProject.toString(), Toast.LENGTH_SHORT).show();
-//                    System.out.println(project.toString());
-                    break;
-            }
-            return true;
-        });
-        // Showing the popup menu
-        popupMenu.show();
+//        Project project = projectList.get(position);
+//        projectId = projectList.get(position).getId();
+//
+//
+//        Toast.makeText(ProjectFragment.this.getActivity(), project.toString(), Toast.LENGTH_SHORT).show();
+//
+//        PopupMenu popupMenu = new PopupMenu(ProjectFragment.this.getActivity(), sortProjectsTextView);
+//
+//        // Inflating popup menu from popup_menu.xml file
+//        popupMenu.getMenuInflater().inflate(R.menu.project_menu, popupMenu.getMenu());
+//
+//        popupMenu.setOnMenuItemClickListener(menuItem -> {
+//            switch (menuItem.getItemId()) {
+//                case R.id.option_delete:
+//
+//                    deleteProject(projectId);
+//                    break;
+//                case R.id.option_edit:
+//                    Intent getProjectIdIntent = new Intent(ProjectFragment.this.getActivity(), EditProjectActivity.class);
+//                    getProjectIdIntent.putExtra("projectId", projectId);
+//                    startActivity(getProjectIdIntent);
+//                    break;
+//            }
+//            return true;
+//        });
+//        // Showing the popup menu
+//        popupMenu.show();
 
 
 
