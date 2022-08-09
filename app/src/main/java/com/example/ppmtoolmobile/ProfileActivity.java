@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,9 +16,11 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-//
+
         profileFirstNameEditText = findViewById(R.id.profileFirstNameEditText);
         profileLastNameEditText = findViewById(R.id.profileLastNameEditText);
         profileEmailAddressEditText = findViewById(R.id.profileEmailAddressEditText);
@@ -159,7 +162,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 avatarUri = data.getData();
                 InputStream imageStream = getContentResolver().openInputStream(avatarUri);
                 selectedAvatar = BitmapFactory.decodeStream(imageStream);
-                selectedAvatar = getCroppedBitmap(selectedAvatar, 650);
+                selectedAvatar = getCroppedBitmap(selectedAvatar, 375);
 
                 userAvatarImageView.setImageBitmap(selectedAvatar);
             }
@@ -182,7 +185,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.option_remove_avatar:
-                        displayDialog(R.layout.caution_dialog_layout);
                         removeAvatar();
                         break;
                     case R.id.option_delete_account:
@@ -200,25 +202,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void removeAvatar() {
-
-    }
-
-    private void deleteAccount() {
-
         displayDialog(R.layout.caution_dialog_layout);
-
-
-    }
-
-    private void displayDialog(int v) {
-        dialog.setContentView(v);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.custom_dialog_background));
-        }
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false); //Optional
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
 
         Button Okay = dialog.findViewById(R.id.btn_okay);
         Button Cancel = dialog.findViewById(R.id.btn_cancel);
@@ -227,7 +211,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(ProfileActivity.this, "Okay", Toast.LENGTH_SHORT).show();
+                boolean isRemoved = databaseHelper.removeAvatar(theUserId);
+
+                if(isRemoved) {
+                    Toast.makeText(ProfileActivity.this, "Your avatar was removed successfully", Toast.LENGTH_SHORT).show();
+                }
                 dialog.dismiss();
             }
         });
@@ -242,6 +230,49 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         dialog.show();
+    }
+
+    private void deleteAccount() {
+
+        displayDialog(R.layout.caution_dialog_layout);
+
+        Button Okay = dialog.findViewById(R.id.btn_okay);
+        Button Cancel = dialog.findViewById(R.id.btn_cancel);
+
+        Okay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(ProfileActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(ProfileActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+
+    }
+
+    private void displayDialog(int layoutView) {
+        dialog.setContentView(layoutView);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.custom_dialog_background));
+        }
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false); //Optional
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
+
     }
 
     public static Bitmap getCroppedBitmap(Bitmap bitmap, int maxSize) {
@@ -338,13 +369,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         User user = new User(userId, firstName, lastName, emailAddress, password);
 
-        boolean res = databaseHelper.editUserDetails(user);
 
-        if(res){
-            Toast.makeText(this, "Successfully updated", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Failure to update", Toast.LENGTH_SHORT).show();
-        }
+
+
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                SharedPreferences preferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putBoolean("saveLogin", false);
+//                editor.apply();
+//                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+//            }
+//        }, 1500);
+
+
 
 
         if(userAvatarImageView.getDrawable() != null && selectedAvatar != null) {
@@ -354,13 +393,23 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
             boolean result = databaseHelper.saveAvatar(userAvatar, authenticatedUser);
-
-
+            boolean res = databaseHelper.editUserDetails(user);
+            if(res) {
+                Toast.makeText(this, "Details changed successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error changing details", Toast.LENGTH_SHORT).show();
+            }
 
             Toast.makeText(this, "Avatar uploaded with user: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         } else {
-            Toast.makeText(this, "Please select image" + authenticatedUser, Toast.LENGTH_SHORT).show();
+            boolean res = databaseHelper.editUserDetails(user);
+
+            if(res) {
+                Toast.makeText(this, "Details changed successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Error changing details", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }

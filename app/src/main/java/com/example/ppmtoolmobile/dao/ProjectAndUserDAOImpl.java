@@ -27,6 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -298,7 +299,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         if(cursor.moveToNext()) {
             byte[] blob = cursor.getBlob(0);
             obj = BitmapFactory.decodeByteArray(blob, 0, blob.length);
-            obj = ProfileActivity.getCroppedBitmap(obj, 650);
+            obj = ProfileActivity.getCroppedBitmap(obj, 375);
 
         }
 
@@ -306,30 +307,61 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     }
 
     @Override
+    public Boolean removeAvatar(long theUserId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean success = false;
+
+        Cursor cursor = db.query(USER_AVATAR_TABLE,// Selecting Table
+                new String[]{COLUMN_USER_AVATAR_BLOB},//Selecting columns want to query
+                COLUMN_USER_AVATAR_PK + " = ?",
+                new String[]{String.valueOf(theUserId)},//Where clause
+                null, null, null);
+
+
+        if(cursor.moveToNext()) {
+            byte[] blob = cursor.getBlob(0);
+            db.delete(USER_AVATAR_TABLE, COLUMN_USER_AVATAR_PK + " = ?", new String[]{String.valueOf(theUserId)});
+            success = true;
+            System.out.println("Deleted avatar of user: " +theUserId);
+
+        }
+
+
+        System.out.println(success);
+
+        return success;
+    }
+
+    @Override
     public Boolean editUserDetails(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        boolean success = true;
 
         cv.put(COLUMN_USER_FIRST_NAME, user.getFirstName());
         cv.put(COLUMN_USER_LAST_NAME, user.getLastName());
         cv.put(COLUMN_USER_EMAIL_ADDRESS, user.getEmailAddress());
         cv.put(COLUMN_USER_PASSWORD, user.getPassword());
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
 
-        Cursor cursor2 = db.rawQuery("SELECT * FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{user.getEmailAddress()});
+        Cursor cursor = db.rawQuery("SELECT " + COLUMN_USER_EMAIL_ADDRESS + " FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{String.valueOf(user.getEmailAddress())});
 
-        if(cursor2.getCount() > 0) {
-            System.out.println("ALREADY EXISTS A USER WITH THIS EMAIL ... IDIOT");
-            return false;
+
+
+        if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
+            success = false;
+
+            // If email address is the same as the account holder, allow info to be updated
+            if(user.getEmailAddress().equals(cursor.getString(0))) {
+                success = true;
+            }
         }
 
-        if (cursor.getCount() > 0) {
-            long result = db.update(USER_TABLE, cv, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
-            return result == -1 ? false : true;
-        } else {
-            return false;
+        if(success) {
+            db.update(USER_TABLE, cv, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
         }
+
+        return success;
     }
 
     @Override

@@ -6,13 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/toolbar_gradient_bg"
+    android:background="@color/primary_purple"
     tools:context=".ViewProjectActivity">
+
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/viewProjectAppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="250dp"
         android:stateListAnimator="@null"
         android:fitsSystemWindows="true"
         >
@@ -27,7 +29,7 @@
         app:title="My project"
 
         app:contentScrim="?attr/colorPrimary"
-        android:background="@drawable/toolbar_gradient_bg"
+        android:background="@color/primary_purple"
         app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
 
@@ -44,9 +46,23 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/viewProjectToolBar"
             android:layout_width="match_parent"
+            android:stateListAnimator="@null"
             android:theme="@style/PurpleActionBar"
             app:layout_collapseMode="pin"
-            android:layout_height="?attr/actionBarSize"/>
+            android:layout_height="?attr/actionBarSize">
+
+            <ImageView
+                android:id="@+id/viewProjectMenu"
+                android:layout_width="wrap_content"
+                android:stateListAnimator="@null"
+
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_dotted_menu_light" />
+
+
+        </androidx.appcompat.widget.Toolbar>
 
 
 
@@ -59,7 +75,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         android:background="@drawable/toolbar_scrollview_rounded_layout_bg"
-        android:padding="25dp"
+        android:padding="30dp"
 
         >
 
@@ -70,61 +86,64 @@
 
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/userAvatarImageView"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:id="@+id/projectUserAvatarImageView"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
                     android:src="@drawable/ic_user_avatar_default" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/profileTitleTextView"
+                        android:id="@+id/viewProjectCreatedByTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_bold"
-                        android:letterSpacing="-0.01"
-                        android:text="Created by John Doe"
+                        android:letterSpacing="-0.03"
+                        android:text="Created by You"
+
                         android:textColor="@color/dark_black"
                         android:textSize="20sp" />
 
                     <TextView
-                        android:id="@+id/profileTitleTextView3"
+                        android:id="@+id/viewProjectOwnerTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-
                         android:fontFamily="@font/roboto"
-                        android:letterSpacing="-0.01"
+                        android:layout_marginTop="-3dp"
+                        android:letterSpacing="-0.03"
                         android:text="Project owner"
                         android:textColor="@color/dark_blue_gray"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/profileTitleTextView1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:fontFamily="@font/roboto"
+                    <Button
+                        android:id="@+id/viewProjectDueStatusInfoBtn"
+                        android:layout_width="120dp"
+                        android:layout_height="24dp"
+                        android:background="@drawable/project_card_small_button"
+                        android:fontFamily="@font/roboto_bold"
                         android:letterSpacing="-0.01"
-                        android:text="27/11/20"
-                        android:textColor="@color/dark_black"
+                        android:text="Not started"
+                        android:layout_marginTop="3dp"
+                        android:stateListAnimator="@null"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:layout_marginEnd="15dp"
+                        android:textColor="@color/white"
                         android:textSize="13sp" />
 
 
                 </LinearLayout>
-
-
-
 
 
 
@@ -143,7 +162,141 @@
                 android:textColor="@color/dark_blue_gray"
                 android:textSize="15sp" />
 
-<!--            <Button-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/viewProjectDateDueTextVi2ew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:letterSpacing="-0.03"
+                    android:text="Date created"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/dark_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/viewProjectDateCreatedTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:letterSpacing="-0.03"
+                    android:text="23 January 2022"
+                    android:textColor="@color/dark_blue_gray"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/viewProjectDateeDueTextVi2ew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:letterSpacing="-0.03"
+                    android:text="Date due"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/dark_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/viewProjectDateDueTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:letterSpacing="-0.03"
+                    android:text="23 January 2022"
+                    android:textColor="@color/dark_blue_gray"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/viewProj3ectDateDueTextVi2ew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:letterSpacing="-0.03"
+                    android:text="Project priority"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/dark_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/viewProjectPriorityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:letterSpacing="-0.03"
+                    android:text="High"
+                    android:textColor="@color/dark_blue_gray"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:id="@+id/viewProjectChecklistLinearLayout"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/viewProjectChecklistTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:fontFamily="@font/roboto_bold"
+                    android:letterSpacing="-0.03"
+                    android:text="Checklist"
+                    android:textColor="@color/dark_black"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/viewProjectChecklistDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/roboto"
+                    android:letterSpacing="-0.03"
+                    android:text="Your projects checklist"
+                    android:textColor="@color/dark_blue_gray"
+                    android:textSize="12sp" />
+
+
+                <ListView
+                    android:id="@+id/viewProjectChecklistListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="10dp"
+                    android:stateListAnimator="@null"
+                    android:divider="@null"
+                    android:dividerHeight="0dp" />
+
+            </LinearLayout>
+            <!--            <Button-->
 <!--                android:id="@+id/loginBtn"-->
 <!--                android:layout_width="match_parent"-->
 <!--                android:layout_height="wrap_content"-->

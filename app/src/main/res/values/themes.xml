@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="PurpleActionBar" parent="Theme.AppCompat">
         <item name="windowActionBar">true</item>
-        <item name="android:background">@drawable/toolbar_gradient_bg</item>
+<!--        <item name="android:background">@drawable/toolbar_gradient_bg</item>-->
+        <item name="android:background">@color/primary_purple</item>
         <item name="windowNoTitle">true</item>
     </style>
 

@@ -9,45 +9,6 @@
         motion:duration="1000"
         motion:autoTransition="animateToEnd">
         <KeyFrameSet>
-
-            <KeyPosition
-                motion:framePosition="20"
-                motion:keyPositionType="parentRelative"
-                motion:percentX="0.2"
-                motion:percentY="0.3"
-                motion:motionTarget="@id/whiteLogo" />
-
-            <KeyAttribute
-                motion:motionTarget="@+id/whiteLogo"
-                motion:framePosition="0"
-                android:alpha="1" />
-
-            <KeyAttribute
-                motion:motionTarget="@+id/whiteLogo"
-                motion:framePosition="17"
-                android:alpha="0" />
-
-<!--            <KeyAttribute-->
-<!--                motion:motionTarget="@+id/purpleLogo"-->
-<!--                motion:framePosition="0"-->
-<!--                android:alpha="0" />-->
-
-           <KeyAttribute
-               motion:motionTarget="@+id/logoTitle"
-                motion:framePosition="0"
-                android:alpha="0" />
-
-<!--            <KeyAttribute-->
-<!--                motion:motionTarget="@+id/logoDescription"-->
-<!--                motion:framePosition="85"-->
-<!--                android:alpha="1" />-->
-
-<!--            <KeyAttribute-->
-<!--                motion:motionTarget="@+id/logoYear"-->
-<!--                motion:framePosition="85"-->
-<!--                android:alpha="1" />-->
-
-
         </KeyFrameSet>
     </Transition>
 
@@ -55,59 +16,34 @@
         <Constraint
             android:id="@+id/backgroundLayout"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent" />
+            motion:layout_constraintStart_toStartOf="parent"
+            android:scaleX="10"
+            android:scaleY="10" />
         <Constraint
             android:id="@+id/purpleLogo"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="135dp"
-            android:layout_height="135dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-/>
+            android:scaleX="0"
+            android:scaleY="0"
+            android:alpha="0" />
         <Constraint
             android:id="@+id/whiteLogo"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="135dp"
-            android:layout_height="135dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            />
-
-        <Constraint
-            android:id="@+id/logoTitle"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            />
-
-        <Constraint
-            android:id="@+id/logoDescription"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            />
-
-        <Constraint
-            android:id="@+id/logoYear"
-            motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
-            motion:layout_constraintStart_toStartOf="parent"
-            />
+            android:scaleX="1"
+            android:scaleY="1" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -119,27 +55,29 @@
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            />
-
+            android:scaleX="0"
+            android:scaleY="0" />
         <Constraint
             android:id="@+id/purpleLogo"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="135dp"
-            android:layout_height="135dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            />
-
+            android:scaleX="1"
+            android:scaleY="1"
+            android:alpha="1"
+            motion:transitionEasing="cubic(1,0,1,0)" />
         <Constraint
             android:id="@+id/whiteLogo"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="135dp"
-            android:layout_height="135dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
-            />
-
+            android:scaleX="0"
+            android:scaleY="0" />
     </ConstraintSet>
 </MotionScene>

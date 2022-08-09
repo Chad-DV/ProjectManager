@@ -19,6 +19,7 @@ public interface ProjectAndUserDAO {
     long getCurrentUserId(String emailAddress);
     User getUserDetails(String emailAddress);
     Bitmap getAvatar(long userId);
+    Boolean removeAvatar(long theUserId);
     Boolean editUserDetails(User user);
     Boolean saveAvatar(UserAvatar userAvatar, String emailAddress);
 

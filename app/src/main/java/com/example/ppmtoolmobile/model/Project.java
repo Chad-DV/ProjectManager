@@ -126,10 +126,10 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public long getProjectRemainingTimeInMilliseconds(LocalDateTime dateDue) {
+    public long getProjectRemainingTimeInMinutes() {
 
 //        System.out.println("project " + getTitle() + ", " + ChronoUnit.MILLIS.between(LocalDateTime.now(), dateDue) + ", expired=" + isProjectExpired(dateDue));
-        return ChronoUnit.MILLIS.between(LocalDateTime.now(), dateDue);
+        return ChronoUnit.MINUTES.between(LocalDateTime.now(), getDateDue());
     }
 
 

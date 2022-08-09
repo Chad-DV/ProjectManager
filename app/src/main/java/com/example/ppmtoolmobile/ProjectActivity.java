@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,7 +83,11 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         displayUserProjectCountTextView.setText("You currently have " + projectCount + " projects");
 //
 //
+
+         Toast.makeText(this, "New project count: " + projectCount, Toast.LENGTH_SHORT).show();
         if(projectCount <= 0) {
+            FrameLayout projectFrameLayout = findViewById(R.id.projectFrameLayout);
+            projectFrameLayout.setPadding(0, 250, 0, 0);
             loadFragment(new EmptyProjectListFragment());
         } else {
             loadFragment(new ProjectFragment());

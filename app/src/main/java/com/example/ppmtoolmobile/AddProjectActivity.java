@@ -197,20 +197,20 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             addProjectTitleEditText.setError("Title is required");
             success = false;
         }
-        if (title.length() < 15) {
-            addProjectTitleEditText.setError("Minimum of 15 characters required");
-            success = false;
-        }
+//        if (title.length() < 15) {
+//            addProjectTitleEditText.setError("Minimum of 15 characters required");
+//            success = false;
+//        }
 
         if (TextUtils.isEmpty(title)) {
             addProjectDescriptionEditText.setError("Title is required");
             success = false;
         }
 
-        if (description.length() < 30) {
-            addProjectDescriptionEditText.setError("Minimum of 30 characters required");
-            success = false;
-        }
+//        if (description.length() < 30) {
+//            addProjectDescriptionEditText.setError("Minimum of 30 characters required");
+//            success = false;
+//        }
 
         if (TextUtils.isEmpty(dateDue)) {
             addProjectDueDateEditText.setError("Due date is required");
@@ -314,8 +314,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         return str;
     }
 
-    public static String[] convertStringToArray(String str){
-        return str.split(strSeparator);
-
-    }
+//    public static String[] convertStringToArray(String str){
+//        return str.split(strSeparator);
+//
+//    }
 }
