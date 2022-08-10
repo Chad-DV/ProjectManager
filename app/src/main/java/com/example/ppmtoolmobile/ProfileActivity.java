@@ -394,22 +394,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             boolean result = databaseHelper.saveAvatar(userAvatar, authenticatedUser);
             boolean res = databaseHelper.editUserDetails(user);
-            if(res) {
-                Toast.makeText(this, "Details changed successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Error changing details", Toast.LENGTH_SHORT).show();
-            }
-
+            System.out.println("did update? : " + res);
             Toast.makeText(this, "Avatar uploaded with user: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         } else {
             boolean res = databaseHelper.editUserDetails(user);
 
-            if(res) {
-                Toast.makeText(this, "Details changed successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Error changing details", Toast.LENGTH_SHORT).show();
-            }
+            System.out.println("did update? : " + res);
+
         }
 
     }

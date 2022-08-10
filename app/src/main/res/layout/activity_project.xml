@@ -32,18 +32,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:maxLength="17"
+                    android:ellipsize="end"
                     android:fontFamily="@font/roboto_bold"
                     android:letterSpacing="-0.02"
-                    android:text="Welcome john"
+                    android:text="Hello"
                     android:textColor="@color/white"
                     android:textSize="28sp" />
 
                 <Button
                     android:id="@+id/projectAddBtn1"
-                    android:layout_width="90dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
+                    android:layout_marginLeft="5dp"
 
-                    android:layout_weight="1"
                     android:background="@drawable/primary_button"
                     android:backgroundTint="@color/white"
                     android:fontFamily="@font/roboto_bold"
@@ -116,6 +118,8 @@
 
             android:orientation="horizontal">
 
+
+
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavView"
                 android:layout_width="match_parent"
@@ -127,6 +131,7 @@
                 app:menu="@menu/nav_menu" />
         </LinearLayout>
 
+=
 
     </RelativeLayout>
 

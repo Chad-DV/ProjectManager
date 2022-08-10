@@ -14,7 +14,6 @@ public interface ProjectAndUserDAO {
     // User
     Boolean register(User user);
     Boolean login(User user);
-    Boolean isEmailExists(String email);
     String getCurrentUserFirstName(String emailAddress);
     long getCurrentUserId(String emailAddress);
     User getUserDetails(String emailAddress);

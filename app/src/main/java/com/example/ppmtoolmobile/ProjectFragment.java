@@ -10,10 +10,14 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.PeriodicWorkRequest;
@@ -51,16 +55,18 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     private List<Project> projectList;
     private MyRecyclerAdapter adapter;
     private RecyclerView recyclerView;
-
     private ProgressBar projectListLoadingProgressBar;
     private long projectId;
     private ProjectAndUserDAOImpl databaseHelper;
     private long theUserId;
     private String authenticatedUser;
-    private String query;
     private ProjectViewModel projectViewModel;
     private int projectCount;
     private Dialog dialog;
+
+    private TextView viewModelTextView;
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -77,9 +83,17 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
         theUserId = databaseHelper.getCurrentUserId(authenticatedUser);
 
+        viewModelTextView = v.findViewById(R.id.viewModelTextView);
+
+
+
         loadProjects(v);
         buildRecyclerView(v);
-        buttonShowNotification();
+//        buttonShowNotification();
+
+
+
+
 
 //        filterProjectEditText.addTextChangedListener(new TextWatcher() {
 //            @Override
@@ -93,6 +107,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 //                filterProjects(editable.toString());
 //            }
 //        });
+
+
 
 
 
@@ -118,11 +134,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
     public void onClick(View view) {
         if(view == sortProjectsTextView) {
             sortProjects();
+            filterProjects();
 
-            if (getArguments() != null) {
-                query = getArguments().getString("query");
-            }
-            System.out.println("fragme " + query);
 
         }
     }
@@ -223,6 +236,47 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void filterProjects() {
+//        String query = filterProjectEditText.getText().toString().trim();
+//
+//        projectList = databaseHelper.searchProjects(theUserId, viewModelTextView.getText().toString());
+//        adapter.refreshList(projectList);
+//        if(projectList.isEmpty()) {
+//            Toast.makeText(getActivity(), "No projects matched with " + query , Toast.LENGTH_SHORT).show();
+//        } else {
+//            Toast.makeText(getActivity(), projectList.toString() , Toast.LENGTH_SHORT).show();
+//        }
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        projectViewModel = new ViewModelProvider(requireActivity()).get(ProjectViewModel.class);
+        projectViewModel.getText().observe(getViewLifecycleOwner(), item -> {
+//            viewModelTextView.setText(item);
+
+            if(item.length() == 0) {
+//                viewModelTextView.setVisibility(View.GONE);
+//                recyclerView.setVisibility(View.VISIBLE);
+                projectList = databaseHelper.getUserProjects(theUserId);
+                adapter.refreshList(projectList);
+            } else {
+//                viewModelTextView.setVisibility(View.GONE);
+//                recyclerView.setVisibility(View.VISIBLE);
+                projectList = databaseHelper.searchProjects(theUserId, item.toString());
+                adapter.refreshList(projectList);
+                if(projectList.isEmpty()) {
+                    Toast.makeText(getActivity(), "No projects matched with " + item , Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), projectList.toString() , Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+
+        });
 
     }
 
@@ -241,7 +295,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
 
         projectListLoadingProgressBar.setVisibility(View.VISIBLE);
-        projectList.clear();
 
         projectList = databaseHelper.getUserProjects(theUserId);
 
@@ -332,5 +385,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, M
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
 
     }
+
 
 }

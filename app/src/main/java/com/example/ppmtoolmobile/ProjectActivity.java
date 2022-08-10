@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -47,6 +49,10 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private long userId;
     private String userFirstName;
     private ProjectViewModel projectViewModel;
+    private TextView viewModelTextView;
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -62,8 +68,27 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_home);
 
-        projectViewModel = new ProjectViewModel();
-        Log.i("ProjectActivity", "projectViewModel is initialized");
+        viewModelTextView = findViewById(R.id.viewModelTextView);
+        projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
+//        filterProjectEditText.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                projectViewModel.setText(editable);
+//            }
+//        });
+
+
+
 
         databaseHelper = new ProjectAndUserDAOImpl(this);
 
@@ -79,10 +104,9 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         userFirstName = databaseHelper.getCurrentUserFirstName(authenticatedUser);
         projectCount = databaseHelper.getProjectCount(userId);
 
-        welcomeUserTextView1.setText("Welcome " + userFirstName + ", " + userId);
+
+        welcomeUserTextView1.setText("Hello " + userFirstName);
         displayUserProjectCountTextView.setText("You currently have " + projectCount + " projects");
-//
-//
 
          Toast.makeText(this, "New project count: " + projectCount, Toast.LENGTH_SHORT).show();
         if(projectCount <= 0) {
@@ -117,23 +141,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-
-        filterProjectEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                projectViewModel.setText(editable);
-            }
-        });
 
         filterProjectEditText.setOnClickListener(this);
         projectAddBtn1.setOnClickListener(this);
@@ -176,17 +183,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void searchProjects() {
         String query = filterProjectEditText.getText().toString().trim();
-
-        Bundle bundle = new Bundle();
-        bundle.putString("query", query);
-        System.out.println("in prj act: " + query);
-// set MyFragment Arguments
-        ProjectFragment myObj = new ProjectFragment();
-        myObj.setArguments(bundle);
-
-
-
-
+        projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
+        projectViewModel.setText(query);
     }
 
 

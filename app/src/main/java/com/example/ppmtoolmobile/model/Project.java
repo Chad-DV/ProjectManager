@@ -63,7 +63,7 @@ public class Project {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, String remindMeInterval, long userId) {
+    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, String remindMeInterval, boolean status, long userId) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -72,6 +72,7 @@ public class Project {
         this.priority = priority;
         this.checklist = checklist;
         this.remindMeInterval = remindMeInterval;
+        this.status = status;
         this.userId = userId;
 
 

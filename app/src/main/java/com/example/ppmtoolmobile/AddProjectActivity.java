@@ -235,15 +235,18 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
                 System.out.println(theProject);
                 System.out.println("chedklist: " + checkList);
-                boolean result = databaseHelper.addProject(theProject, authenticatedUser);
 
-                if(result) {
-                    Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();
-                    System.out.println(theProject);
+                if(databaseHelper.addProject(theProject, authenticatedUser)) {
                     clearInput();
-                } else {
-                    Toast.makeText(AddProjectActivity.this, "Error adding project", Toast.LENGTH_SHORT).show();
                 }
+
+//                if(result) {
+//                    Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();
+//                    System.out.println(theProject);
+//                    clearInput();
+//                } else {
+//                    Toast.makeText(AddProjectActivity.this, "Error adding project", Toast.LENGTH_SHORT).show();
+//                }
             }
 
 

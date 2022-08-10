@@ -122,6 +122,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     public Boolean register(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        long result = 0;
 
         String password = user.getPassword();
         String salt = PasswordUtils.getSalt(30);
@@ -139,8 +140,17 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         cv.put(COLUMN_USER_PASSWORD, mySecurePassword);
         cv.put(COLUMN_USER_PASSWORD_SALT, salt);
 
-        long result = db.insert(USER_TABLE, null, cv);
+
+        if(isEmailExists(user.getEmailAddress())) {
+            Toast.makeText(context.getApplicationContext(), "User already exists with this Email Address.", Toast.LENGTH_SHORT).show();
+
+        } else {
+            result = db.insert(USER_TABLE, null, cv);
+            Toast.makeText(context.getApplicationContext(), "Your account was created successfully", Toast.LENGTH_SHORT).show();
+        }
+
         return result == -1 ? false : true;
+
 
     }
 
@@ -182,25 +192,19 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         return valid;
     }
 
-    @Override
-    public Boolean isEmailExists(String email) {
+    private Boolean isEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(USER_TABLE,// Selecting Table
-                new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
+                new String[]{COLUMN_USER_EMAIL_ADDRESS},//Selecting columns want to query
                 COLUMN_USER_EMAIL_ADDRESS + " = ?",
                 new String[]{email},//Where clause
                 null, null, null);
 
         if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
-            System.out.println("User with email " + email + " already exists");
-            //if cursor has value then in user database there is user associated with this given email so return true
             return true;
         }
 
         cursor.close();
-
-        System.out.println("Email does not exist");
-        //if email does not exist return false
         return false;
     }
 
@@ -336,7 +340,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     public Boolean editUserDetails(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        boolean success = true;
+        boolean success = false;
 
         cv.put(COLUMN_USER_FIRST_NAME, user.getFirstName());
         cv.put(COLUMN_USER_LAST_NAME, user.getLastName());
@@ -346,18 +350,21 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         Cursor cursor = db.rawQuery("SELECT " + COLUMN_USER_EMAIL_ADDRESS + " FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{String.valueOf(user.getEmailAddress())});
 
-
-
-        if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
-            success = false;
-
-            // If email address is the same as the account holder, allow info to be updated
-            if(user.getEmailAddress().equals(cursor.getString(0))) {
-                success = true;
-            }
+        // if new email is unique, true
+        if(!isEmailExists(user.getEmailAddress())) {
+            System.out.println("email is unique, updated");
+            success = true;
         }
 
-        if(success) {
+
+        if(cursor.moveToFirst() && user.getEmailAddress().equals(cursor.getString(0))) {
+            success = true;
+            System.out.println("current email is not unique with itself");
+        }
+
+
+
+        if(success == true) {
             db.update(USER_TABLE, cv, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
         }
 
@@ -422,6 +429,9 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         SQLiteDatabase dbWrite = this.getWritableDatabase();
         SQLiteDatabase dbRead = this.getReadableDatabase();
         ContentValues cv = new ContentValues();
+        long result = 0;
+        long userId = 0;
+
         Cursor cursor = dbRead.rawQuery("SELECT " + COLUMN_USER_ID + " FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{emailAddress});
 //        Cursor cursor = dbRead.query(USER_TABLE,// Selecting Table
 //                new String[]{COLUMN_USER_ID},//Selecting columns want to query
@@ -431,10 +441,9 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
 
 
-
         while(cursor.moveToNext()) {
-            long userId = cursor.getLong(0);
 
+            userId = cursor.getLong(0);
             cv.put(COLUMN_PROJECT_TITLE, project.getTitle());
             cv.put(COLUMN_PROJECT_DESCRIPTION, project.getDescription());
             cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
@@ -446,13 +455,36 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             cv.put(COLUMN_USER_PROJECT_FK, userId);
         }
 
+        if(isDuplicateProject(userId, project.getTitle())) {
+            Toast.makeText(context.getApplicationContext(), "Project already exists with this title.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
 
-        long result = dbWrite.insert(PROJECT_TABLE, null, cv);
+        result = dbWrite.insert(PROJECT_TABLE, null, cv);
+        Toast.makeText(context.getApplicationContext(), "Project created successfully.", Toast.LENGTH_SHORT).show();
+
 
         return result == -1 ? false : true;
 
     }
+
+    private Boolean isDuplicateProject(long userId, String title) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? AND " + COLUMN_PROJECT_TITLE + " = ?",
+                new String[]{String.valueOf(userId), title});
+
+        if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
+            return true;
+        }
+
+        System.out.println(cursor.getCount());
+        cursor.close();
+        return false;
+    }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -503,6 +535,8 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         }
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public Project getProjectById(long projectId) {
@@ -525,9 +559,10 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             String priority = cursor.getString(5);
             String remindMeInterval = cursor.getString(6);
             String checklist = cursor.getString(7);
-            int userId = cursor.getInt(8);
+            boolean status = cursor.getInt(8) > 0;
+            int userId = cursor.getInt(9);
 
-            return new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, userId);
+            return new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, status, userId);
         }
 
 
@@ -542,11 +577,13 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? AND " + COLUMN_PROJECT_TITLE + " LIKE ?",
                 new String[]{String.valueOf(userId), query});
-        if (cursor.moveToFirst()) {
+
+
+        if(cursor.getCount() > 0) {
             readDataFromCursor(projectList, cursor);
         }
-//        db.close();
-//        cursor.close();
+
+
         return projectList;
     }
 
@@ -645,9 +682,10 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             String priority = cursor.getString(5);
             String remindMeInterval = cursor.getString(6);
             String checklist = cursor.getString(7);
-            int theUserId = cursor.getInt(8);
+            boolean status = cursor.getInt(8) > 0;
+            int theUserId = cursor.getInt(9);
 
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, theUserId);
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, status, theUserId);
 
             projectList.add(project);
         }

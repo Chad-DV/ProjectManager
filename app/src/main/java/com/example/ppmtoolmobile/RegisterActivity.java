@@ -1,8 +1,10 @@
 package com.example.ppmtoolmobile;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -54,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void registerUser() {
 
         String firstName = firstNameEditText.getText().toString().trim();
@@ -97,14 +100,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if(!databaseHelper.isEmailExists(emailAddress)) {
-            databaseHelper.register(new User(firstName, lastName, emailAddress, password));
+        if(databaseHelper.register(new User(firstName, lastName, emailAddress, password)) == true) {
             clearInput();
-
-            Toast.makeText(this, "Account created successfully! You can now login", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "User with email " + emailAddress + " already exists!", Toast.LENGTH_LONG).show();
         }
+
 
     }
 

@@ -144,7 +144,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             timePickerDialog.show();
         } else if(view == editProjectChecklistBtn) {
             String add_item = editProjectChecklistEditText.getText().toString();
-
             if(TextUtils.isEmpty(add_item)) {
                 editProjectChecklistEditText.setError("Please enter a value");
             } else if (checklistItemList.contains(add_item)) {
