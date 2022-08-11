@@ -33,6 +33,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
+import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
+import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
 import com.example.ppmtoolmobile.model.UserAvatar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressBar avatarProgressBar;
     private Button profileUpdateBtn;
     private ImageView profileNavigationBack, profileMenu;
-    private ProjectAndUserDAOImpl databaseHelper;
+    private UserDAOImpl userHelper;
     private long theUserId;
     private String authenticatedUser;
     private static final int IMAGE_PICK_CODE = 1000;
@@ -88,7 +90,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
         Toast.makeText(this, "profile activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
-        databaseHelper = new ProjectAndUserDAOImpl(this);
+        userHelper = new UserDAOImpl(this);
 
 //        avatarProgressBar.setVisibility(View.VISIBLE);
 
@@ -191,8 +193,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         deleteAccount();
                         break;
                 }
-
-
                 return true;
             }
 
@@ -210,11 +210,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                boolean isRemoved = databaseHelper.removeAvatar(theUserId);
-
+                boolean isRemoved = userHelper.removeAvatar(theUserId);
                 if(isRemoved) {
                     Toast.makeText(ProfileActivity.this, "Your avatar was removed successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ProfileActivity.this, "Error removing avatar, please try again shortly", Toast.LENGTH_SHORT).show();
                 }
                 dialog.dismiss();
             }
@@ -319,16 +319,16 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void loadUserDetails() {
-        theUserId = databaseHelper.getCurrentUserId(authenticatedUser);
+        theUserId = userHelper.getCurrentUserId(authenticatedUser);
         Toast.makeText(this, "USER : " + authenticatedUser, Toast.LENGTH_SHORT).show();
-        Bitmap userAvatar = databaseHelper.getAvatar(theUserId);
+        Bitmap userAvatar = userHelper.getAvatar(theUserId);
 
-        System.out.println("current user no avatar: " + databaseHelper.getUserDetails(authenticatedUser));
+        System.out.println("current user no avatar: " + userHelper.getUserDetails(authenticatedUser));
         System.out.println("current user avatar: " + userAvatar);
 
         if(userAvatar != null) {
             avatarProgressBar.setVisibility(View.GONE);
-            User userDetails = databaseHelper.getUserDetails(authenticatedUser);
+            User userDetails = userHelper.getUserDetails(authenticatedUser);
             profileFirstNameEditText.setText(userDetails.getFirstName());
             profileLastNameEditText.setText(userDetails.getLastName());
             profileEmailAddressEditText.setText(userDetails.getEmailAddress());
@@ -344,7 +344,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //            userAvatarImageView.setImageBitmap(bitmap);
 
         } else {
-            User userDetails = databaseHelper.getUserDetails(authenticatedUser);
+            User userDetails = userHelper.getUserDetails(authenticatedUser);
             profileFirstNameEditText.setText(userDetails.getFirstName());
             profileLastNameEditText.setText(userDetails.getLastName());
             profileEmailAddressEditText.setText(userDetails.getEmailAddress());
@@ -365,7 +365,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         String emailAddress = profileEmailAddressEditText.getText().toString().trim();
         String password = profilePasswordEditText.getText().toString().trim();
 
-        long userId = databaseHelper.getCurrentUserId(authenticatedUser);
+        long userId = userHelper.getCurrentUserId(authenticatedUser);
 
         User user = new User(userId, firstName, lastName, emailAddress, password);
 
@@ -391,14 +391,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
             UserAvatar userAvatar = new UserAvatar(String.valueOf(uuid), selectedAvatar);
 
-
-            boolean result = databaseHelper.saveAvatar(userAvatar, authenticatedUser);
-            boolean res = databaseHelper.editUserDetails(user);
+            boolean result = userHelper.saveAvatar(userAvatar, authenticatedUser);
+            boolean res = userHelper.editUserDetails(user);
             System.out.println("did update? : " + res);
             Toast.makeText(this, "Avatar uploaded with user: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         } else {
-            boolean res = databaseHelper.editUserDetails(user);
+            boolean res = userHelper.editUserDetails(user);
 
             System.out.println("did update? : " + res);
 

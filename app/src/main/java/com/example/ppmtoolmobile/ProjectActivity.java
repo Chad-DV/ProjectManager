@@ -4,19 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
+import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
+import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -34,24 +30,22 @@ import java.util.List;
 
 public class ProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button projectAddBtn1;
+    private Button projectAddBtn;
     private TextView displayUserProjectCountTextView,welcomeUserTextView1;
     private EditText filterProjectEditText;
     private LinearLayout filterProjectLinearLayout;
-    private ProjectAndUserDAOImpl databaseHelper;
+    private ProjectDAOImpl projectHelper;
+    private UserDAOImpl userHelper;
     private BottomNavigationView bottomNavView;
     private List<Project> projectList;
-    private MyRecyclerAdapter adapter;
+    private ProjectRecyclerAdapter adapter;
 
     private RecyclerView recyclerView;
     private String authenticatedUser;
     private int projectCount;
     private long userId;
     private String userFirstName;
-    private ProjectViewModel projectViewModel;
-    private TextView viewModelTextView;
-
-
+    private ProjectActivityViewModel projectViewModel;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -62,35 +56,18 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_project);
 
         filterProjectEditText = findViewById(R.id.filterProjectEditText);
-        projectAddBtn1 = findViewById(R.id.projectAddBtn1);
+        projectAddBtn = findViewById(R.id.projectAddBtn);
         displayUserProjectCountTextView = findViewById(R.id.displayUserProjectCountTextView);
         welcomeUserTextView1 = findViewById(R.id.welcomeUserTextView1);
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_home);
 
-        viewModelTextView = findViewById(R.id.viewModelTextView);
-        projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
-//        filterProjectEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                projectViewModel.setText(editable);
-//            }
-//        });
+        projectViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
 
 
 
-
-        databaseHelper = new ProjectAndUserDAOImpl(this);
+        userHelper = new UserDAOImpl(this);
+        projectHelper = new ProjectDAOImpl(this);
 
         // getting current username through intent from LoginActivity.class
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
@@ -98,24 +75,30 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 //        Toast.makeText(this, "project activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         // current user id
-        userId = databaseHelper.getCurrentUserId(authenticatedUser);
+        userId = userHelper.getCurrentUserId(authenticatedUser);
 
         // Getting users first name and amount of projects (This will be displayed in the heading of the main screen)
-        userFirstName = databaseHelper.getCurrentUserFirstName(authenticatedUser);
-        projectCount = databaseHelper.getProjectCount(userId);
+        userFirstName = userHelper.getCurrentUserFirstName(authenticatedUser);
+        projectCount = projectHelper.getProjectCount(userId);
 
-
-        welcomeUserTextView1.setText("Hello " + userFirstName);
-        displayUserProjectCountTextView.setText("You currently have " + projectCount + " projects");
-
-         Toast.makeText(this, "New project count: " + projectCount, Toast.LENGTH_SHORT).show();
         if(projectCount <= 0) {
-            FrameLayout projectFrameLayout = findViewById(R.id.projectFrameLayout);
-            projectFrameLayout.setPadding(0, 250, 0, 0);
             loadFragment(new EmptyProjectListFragment());
+
         } else {
             loadFragment(new ProjectFragment());
+
         }
+        projectViewModel.getProjectCount().observe(this, count -> {
+            displayUserProjectCountTextView.setText("You currently have " + count + " project(s)");
+
+
+        });
+
+        welcomeUserTextView1.setText("Hello " + userFirstName);
+
+
+         Toast.makeText(this, "New project count: " + projectCount, Toast.LENGTH_SHORT).show();
+
 
 //        loadFragment(new ProjectFragment());
 
@@ -143,7 +126,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
 
         filterProjectEditText.setOnClickListener(this);
-        projectAddBtn1.setOnClickListener(this);
+        projectAddBtn.setOnClickListener(this);
 
     }
 
@@ -164,7 +147,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View view) {
-        if(view == projectAddBtn1) {
+        if(view == projectAddBtn) {
             Intent goToAddProjectIntent = new Intent(this, AddProjectActivity.class);
             goToAddProjectIntent.putExtra("authenticatedUser", authenticatedUser);
             startActivity(goToAddProjectIntent);
@@ -183,8 +166,8 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void searchProjects() {
         String query = filterProjectEditText.getText().toString().trim();
-        projectViewModel = new ViewModelProvider(this).get(ProjectViewModel.class);
-        projectViewModel.setText(query);
+        projectViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
+        projectViewModel.setQuery(query);
     }
 
 

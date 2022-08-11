@@ -126,12 +126,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         String password = user.getPassword();
         String salt = PasswordUtils.getSalt(30);
-
         String mySecurePassword = PasswordUtils.generateSecurePassword(password, salt);
-
-        // Print out protected password
-        System.out.println("My secure password = " + mySecurePassword);
-        System.out.println("Salt value = " + salt);
 
 
         cv.put(COLUMN_USER_FIRST_NAME, user.getFirstName());
@@ -143,7 +138,6 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         if(isEmailExists(user.getEmailAddress())) {
             Toast.makeText(context.getApplicationContext(), "User already exists with this Email Address.", Toast.LENGTH_SHORT).show();
-
         } else {
             result = db.insert(USER_TABLE, null, cv);
             Toast.makeText(context.getApplicationContext(), "Your account was created successfully", Toast.LENGTH_SHORT).show();
@@ -188,7 +182,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         }
 
-        cursor.close();
+        closeCursor(cursor);
         return valid;
     }
 
@@ -204,7 +198,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             return true;
         }
 
-        cursor.close();
+        closeCursor(cursor);
         return false;
     }
 
@@ -218,13 +212,14 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
                 new String[]{String.valueOf(emailAddress)},//Where clause
                 null, null, null);
 
-        String firstName = "";
+        String firstName = null;
 
         while(cursor.moveToNext()) {
             firstName = cursor.getString(0);
         }
 
 
+        closeCursor(cursor);
         return firstName;
     }
 
@@ -240,12 +235,11 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         long userId = 0;
 
-
-
         while(cursor.moveToNext()) {
             userId = cursor.getLong(0);
         }
 
+        closeCursor(cursor);
         return userId;
 
     }
@@ -262,7 +256,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
         System.out.println("cursor count: " + cursor.getCount());
 
-        if(cursor.moveToNext()) {
+        while(cursor.moveToNext()) {
             long userId = cursor.getLong(0);
             String firstName = cursor.getString(1);
             String lastName = cursor.getString(2);
@@ -273,6 +267,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         }
 
 
+        closeCursor(cursor);
         return user;
     }
 
@@ -281,16 +276,6 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         SQLiteDatabase db = this.getReadableDatabase();
         User user = null;
         List<Object> userDetails = new ArrayList<>();
-//        Cursor cursor = db.query(USER_TABLE,// Selecting Table
-//                new String[]{COLUMN_USER_ID, COLUMN_USER_FIRST_NAME, COLUMN_USER_LAST_NAME, COLUMN_USER_EMAIL_ADDRESS, COLUMN_USER_PASSWORD},//Selecting columns want to query
-//                COLUMN_USER_EMAIL_ADDRESS + " = ?",
-//                new String[]{String.valueOf(theEmailAddress)},//Where clause
-//                null, null, null);
-
-
-        /*SELECT user_id, first_name, last_name, email_address,avatar from user_avatar
-          INNER JOIN user ON user.id = user_avatar.user_id;*/
-
         Bitmap obj = null;
 
 
@@ -300,13 +285,14 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
                 new String[]{String.valueOf(theUserId)},//Where clause
                 null, null, null);
 
-        if(cursor.moveToNext()) {
+        while(cursor.moveToNext()) {
             byte[] blob = cursor.getBlob(0);
             obj = BitmapFactory.decodeByteArray(blob, 0, blob.length);
             obj = ProfileActivity.getCroppedBitmap(obj, 375);
 
         }
 
+        closeCursor(cursor);
         return obj;
     }
 
@@ -314,6 +300,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     public Boolean removeAvatar(long theUserId) {
         SQLiteDatabase db = this.getWritableDatabase();
         boolean success = false;
+        long result = 0;
 
         Cursor cursor = db.query(USER_AVATAR_TABLE,// Selecting Table
                 new String[]{COLUMN_USER_AVATAR_BLOB},//Selecting columns want to query
@@ -322,18 +309,12 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
                 null, null, null);
 
 
-        if(cursor.moveToNext()) {
-            byte[] blob = cursor.getBlob(0);
-            db.delete(USER_AVATAR_TABLE, COLUMN_USER_AVATAR_PK + " = ?", new String[]{String.valueOf(theUserId)});
-            success = true;
-            System.out.println("Deleted avatar of user: " +theUserId);
-
+        while(cursor.moveToNext()) {
+            result = db.delete(USER_AVATAR_TABLE, COLUMN_USER_AVATAR_PK + " = ?", new String[]{String.valueOf(theUserId)});
         }
 
-
-        System.out.println(success);
-
-        return success;
+        closeCursor(cursor);
+        return result == -1 ? false : true;
     }
 
     @Override
@@ -362,11 +343,11 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             System.out.println("current email is not unique with itself");
         }
 
-
-
         if(success == true) {
             db.update(USER_TABLE, cv, COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
         }
+
+        closeCursor(cursor);
 
         return success;
     }
@@ -378,8 +359,8 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             SQLiteDatabase dbRead = this.getReadableDatabase();
             Bitmap avatar = userAvatar.getAvatar();
             long userId = 0;
+            long result = 0;
 
-            boolean success = true;
             avatarOutputStream = new ByteArrayOutputStream();
             avatar.compress(Bitmap.CompressFormat.JPEG, 100, avatarOutputStream);
 
@@ -397,31 +378,19 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
             Cursor cursor2 = dbRead.rawQuery("SELECT " + COLUMN_USER_AVATAR_NAME + " FROM " + USER_AVATAR_TABLE + " WHERE " + COLUMN_USER_AVATAR_PK + " = ?", new String[]{String.valueOf(userId)});
 
-
-            try {
-
-                if(cursor2.getCount() > 0) {
-                    dbWrite.update(USER_AVATAR_TABLE, cv,COLUMN_USER_AVATAR_PK + " = " + userId, null);
-                } else {
-                    long resultCode = dbWrite.insert(USER_AVATAR_TABLE,null, cv);
-                }
-            } catch (SQLiteConstraintException e) {
-                success = false;
-                System.out.println(e.getMessage());
+            if(cursor2.getCount() > 0) {
+                result = dbWrite.update(USER_AVATAR_TABLE, cv,COLUMN_USER_AVATAR_PK + " = " + userId, null);
+            } else {
+                result = dbWrite.insert(USER_AVATAR_TABLE,null, cv);
             }
 
-            return success;
+            closeCursor(cursor);
+            return result == -1 ? false : true;
 
 
 
     }
 
-//    public void getAvatar(String emailAddress) {
-//        SQLiteDatabase dbRead = this.getReadableDatabase();
-//        /*SELECT user_id, first_name, last_name, email_address,avatar from user_avatar
-//          INNER JOIN user ON user.id = user_avatar.user_id;*/
-//        Cursor cursor = dbRead.rawQuery("SELECT");
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -433,16 +402,8 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         long userId = 0;
 
         Cursor cursor = dbRead.rawQuery("SELECT " + COLUMN_USER_ID + " FROM " + USER_TABLE + " WHERE " + COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{emailAddress});
-//        Cursor cursor = dbRead.query(USER_TABLE,// Selecting Table
-//                new String[]{COLUMN_USER_ID},//Selecting columns want to query
-//                COLUMN_USER_EMAIL_ADDRESS + " = ?",
-//                new String[]{String.valueOf(emailAddress)},//Where clause
-//                null, null, null);
-
-
 
         while(cursor.moveToNext()) {
-
             userId = cursor.getLong(0);
             cv.put(COLUMN_PROJECT_TITLE, project.getTitle());
             cv.put(COLUMN_PROJECT_DESCRIPTION, project.getDescription());
@@ -462,8 +423,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
 
         result = dbWrite.insert(PROJECT_TABLE, null, cv);
-        Toast.makeText(context.getApplicationContext(), "Project created successfully.", Toast.LENGTH_SHORT).show();
-
+        closeCursor(cursor);
 
         return result == -1 ? false : true;
 
@@ -478,9 +438,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         if (cursor != null && cursor.moveToFirst() && cursor.getCount() > 0) {
             return true;
         }
-
-        System.out.println(cursor.getCount());
-        cursor.close();
+        closeCursor(cursor);
         return false;
     }
 
@@ -491,6 +449,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
     public Boolean editProject(Project project) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
+        long result = 0;
 
         cv.put(COLUMN_PROJECT_TITLE, project.getTitle());
         cv.put(COLUMN_PROJECT_DESCRIPTION, project.getDescription());
@@ -504,35 +463,31 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 
 
         if (cursor.getCount() > 0) {
-            long result = db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
-            return result != -1;
-        } else {
-            System.out.println("error");
-            return false;
+            result = db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
+
         }
 
+        db.close();
+        closeCursor(cursor);
 
-//        return db.update(PROJECT_TABLE, cv, COLUMN_PROJECT_ID + " = ?", new String[] { String.valueOf(project.getId())});
-
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE id = ?", new String[]{project.getTitle()})
-
+        return result == -1 ? false : true;
 
     }
 
     @Override
     public Boolean deleteProjectById(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
+        int result = 0;
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(id)});
 
         if (cursor.getCount() > 0) {
-            long result = db.delete(PROJECT_TABLE, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(id)});
-
-            db.close();
-            return result == -1 ? false : true;
-        } else {
-            return false;
+            result = db.delete(PROJECT_TABLE, COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(id)});
         }
+
+        closeCursor(cursor);
+        db.close();
+        return result == -1 ? false : true;
     }
 
 
@@ -565,7 +520,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             return new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, status, userId);
         }
 
-
+        closeCursor(cursor);
         return null;
     }
 
@@ -594,8 +549,9 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
 //        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ?", new String[]{String.valueOf(userId)});
 
-
-        return cursor.getCount();
+        int projectCount = cursor.getCount();
+        closeCursor(cursor);
+        return projectCount;
 
     }
 
@@ -660,6 +616,7 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
         List<Project> projectList = new ArrayList<>();
         Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE + " WHERE " + COLUMN_USER_PROJECT_FK + " = ? "
                 + "ORDER BY date(" + COLUMN_PROJECT_DATE_DUE + ") DESC", new String[]{String.valueOf(userId)});
+
         readDataFromCursor(projectList, cursor);
 
         return projectList;
@@ -690,6 +647,20 @@ public class ProjectAndUserDAOImpl extends SQLiteOpenHelper implements ProjectAn
             projectList.add(project);
         }
 
+        closeCursor(cursor);
+
+    }
+
+    private void closeCursor(Cursor cursor) {
+        if(cursor != null) {
+            cursor.close();
+        }
+    }
+
+    private void closeDB(SQLiteDatabase db) {
+        if(db != null) {
+            db.close();
+        }
     }
 }
 

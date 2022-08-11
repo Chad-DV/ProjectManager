@@ -3,15 +3,19 @@ package com.example.ppmtoolmobile;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
+import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
+import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 
 import java.time.LocalDateTime;
@@ -42,7 +48,6 @@ import java.util.List;
 public class AddProjectActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener{
 
     private Button addProjectBtn;
-    private TextView re333r;
     private EditText addProjectTitleEditText, addProjectDescriptionEditText, addProjectDueDateEditText, addProjectTimeEditText,addProjectChecklistEditText;
     private RadioGroup addProjectPriorityRadioGroup;
     private ImageView addProjectNavigationBack;
@@ -50,7 +55,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
-    private ProjectAndUserDAOImpl databaseHelper;
+    private ProjectDAOImpl projectHelper;
+
     private RadioButton projectPriorityRadioBtn, projectPriorityHighRadioBtn, projectPriorityMediumRadioBtn, projectPriorityLowRadioBtn, projectPriorityNoneRadioBtn;
     private static String strSeparator = ", ";
     private int count = 0;
@@ -59,13 +65,15 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
     private ListView addProjectChecklistListView;
     private List<String> checklistItemList;
     private ProjectChecklistItemAdapter checklistItemAdapter;
+    private String authenticatedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_project);
 
-        databaseHelper = new ProjectAndUserDAOImpl(this);
+        projectHelper = new ProjectDAOImpl(this);
+
 
         addProjectRemindMe2WeeksCheckbox = findViewById(R.id.addProjectRemindMe2WeeksCheckbox);
         addProjectRemindMe1WeekCheckbox = findViewById(R.id.addProjectRemindMe1WeekCheckbox);
@@ -86,6 +94,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         addProjectChecklistListView = findViewById(R.id.addProjectChecklistListView);
         checklistItemList = new ArrayList<>();
 
+        authenticatedUser =  getIntent().getStringExtra("authenticatedUser");
+
 
 
         dateSetListener = (datePicker, year, month, day) -> {
@@ -103,6 +113,15 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, ProjectActivity.class);
+        intent.putExtra("authenticatedUser", authenticatedUser);
+        startActivity(intent);
+
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -142,11 +161,12 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
                 addProjectChecklistEditText.setError("Please enter a value");
             } else if (checklistItemList.contains(add_item)) {
                 Toast.makeText(getBaseContext(), "Item Already Exist", Toast.LENGTH_LONG).show();
-            } // Enter the element if it does not exist
-            else {
+            } else {
                 checklistItemList.add(add_item);
                 checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
                 addProjectChecklistListView.setAdapter(checklistItemAdapter);
+                ListViewHelper.getListViewSize(addProjectChecklistListView);
+                System.out.println("CHECKLIST AFTER ADDING: " + checklistItemList );
                 addProjectChecklistEditText.setText("");
             }
 
@@ -158,12 +178,12 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-        final int removing_item=position;
+        final int itemToRemove =position;
         AlertDialog.Builder builder = new AlertDialog.Builder(AddProjectActivity.this); // Ask the user to get the confirmation before deleting an item from the listView
         builder.setMessage("Do you want to delete").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                checklistItemList.remove(removing_item);
+                checklistItemList.remove(itemToRemove);
                 checklistItemAdapter.notifyDataSetChanged();
                 Toast.makeText(getBaseContext(), "Item Deleted", Toast.LENGTH_LONG).show();
             }
@@ -188,7 +208,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         String priority = getProjectPriorityValue();
         String remindMeInterval = getProjectRemindMeValues();
         String checkList = convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
-        String authenticatedUser = getIntent().getStringExtra("authenticatedUser");
+
 
         boolean success = true;
 
@@ -225,49 +245,34 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         if (TextUtils.isEmpty(dateDue) && TextUtils.isEmpty(timeDue)) {
             addProjectDueDateEditText.setError("Due date is required");
             addProjectTimeEditText.setError("Due time is required");
-        } else {
-            String dateTime = dateDue + " " + timeDue;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
-            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList);
-
-            if(success) {
-
-                System.out.println(theProject);
-                System.out.println("chedklist: " + checkList);
-
-                if(databaseHelper.addProject(theProject, authenticatedUser)) {
-                    clearInput();
-                }
-
-//                if(result) {
-//                    Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();
-//                    System.out.println(theProject);
-//                    clearInput();
-//                } else {
-//                    Toast.makeText(AddProjectActivity.this, "Error adding project", Toast.LENGTH_SHORT).show();
-//                }
-            }
-
-
-
-//            getProjectRemindMeValues();
-
-
-
-
-
-
-
         }
 
+
+        String dateTime = dateDue + " " + timeDue;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList);
+
+        if(success) {
+            System.out.println(theProject);
+            boolean result = projectHelper.addProject(theProject, authenticatedUser);
+            if(result) {
+                Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();
+                clearInput();
+
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        startActivity(new Intent(getApplicationContext(), ProjectActivity.class));
+//                    }
+//                }, 300);
+
+
+
+            }
+
+        }
     }
-
-
-
-//
-
-
 
     private String checkDigit(int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
@@ -278,7 +283,15 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         addProjectDescriptionEditText.setText("");
         addProjectDueDateEditText.setText("");
         addProjectTimeEditText.setText("");
+        addProjectRemindMe2WeeksCheckbox.setChecked(false);
+        addProjectRemindMe1WeekCheckbox.setChecked(false);
+        addProjectRemindMe1DayCheckbox.setChecked(false);
+        addProjectRemindMe1HourCheckbox.setChecked(false);
+        addProjectRemindMe30MinutesCheckbox.setChecked(false);
         addProjectPriorityRadioGroup.setSelected(false);
+        checklistItemList.clear();
+
+        addProjectChecklistListView.setAdapter(checklistItemAdapter);
     }
 
     public String getProjectRemindMeValues() {
@@ -314,7 +327,9 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
                 str = str+strSeparator;
             }
         }
+
         return str;
+
     }
 
 //    public static String[] convertStringToArray(String str){

@@ -2,7 +2,6 @@ package com.example.ppmtoolmobile;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,31 +13,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.ppmtoolmobile.model.Priority;
 import com.example.ppmtoolmobile.model.Project;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
-public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.MyViewHolder>  {
+public class ProjectRecyclerAdapter extends RecyclerView.Adapter<ProjectRecyclerAdapter.MyViewHolder>  {
 
     private List<Project> projectList;
     private OnProjectClickListener onProjectClickListener;
     private Context context;
 
-    public MyRecyclerAdapter(Context context, List<Project> projectList, OnProjectClickListener onProjectClickListener) {
+    public ProjectRecyclerAdapter(Context context, List<Project> projectList, OnProjectClickListener onProjectClickListener) {
         this.projectList = projectList;
         this.context = context;
         this.onProjectClickListener = onProjectClickListener;
     }
 
-    public MyRecyclerAdapter(Context context, List<Project> projectList) {
-        this.projectList = projectList;
-        this.context = context;
-    }
 
     @NonNull
     @Override

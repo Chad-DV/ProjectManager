@@ -72,12 +72,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/primary_button"
-            android:backgroundTint="@color/light_blue"
+            android:backgroundTint="@color/light_purple"
             android:fontFamily="@font/roboto_bold"
             android:stateListAnimator="@null"
             android:text="Okay"
             android:textAllCaps="false"
-            android:textColor="@color/dark_blue" />
+            android:textColor="@color/primary_purple" />
 
     </LinearLayout>
 

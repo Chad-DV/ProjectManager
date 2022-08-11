@@ -286,6 +286,13 @@
                     android:textSize="12sp" />
 
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical"
+                    android:id="@+id/addChecklistLinearLayout">
+
                 <ListView
                     android:id="@+id/viewProjectChecklistListView"
                     android:layout_width="match_parent"
@@ -294,6 +301,8 @@
                     android:stateListAnimator="@null"
                     android:divider="@null"
                     android:dividerHeight="0dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
             <!--            <Button-->

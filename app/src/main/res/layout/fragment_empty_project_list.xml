@@ -2,9 +2,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/emptyProjectListLinearLayout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_marginTop="40dp"
+        android:padding="50dp"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -20,7 +22,7 @@
 
             <TextView
                 android:id="@+id/d32"
-                android:layout_width="320dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
 
@@ -28,12 +30,13 @@
                 android:letterSpacing="-0.03"
                 android:text="You currently have no projects to manage"
                 android:textAlignment="center"
+                android:lineHeight="27dp"
                 android:textColor="@color/dark_black"
-                android:textSize="26sp" />
+                android:textSize="28sp" />
 
             <TextView
                 android:id="@+id/d33"
-                android:layout_width="330dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto"
                 android:letterSpacing="-0.01"
@@ -50,16 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-
                 android:src="@drawable/ic_empty_project_list_illustration"/>
-
-
-
-
-
-
-
-
 
     </LinearLayout>
 

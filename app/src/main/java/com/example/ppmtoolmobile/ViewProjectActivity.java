@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
+import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
+import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -42,7 +44,8 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
     private Button viewProjectDueStatusInfoBtn;
     private long userId;
     private long projectId;
-    private ProjectAndUserDAOImpl databaseHelper;
+    private UserDAOImpl userHelper;
+    private ProjectDAOImpl projectHelper;
     private Dialog dialog;
     private ListView viewProjectChecklistListView;
     private List<String> checklistItemList;
@@ -72,10 +75,10 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
 
         dialog = new Dialog(this);
 
-
-        databaseHelper = new ProjectAndUserDAOImpl(this);
+        projectHelper = new ProjectDAOImpl(this);
+        userHelper = new UserDAOImpl(this);
         authenticatedUser = getIntent().getStringExtra("authenticatedUser");
-        userId = databaseHelper.getCurrentUserId(authenticatedUser);
+        userId = userHelper.getCurrentUserId(authenticatedUser);
         projectId = getIntent().getLongExtra("projectId", 0);
 
         Toast.makeText(this, "view project activity: " + projectId, Toast.LENGTH_SHORT).show();
@@ -94,7 +97,7 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadProjectDetails() {
-        Project project = databaseHelper.getProjectById(projectId);
+        Project project = projectHelper.getProjectById(projectId);
 
         viewProjectCollapsingToolbarLayout.setTitle(project.getTitle());
         viewProjectDescriptionTextView.setText(project.getDescription());
@@ -108,7 +111,6 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         viewProjectPriorityTextView.setText(project.getPriority());
 
         String[] checklistItemArray = convertStringToArray(project.getChecklist());
-        String checkList = convertArrayToString(checklistItemArray);
         checklistItemList = Arrays.stream(checklistItemArray).collect(Collectors.toList());
 
         LinearLayout viewProjectChecklistLinearLayout = findViewById(R.id.viewProjectChecklistLinearLayout);
@@ -116,6 +118,11 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
 
         checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
         viewProjectChecklistListView.setAdapter(checklistItemAdapter);
+        ListViewHelper.getListViewSize(viewProjectChecklistListView);
+
+        System.out.println("Checklist arr: " + Arrays.toString(checklistItemArray));
+        System.out.println("Checklist list: " + checklistItemList);
+
 //        viewProjectChecklistLinearLayout.setVisibility(View.INVISIBLE);
 
 
@@ -174,9 +181,7 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         Okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                boolean res = databaseHelper.deleteProjectById(projectId);
-
+                boolean res = projectHelper.deleteProjectById(projectId);
                 if(res) {
                     finish();
                 }
@@ -219,17 +224,17 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public static String convertArrayToString(String[] array){
-        String str = "";
-        for (int i = 0;i<array.length; i++) {
-            str = str+array[i];
-            // Do not append comma at the end of last element
-            if(i<array.length-1){
-                str = str+strSeparator;
-            }
-        }
-        return str;
-    }
+//    public static String convertArrayToString(String[] array){
+//        String str = null;
+//        for (int i = 0;i<array.length; i++) {
+//            str = str+array[i];
+//            // Do not append comma at the end of last element
+//            if(i<array.length-1){
+//                str = str+strSeparator;
+//            }
+//        }
+//        return str;
+//    }
 
 
 }

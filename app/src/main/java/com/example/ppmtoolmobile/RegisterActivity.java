@@ -13,9 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
+import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
+import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -24,7 +24,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText firstNameEditText, lastNameEditText, emailAddressEditText, passwordEditText;
     private TextView loginPromptTextView2;
     private ProgressBar registerProgressBar;
-    private ProjectAndUserDAOImpl databaseHelper;
+    private UserDAOImpl userHelper;
 
 
     @Override
@@ -32,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        databaseHelper = new ProjectAndUserDAOImpl(this);
+        userHelper = new UserDAOImpl(this);
         loginPromptTextView2 = (TextView) findViewById(R.id.loginPromptTextView2);
         registerBtn = (Button) findViewById(R.id.registerBtn);
         firstNameEditText = (EditText) findViewById(R.id.registerFirstNameEditText);
@@ -46,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         registerBtn.setOnClickListener(RegisterActivity.this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View view) {
         if(view == loginPromptTextView2) {
@@ -100,7 +101,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if(databaseHelper.register(new User(firstName, lastName, emailAddress, password)) == true) {
+        Boolean isValid = userHelper.register(new User(firstName, lastName, emailAddress, password));
+        System.out.println("isValid? : " + isValid);
+        if(isValid) {
             clearInput();
         }
 

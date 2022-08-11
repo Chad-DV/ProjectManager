@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
+import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
+import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -23,7 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button loginBtn;
     private EditText loginEmailAddressEditText, loginPasswordEditText;
     private TextView registerPromptTextView2;
-    private ProjectAndUserDAOImpl databaseHelper;
+    private UserDAOImpl userHelper;
     private CheckBox loginRememberMeCheckbox;
     private SharedPreferences loginPreferences;
     private SharedPreferences.Editor loginPrefsEditor;
@@ -35,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        databaseHelper = new ProjectAndUserDAOImpl(this);
+        userHelper = new UserDAOImpl(this);
 
         loginBtn = findViewById(R.id.loginBtn);
         loginEmailAddressEditText = findViewById(R.id.loginEmailAddressEditText);
@@ -50,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (saveLogin == true) {
             String emailAddress = loginPreferences.getString("emailAddress", "");
             String password = loginPreferences.getString("password", "");
-            boolean isValid = databaseHelper.login(new User(emailAddress, password));
+            boolean isValid = userHelper.login(new User(emailAddress, password));
             loginRememberMeCheckbox.setChecked(true);
             if(isValid) {
                 Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);
@@ -79,8 +81,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loginUser() {
 
-       String emailAddress = loginEmailAddressEditText.getText().toString().trim();
-//        String emailAddress = "test2@gmail.com";
+//       String emailAddress = loginEmailAddressEditText.getText().toString().trim();
+        String emailAddress = "eish@gmail.com";
         String password = "password";
 //
 //        if(TextUtils.isEmpty(emailAddress)) {
@@ -112,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
 
-        boolean isValid = databaseHelper.login(new User(emailAddress, password));
+        boolean isValid = userHelper.login(new User(emailAddress, password));
 
         if(isValid) {
             Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);
