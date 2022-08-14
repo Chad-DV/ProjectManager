@@ -15,9 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.WorkRequest;
 
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -25,21 +22,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
 import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
+import com.example.ppmtoolmobile.utils.DBUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class ProjectFragment extends Fragment implements View.OnClickListener, ProjectRecyclerAdapter.OnProjectClickListener {
 
@@ -72,7 +66,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
         projectViewModel = new ViewModelProvider(requireActivity()).get(ProjectActivityViewModel.class);
 
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
-        authenticatedUser = getActivity().getIntent().getStringExtra("authenticatedUser");
+        authenticatedUser = getActivity().getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
         theUserId = userHelper.getCurrentUserId(authenticatedUser);
 
         viewModelTextView1 = v.findViewById(R.id.viewModelTextView1);
@@ -96,6 +90,10 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
         super.onStart();
         projectList = projectHelper.getUserProjects(theUserId);
         projectCount = projectList.size();
+
+//        for(Project p : projectList) {
+//            System.out.println("Project " + p.getTitle() + " is due in " + p.getProjectRemainingTimeInMinutes() + " minutes");
+//        }
         projectViewModel.setProjectCount(projectCount);
         adapter.refreshList(projectList);
 
@@ -105,15 +103,12 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
     @Override
     public void onClick(View view) {
         if(view == sortProjectsTextView) {
+
             sortProjects();
-            filterProjects();
-
-
         }
     }
 
     private void sortProjects() {
-        // Initializing the popup menu and giving the reference as current context
         PopupMenu popupMenu = new PopupMenu(ProjectFragment.this.getActivity(), sortProjectsTextView);
 
         // Inflating popup menu from popup_menu.xml file
@@ -124,16 +119,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-                    case R.id.option_priority_high_low:
-                        // sort function
-                        projectList = projectHelper.sortByPriorityHighToLow(theUserId);
-                        adapter.refreshList(projectList);
-                        break;
-                    case R.id.option_priority_low_high:
-                        // sort function
-                        projectList = projectHelper.sortByPriorityLowToHigh(theUserId);
-                        adapter.refreshList(projectList);
-                        break;
                     case R.id.option_due_date_newest_to_oldest:
                         // sort function
                         projectList = projectHelper.sortByDateNewestToOldest(theUserId);
@@ -145,8 +130,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
                         adapter.refreshList(projectList);
                         break;
                 }
-
-
                 return true;
             }
         });
@@ -157,17 +140,11 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onProjectClick(View view, int position) {
-//        Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
 
-//        filterList("69");
-
         Intent goToProjectIntent = new Intent(ProjectFragment.this.getActivity(), ViewProjectActivity.class);
-        goToProjectIntent.putExtra("authenticatedUser", authenticatedUser);
+        goToProjectIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
         goToProjectIntent.putExtra("projectId", projectId);
-//        goToProjectIntent.putExtra("title", project.getTitle());
-//        goToProjectIntent.putExtra("description", project.getDescription());
-
         startActivity(goToProjectIntent);
     }
 
@@ -178,8 +155,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
 
         Project project = projectList.get(position);
         projectId = projectList.get(position).getId();
-
-
 
         Context wrapper = new ContextThemeWrapper(getActivity(), R.style.MyPopupOtherStyle);
         PopupMenu popupMenu = new PopupMenu(wrapper, sortProjectsTextView);
@@ -206,26 +181,12 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void filterProjects() {
-//        String query = filterProjectEditText.getText().toString().trim();
-//
-//        projectList = databaseHelper.searchProjects(theUserId, viewModelTextView.getText().toString());
-//        adapter.refreshList(projectList);
-//        if(projectList.isEmpty()) {
-//            Toast.makeText(getActivity(), "No projects matched with " + query , Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(getActivity(), projectList.toString() , Toast.LENGTH_SHORT).show();
-//        }
-
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         projectViewModel.getQuery().observe(getViewLifecycleOwner(), item -> {
-//            viewModelTextView.setText(item);
 
             if(item.isEmpty()) {
                 viewModelTextView1.setVisibility(View.GONE);
@@ -233,7 +194,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
                 recyclerView.setVisibility(View.VISIBLE);
                 projectList = projectHelper.getUserProjects(theUserId);
                 adapter.refreshList(projectList);
-                System.out.println("ITEM IS EMPTY");
                 projectCount = projectList.size();
                 projectViewModel.setProjectCount(projectCount);
             }else {
@@ -243,11 +203,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
                 projectList = projectHelper.filterProjects(theUserId, item.toString());
                 projectCount = projectList.size();
 
-                System.out.println("RESULT: " + projectCount);
-
                 projectViewModel.setProjectCount(projectCount);
                 if(projectList.isEmpty()) {
-                    Toast.makeText(getActivity(), "No projects matched with " + item , Toast.LENGTH_SHORT).show();
                     viewModelTextView1.setVisibility(View.VISIBLE);
                     viewModelTextView2.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
@@ -296,36 +253,29 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
         Button Okay = dialog.findViewById(R.id.btn_okay);
         Button Cancel = dialog.findViewById(R.id.btn_cancel);
 
-        Okay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                projectHelper.deleteProjectById(projectId);
+        Okay.setOnClickListener(v -> {
+            projectHelper.deleteProjectById(projectId);
 
-                projectList = projectHelper.getUserProjects(theUserId);
+            projectList = projectHelper.getUserProjects(theUserId);
 
-                projectCount = projectList.size();
-                projectViewModel.setProjectCount(projectCount);
+            projectCount = projectList.size();
+            projectViewModel.setProjectCount(projectCount);
 
-                if(projectCount <= 0) {
-                    EmptyProjectListFragment fragment = new EmptyProjectListFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.projectFrameLayout, fragment);
-                    fragmentTransaction.addToBackStack(null);
+            if(projectCount <= 0) {
+                EmptyProjectListFragment fragment = new EmptyProjectListFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.projectFrameLayout, fragment);
+                fragmentTransaction.addToBackStack(null);
 
-                    fragmentTransaction.commit();
-                }
-                adapter.refreshList(projectList);
-                dialog.dismiss();
+                fragmentTransaction.commit();
             }
+            adapter.refreshList(projectList);
+            dialog.dismiss();
         });
 
-        Cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-            }
+        Cancel.setOnClickListener(view -> {
+            dialog.dismiss();
         });
 
         dialog.show();
@@ -362,12 +312,6 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
             }
             System.out.println("Project title: " + projectList.get(i).getTitle() + ", Minutes left: " + minutes[i]);
         }
-
-//        WorkRequest request = new PeriodicWorkRequest.Builder(NotificationWorker.class, 10, TimeUnit.MINUTES)
-//                .setInitialDelay(1, TimeUnit.SECONDS)
-//                .build();
-//
-//        WorkManager.getInstance(getActivity().getApplicationContext()).enqueue(request);
 
 
     }

@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -25,16 +24,16 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
-import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
+import com.example.ppmtoolmobile.utils.ArrayConversionUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +49,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private TimePickerDialog timePickerDialog;
     private RadioButton editProjectPriorityRadioBtn, projectPriorityHighRadioBtn, projectPriorityMediumRadioBtn, projectPriorityLowRadioBtn;
     private RadioGroup editProjectPriorityRadioGroup;
-    private static String strSeparator = ", ";
 
     private ImageButton editProjectChecklistBtn;
     private ListView editProjectChecklistListView;
@@ -63,6 +61,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_project);
 
+        checklistItemList = new ArrayList<>();
 
         editProjectRemindMe2WeeksCheckbox = findViewById(R.id.editProjectRemindMe2WeeksCheckbox);
         editProjectRemindMe1WeekCheckbox = findViewById(R.id.editProjectRemindMe1WeekCheckbox);
@@ -86,7 +85,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectChecklistEditText = findViewById(R.id.editProjectChecklistEditText);
         editProjectChecklistBtn = findViewById(R.id.editProjectChecklistBtn);
         editProjectChecklistListView = findViewById(R.id.editProjectChecklistListView);
-        checklistItemList = new ArrayList<>();
 
         projectHelper = new ProjectDAOImpl(this);
 
@@ -152,6 +150,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
                 checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
                 editProjectChecklistListView.setAdapter(checklistItemAdapter);
                 ListViewHelper.getListViewSize(editProjectChecklistListView);
+                System.out.println("CHECKLIST AFTER EDITING: " + checklistItemList );
                 editProjectChecklistEditText.setText("");
 
             }
@@ -197,20 +196,24 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         // Get time only as String
         String time = dueDateAndTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        String[] remindMeValues = convertStringToArray(project.getRemindMeInterval());
-        String[] checklistItemArray = convertStringToArray(project.getChecklist());
+        String[] remindMeValues = ArrayConversionUtils.convertStringToArray(project.getRemindMeInterval());
+        String[] checklistItemArray = ArrayConversionUtils.convertStringToArray(project.getChecklist());
         checklistItemList = Arrays.stream(checklistItemArray).collect(Collectors.toList());
         String priority = project.getPriority();
 
         System.out.println("project: " + project);
-        System.out.println("project.getChecklist(): " + project.getChecklist());
+//        System.out.println("remind me values .length: " + remindMeValues.length);
+        System.out.println("project.getRemindMeInterval(): " + project.getRemindMeInterval());
+
+        System.out.println("checklistItemArray: " + Arrays.toString(checklistItemArray));
+        System.out.println("checklistItemList: " + checklistItemList);
 
         int selected = -1;
-        System.out.println("projectPriorityHighRadioBtn: " + R.id.projectPriorityHighRadioBtn);
-        System.out.println("projectPriorityMediumRadioBtn: " + R.id.projectPriorityMediumRadioBtn);
-        System.out.println("projectPriorityLowRadioBtn: " + R.id.projectPriorityLowRadioBtn);
-
-        System.out.println("checked radio btn id: " + editProjectPriorityRadioGroup.getCheckedRadioButtonId());
+//        System.out.println("projectPriorityHighRadioBtn: " + R.id.projectPriorityHighRadioBtn);
+//        System.out.println("projectPriorityMediumRadioBtn: " + R.id.projectPriorityMediumRadioBtn);
+//        System.out.println("projectPriorityLowRadioBtn: " + R.id.projectPriorityLowRadioBtn);
+//
+//        System.out.println("checked radio btn id: " + editProjectPriorityRadioGroup.getCheckedRadioButtonId());
 
 
         if(priority.equalsIgnoreCase("High")) {
@@ -221,8 +224,8 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             selected = 2;
         }
 
-
-        System.out.println("SELECTED VALUE IS: " + selected);
+//
+//        System.out.println("SELECTED VALUE IS: " + selected);
 
         switch (selected) {
             case 0:
@@ -237,22 +240,25 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         }
 
 
-        System.out.println("Project: " + project);
-
         editProjectTitleEditText.setText(project.getTitle());
         editProjectDescriptionEditText.setText(project.getDescription());
         editProjectDueDateEditText.setText(date);
         editProjectDueTimeEditText.setText(time);
 
 
-        System.out.println("checklist size: " + checklistItemArray.length);
-        for (String s : checklistItemArray) {
-            System.out.println("check list item: " + s);
+        if(checklistItemArray[0].isEmpty()) {
+            System.out.println("Checklist has no values");
+            editProjectChecklistListView.setVisibility(View.GONE);
         }
+
+//        editProjectChecklistListView.setVisibility(View.VISIBLE);
+
 
         checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
         editProjectChecklistListView.setAdapter(checklistItemAdapter);
         ListViewHelper.getListViewSize(editProjectChecklistListView);
+
+
 
         if(remindMeValues.length > 0) {
             if(!remindMeValues[0].equals("null")) editProjectRemindMe2WeeksCheckbox.setChecked(true);
@@ -274,7 +280,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         String timeDue = editProjectDueTimeEditText.getText().toString().trim();
         String priority = getProjectPriorityValue();
         String remindMeInterval = getProjectRemindMeValues();
-        String checkList = convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
+        String checkList = ArrayConversionUtils.convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
 
 
 
@@ -334,27 +340,10 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         if(editProjectRemindMe30MinutesCheckbox.isChecked())
             msg[4] = "30 minutes";
 
-        return convertArrayToString(msg);
+        return ArrayConversionUtils.convertArrayToString(msg);
     }
 
-    public static String convertArrayToString(String[] array){
-        String str = "";
-        for (int i = 0;i<array.length; i++) {
-            str = str+array[i];
-            // Do not append comma at the end of last element
-            if(i<array.length-1){
-                str = str+strSeparator;
-            }
-        }
-        return str;
-    }
 
-    public static String[] convertStringToArray(String str){
-        if(str == null) {
-            return new String[]{};
-        }
-        return str.split(strSeparator);
-    }
 
 
 }

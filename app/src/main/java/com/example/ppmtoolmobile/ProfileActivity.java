@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -16,11 +14,9 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +28,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
-import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
 import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
 import com.example.ppmtoolmobile.model.UserAvatar;
+import com.example.ppmtoolmobile.utils.DBUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.InputStream;
@@ -57,7 +52,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     private Uri avatarUri;
-    Bitmap selectedAvatar;
+    private Bitmap selectedAvatar;
     private Dialog dialog;
 
     @Override
@@ -68,7 +63,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         profileFirstNameEditText = findViewById(R.id.profileFirstNameEditText);
         profileLastNameEditText = findViewById(R.id.profileLastNameEditText);
         profileEmailAddressEditText = findViewById(R.id.profileEmailAddressEditText);
-        profilePasswordEditText = findViewById(R.id.profilePasswordEditText);
         profileNavigationBack = findViewById(R.id.profileNavigationBack);
         changeUserAvatarTextView = findViewById(R.id.changeUserAvatarTextView);
         userAvatarImageView = findViewById(R.id.userAvatarImageView);
@@ -78,22 +72,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         dialog = new Dialog(this);
 
 
+        authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
 
-
-
-
-        // getting current username through intent from ProjectActivity.class
-        authenticatedUser = getIntent().getStringExtra("authenticatedUser");
-
-
-
-
-
-        Toast.makeText(this, "profile activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
         userHelper = new UserDAOImpl(this);
-
-//        avatarProgressBar.setVisibility(View.VISIBLE);
-
         loadUserDetails();
 
         profileNavigationBack.setOnClickListener(this);
@@ -169,7 +150,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 userAvatarImageView.setImageBitmap(selectedAvatar);
             }
         } catch(Exception e) {
-
+            Toast.makeText(this, "There was an error, please try again shortly", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -178,7 +159,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void showMenu() {
         PopupMenu popupMenu = new PopupMenu(ProfileActivity.this, profileMenu);
 
-        // Inflating popup menu from popup_menu.xml file
         popupMenu.getMenuInflater().inflate(R.menu.profile_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -188,9 +168,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 switch (menuItem.getItemId()) {
                     case R.id.option_remove_avatar:
                         removeAvatar();
-                        break;
-                    case R.id.option_delete_account:
-                        deleteAccount();
                         break;
                 }
                 return true;
@@ -210,6 +187,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Okay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 boolean isRemoved = userHelper.removeAvatar(theUserId);
                 if(isRemoved) {
                     Toast.makeText(ProfileActivity.this, "Your avatar was removed successfully", Toast.LENGTH_SHORT).show();
@@ -232,35 +210,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         dialog.show();
     }
 
-    private void deleteAccount() {
-
-        displayDialog(R.layout.caution_dialog_layout);
-
-        Button Okay = dialog.findViewById(R.id.btn_okay);
-        Button Cancel = dialog.findViewById(R.id.btn_cancel);
-
-        Okay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(ProfileActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        Cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(ProfileActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-
-
-    }
 
     private void displayDialog(int layoutView) {
         dialog.setContentView(layoutView);
@@ -312,7 +261,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void moveToIntent(Intent intent) {
 //        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
 
-        intent.putExtra("authenticatedUser", authenticatedUser);
+        intent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
         startActivity(intent);
         overridePendingTransition(0,0);
     }
@@ -348,7 +297,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             profileFirstNameEditText.setText(userDetails.getFirstName());
             profileLastNameEditText.setText(userDetails.getLastName());
             profileEmailAddressEditText.setText(userDetails.getEmailAddress());
-            profilePasswordEditText.setText(userDetails.getPassword());
         }
 
 

@@ -26,28 +26,39 @@ public class Project {
     private String description;
     private LocalDateTime dateCreated;
     private LocalDateTime dateDue;
-//    private String dueTime;
     private String priority;
-    private String checklist;
     private String remindMeInterval;
+    private String checklist;
     private long userId;
-    private boolean status = false;
 
     public Project() {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Project(String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist) {
+        this.title = title;
+        this.description = description;
+        this.dateDue = dateDue;
+        this.dateCreated = LocalDateTime.now();
+        this.priority = priority;
+        this.remindMeInterval = remindMeInterval;
+        this.checklist = checklist;
+    }
+
+    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist, long userId) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.dateCreated = LocalDateTime.now();
         this.dateDue = dateDue;
         this.priority = priority;
-        this.remindMeInterval = remindMeInterval;
         this.checklist = checklist;
-
+        this.remindMeInterval = remindMeInterval;
+        this.userId = userId;
     }
+
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Project(long id, String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist) {
@@ -61,80 +72,6 @@ public class Project {
         this.checklist = checklist;
 
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String checklist, String remindMeInterval, boolean status, long userId) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.dateCreated = dateCreated;
-        this.dateDue = dateDue;
-        this.priority = priority;
-        this.checklist = checklist;
-        this.remindMeInterval = remindMeInterval;
-        this.status = status;
-        this.userId = userId;
-
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Project(long id, String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.dateCreated = LocalDateTime.now();
-        this.dateDue = dateDue;
-        this.priority = priority;
-        this.remindMeInterval = remindMeInterval;
-        this.checklist = checklist;
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public long calculateDaysTillProjectDue(LocalDateTime dateCreated, LocalDateTime dateDue) {
-
-//        Period period = Period.between(dateCreated.toLocalDate(), dateDue.toLocalDate());
-//        Duration duration = Duration.between(dateCreated.toLocalTime(), dateDue.toLocalTime());
-
-//        System.out.println("STATUS OF PROJECT");
-//        System.out.println("Project created: " + dateCreated);
-//        System.out.println("Project due: " + dateDue);
-//
-//        System.out.println("Project is due in : " + ChronoUnit.DAYS.between(dateCreated, dateDue) + " days");
-
-
-        return ChronoUnit.DAYS.between(dateCreated, dateDue);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public boolean isProjectExpired() {
-        LocalDateTime current = LocalDateTime.now();
-
-        // Here, notify the user when 1 hour is left till the project due date
-//        if(minutes == 60) {
-//            System.out.println("PROJECT EXPIRES IN 1 HOUR: " + getTitle());
-//        }
-
-        // send push notification based on time remaining
-        // Remind 2 weeks (336 hours) (20160 minutes) before due date
-        // Remind 1 week (168 hours) (10080 minutes) (604,800,000 milliseconds) before due date
-        // Remind 1 day (24 hours) (1440 minutes) (86,400,000 milliseconds) before due date
-        // Remind 1 hour (60 minutes) (3,600,000 milliseconds) before due date
-        // Remind 30 minutes (1,800,000 milliseconds) before due date
-//        System.out.println("minutes till project " + getTitle() + " is due: " + minutes);
-        return current.isAfter(getDateDue());
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public long getProjectRemainingTimeInMinutes() {
-
-//        System.out.println("project " + getTitle() + ", " + ChronoUnit.MILLIS.between(LocalDateTime.now(), dateDue) + ", expired=" + isProjectExpired(dateDue));
-        return ChronoUnit.MINUTES.between(LocalDateTime.now(), getDateDue());
-    }
-
-
-
 
     public long getId() {
         return id;
@@ -176,13 +113,29 @@ public class Project {
         this.dateDue = dateDue;
     }
 
-
     public String getPriority() {
         return priority;
     }
 
     public void setPriority(String priority) {
         this.priority = priority;
+    }
+
+
+    public String getChecklist() {
+        return checklist;
+    }
+
+    public void setChecklist(String checklist) {
+        this.checklist = checklist;
+    }
+
+    public String getRemindMeInterval() {
+        return remindMeInterval;
+    }
+
+    public void setRemindMeInterval(String remindMeInterval) {
+        this.remindMeInterval = remindMeInterval;
     }
 
     public long getUserId() {
@@ -193,28 +146,15 @@ public class Project {
         this.userId = userId;
     }
 
-    public String getChecklist() {
-        return checklist;
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean isProjectExpired() {
+        LocalDateTime current = LocalDateTime.now();
+        return current.isAfter(getDateDue());
     }
 
-    public void setChecklist(String checkList) {
-        this.checklist = checklist;
-    }
-
-    public String getRemindMeInterval() {
-        return remindMeInterval;
-    }
-
-    public void setRemindMeInterval(String remindMe) {
-        this.remindMeInterval = remindMeInterval;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public long getProjectRemainingTimeInMinutes() {
+        return ChronoUnit.MINUTES.between(LocalDateTime.now(), getDateDue());
     }
 
 
@@ -227,10 +167,9 @@ public class Project {
                 ", dateCreated=" + dateCreated +
                 ", dateDue=" + dateDue +
                 ", priority='" + priority + '\'' +
-                ", checklist='" + checklist + '\'' +
                 ", remindMeInterval='" + remindMeInterval + '\'' +
+                ", checklist=" + checklist +
                 ", userId=" + userId +
-                ", status=" + status +
-                '}' + "\n";
+                '}';
     }
 }

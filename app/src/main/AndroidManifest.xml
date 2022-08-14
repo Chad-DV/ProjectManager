@@ -3,8 +3,10 @@
     package="com.example.ppmtoolmobile">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
+        android:name=".AppNotification"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -44,7 +46,8 @@
         <activity
             android:name=".RegisterActivity"
             android:exported="true" /> <!-- For broadcast receiver -->
-        <receiver android:name=".AlarmReceiver" />
+        <service android:name=".services.ProjectService"/>
+
     </application>
 
 </manifest>

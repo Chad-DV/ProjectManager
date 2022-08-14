@@ -3,11 +3,10 @@ package com.example.ppmtoolmobile;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,23 +19,20 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
-import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
+import com.example.ppmtoolmobile.utils.ArrayConversionUtils;
+import com.example.ppmtoolmobile.utils.DBUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -57,9 +53,10 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
     private TimePickerDialog timePickerDialog;
     private ProjectDAOImpl projectHelper;
 
-    private RadioButton projectPriorityRadioBtn, projectPriorityHighRadioBtn, projectPriorityMediumRadioBtn, projectPriorityLowRadioBtn, projectPriorityNoneRadioBtn;
-    private static String strSeparator = ", ";
-    private int count = 0;
+    private RadioButton projectPriorityRadioBtn;
+    private Dialog dialog;
+
+
 
     private ImageButton addProjectChecklistBtn;
     private ListView addProjectChecklistListView;
@@ -73,6 +70,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         setContentView(R.layout.activity_add_project);
 
         projectHelper = new ProjectDAOImpl(this);
+        dialog = new Dialog(this);
 
 
         addProjectRemindMe2WeeksCheckbox = findViewById(R.id.addProjectRemindMe2WeeksCheckbox);
@@ -94,7 +92,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         addProjectChecklistListView = findViewById(R.id.addProjectChecklistListView);
         checklistItemList = new ArrayList<>();
 
-        authenticatedUser =  getIntent().getStringExtra("authenticatedUser");
+        authenticatedUser =  getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
 
 
 
@@ -118,7 +116,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(this, ProjectActivity.class);
-        intent.putExtra("authenticatedUser", authenticatedUser);
+        intent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
         startActivity(intent);
 
     }
@@ -207,8 +205,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         String timeDue = addProjectTimeEditText.getText().toString().trim();
         String priority = getProjectPriorityValue();
         String remindMeInterval = getProjectRemindMeValues();
-        String checkList = convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
-
+        String checkList = ArrayConversionUtils.convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
 
         boolean success = true;
 
@@ -259,20 +256,27 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();
                 clearInput();
 
-//                Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        startActivity(new Intent(getApplicationContext(), ProjectActivity.class));
-//                    }
-//                }, 300);
+                displayDialog(R.layout.post_created_success_dialog);
+                Button Okay = dialog.findViewById(R.id.btn_okay);
 
+                Okay.setOnClickListener(view -> {
+                    dialog.dismiss();
+
+                    new Handler().postDelayed(() -> {
+                        Intent goToProjectActivityIntent = new Intent(getApplicationContext(), ProjectActivity.class);
+                        goToProjectActivityIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
+                        startActivity(goToProjectActivityIntent);
+                    }, 1000);
+                });
+
+                dialog.show();
 
 
             }
 
         }
     }
+
 
     private String checkDigit(int number) {
         return number <= 9 ? "0" + number : String.valueOf(number);
@@ -308,7 +312,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             msg[4] = "30 minutes";
 
 
-        return convertArrayToString(msg);
+        return ArrayConversionUtils.convertArrayToString(msg);
     }
 
 
@@ -318,22 +322,16 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         return projectPriorityRadioBtn.getText().toString();
     }
 
-    public static String convertArrayToString(String[] array){
-        String str = "";
-        for (int i = 0;i<array.length; i++) {
-            str = str+array[i];
-            // Do not append comma at the end of last element
-            if(i<array.length-1){
-                str = str+strSeparator;
-            }
-        }
+    private void displayDialog(int layoutView) {
+        dialog.setContentView(layoutView);
 
-        return str;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.custom_dialog_background));
+        }
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false); //Optional
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
 
     }
-
-//    public static String[] convertStringToArray(String str){
-//        return str.split(strSeparator);
-//
-//    }
 }

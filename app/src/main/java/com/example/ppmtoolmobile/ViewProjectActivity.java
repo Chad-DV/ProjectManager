@@ -2,13 +2,9 @@ package com.example.ppmtoolmobile;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.ResourcesCompat;
 
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,10 +18,10 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
 import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
+import com.example.ppmtoolmobile.utils.DBUtils;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import java.time.format.DateTimeFormatter;
@@ -36,7 +32,6 @@ import java.util.stream.Collectors;
 
 public class ViewProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView viewProjectNavigationBack;
     private TextView viewProjectTitleTextView, viewProjectDescriptionTextView, viewProjectDateCreatedTextView, viewProjectDateDueTextView, viewProjectPriorityTextView;
     private CollapsingToolbarLayout viewProjectCollapsingToolbarLayout;
     private String authenticatedUser;
@@ -77,7 +72,7 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
 
         projectHelper = new ProjectDAOImpl(this);
         userHelper = new UserDAOImpl(this);
-        authenticatedUser = getIntent().getStringExtra("authenticatedUser");
+        authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
         userId = userHelper.getCurrentUserId(authenticatedUser);
         projectId = getIntent().getLongExtra("projectId", 0);
 
@@ -113,17 +108,21 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         String[] checklistItemArray = convertStringToArray(project.getChecklist());
         checklistItemList = Arrays.stream(checklistItemArray).collect(Collectors.toList());
 
-        LinearLayout viewProjectChecklistLinearLayout = findViewById(R.id.viewProjectChecklistLinearLayout);
-
 
         checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
         viewProjectChecklistListView.setAdapter(checklistItemAdapter);
         ListViewHelper.getListViewSize(viewProjectChecklistListView);
 
-        System.out.println("Checklist arr: " + Arrays.toString(checklistItemArray));
+//        System.out.println("Checklist arr: " + Arrays.toString(checklistItemArray));
         System.out.println("Checklist list: " + checklistItemList);
 
-//        viewProjectChecklistLinearLayout.setVisibility(View.INVISIBLE);
+        LinearLayout viewProjectChecklistLinearLayout = findViewById(R.id.viewProjectChecklistLinearLayout);
+
+        if(checklistItemArray[0].isEmpty()) {
+            viewProjectChecklistLinearLayout.setVisibility(View.INVISIBLE);
+        }
+
+
 
 
         if(project.isProjectExpired()) {
@@ -178,24 +177,18 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         Button Okay = dialog.findViewById(R.id.btn_okay);
         Button Cancel = dialog.findViewById(R.id.btn_cancel);
 
-        Okay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean res = projectHelper.deleteProjectById(projectId);
-                if(res) {
-                    finish();
-                }
-
-                Toast.makeText(ViewProjectActivity.this, String.valueOf(res), Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+        Okay.setOnClickListener(view -> {
+            boolean res = projectHelper.deleteProjectById(projectId);
+            if(res) {
+                finish();
             }
+
+            Toast.makeText(ViewProjectActivity.this, String.valueOf(res), Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         });
 
-        Cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
+        Cancel.setOnClickListener(view -> {
+            dialog.dismiss();
         });
 
         dialog.show();
@@ -223,18 +216,6 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         return str.split(strSeparator);
 
     }
-
-//    public static String convertArrayToString(String[] array){
-//        String str = null;
-//        for (int i = 0;i<array.length; i++) {
-//            str = str+array[i];
-//            // Do not append comma at the end of last element
-//            if(i<array.length-1){
-//                str = str+strSeparator;
-//            }
-//        }
-//        return str;
-//    }
 
 
 }

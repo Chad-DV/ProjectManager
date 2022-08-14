@@ -17,6 +17,7 @@ import com.example.ppmtoolmobile.utils.DBUtils;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
@@ -66,8 +67,7 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
             cv.put(DBUtils.COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
             cv.put(DBUtils.COLUMN_PROJECT_PRIORITY, project.getPriority());
             cv.put(DBUtils.COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
-            cv.put(DBUtils.COLUMN_PROJECT_CHECKLIST, project.getChecklist());
-            cv.put(DBUtils.COLUMN_PROJECT_STATUS, project.isStatus());
+            cv.put(DBUtils.COLUMN_PROJECT_CHECKLIST, project.getChecklist().toString());
             cv.put(DBUtils.COLUMN_USER_PROJECT_FK, userId);
         }
 
@@ -112,7 +112,7 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
         cv.put(DBUtils.COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
         cv.put(DBUtils.COLUMN_PROJECT_PRIORITY, project.getPriority());
         cv.put(DBUtils.COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
-        cv.put(DBUtils.COLUMN_PROJECT_CHECKLIST, project.getChecklist());
+        cv.put(DBUtils.COLUMN_PROJECT_CHECKLIST, project.getChecklist().toString());
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + DBUtils.PROJECT_TABLE + " WHERE " + DBUtils.COLUMN_PROJECT_ID + " = ?", new String[]{String.valueOf(project.getId())});
 
@@ -169,10 +169,9 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
             String priority = cursor.getString(5);
             String remindMeInterval = cursor.getString(6);
             String checklist = cursor.getString(7);
-            boolean status = cursor.getInt(8) > 0;
-            int userId = cursor.getInt(9);
+            int userId = cursor.getInt(8);
 
-            return new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, status, userId);
+            return new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, remindMeInterval, checklist, userId);
         }
 
         closeCursor(cursor);
@@ -296,10 +295,9 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
             String priority = cursor.getString(5);
             String remindMeInterval = cursor.getString(6);
             String checklist = cursor.getString(7);
-            boolean status = cursor.getInt(8) > 0;
-            int theUserId = cursor.getInt(9);
+            int theUserId = cursor.getInt(8);
 
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, status, theUserId);
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, remindMeInterval , checklist, theUserId);
 
             projectList.add(project);
         }

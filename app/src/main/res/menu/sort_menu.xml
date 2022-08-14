@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/option_priority_high_low"
-        android:title="Priority High to Low" />
-
-    <item android:id="@+id/option_priority_low_high"
-        android:title="Priority Low to High" />
 
     <item android:id="@+id/option_due_date_newest_to_oldest"
         android:title="Due Newest to Oldest" />

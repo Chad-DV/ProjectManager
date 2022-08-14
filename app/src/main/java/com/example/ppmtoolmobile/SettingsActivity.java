@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.ppmtoolmobile.utils.DBUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -40,10 +41,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         settingsNavigationBack = findViewById(R.id.settingsNavigationBack);
         settingsProfileCardView = findViewById(R.id.settingsProfileCardView);
         settingsMyProjectsCardView = findViewById(R.id.settingsMyProjectsCardView);
-        settingsNotificationsCardView = findViewById(R.id.settingsNotificationsCardView);
         settingsLogoutCardView = findViewById(R.id.settingsLogoutCardView);
 
-        authenticatedUser = getIntent().getStringExtra("authenticatedUser");
+        authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
 
         Toast.makeText(this, "settings activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
@@ -52,7 +52,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         settingsNavigationBack.setOnClickListener(this);
         settingsProfileCardView.setOnClickListener(this);
         settingsMyProjectsCardView.setOnClickListener(this);
-        settingsNotificationsCardView.setOnClickListener(this);
         settingsLogoutCardView.setOnClickListener(this);
 
         // Perform item selected listener
@@ -83,7 +82,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void moveToIntent(Intent intent) {
 //        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
 
-        intent.putExtra("authenticatedUser", authenticatedUser);
+        intent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
         startActivity(intent);
         overridePendingTransition(0,0);
     }
@@ -98,9 +97,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         } else if(view == settingsMyProjectsCardView) {
             Intent goToProjectActivityIntent = new Intent(SettingsActivity.this, ProjectActivity.class);
             moveToIntent(goToProjectActivityIntent);
-        } else if(view == settingsNotificationsCardView) {
-
-        } else if(view == settingsLogoutCardView) {
+        }else if(view == settingsLogoutCardView) {
             logout();
         }
     }

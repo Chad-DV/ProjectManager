@@ -10,15 +10,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
-import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
 import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.User;
+import com.example.ppmtoolmobile.utils.DBUtils;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -56,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginRememberMeCheckbox.setChecked(true);
             if(isValid) {
                 Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);
-                goToLoginIntent.putExtra("authenticatedUser", emailAddress);
+                goToLoginIntent.putExtra(DBUtils.AUTHENTICATED_USER, emailAddress);
                 startActivity(goToLoginIntent);
                 LoginActivity.this.finish();
             }
@@ -82,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void loginUser() {
 
 //       String emailAddress = loginEmailAddressEditText.getText().toString().trim();
-        String emailAddress = "eish@gmail.com";
+        String emailAddress = "john@gmail.com";
         String password = "password";
 //
 //        if(TextUtils.isEmpty(emailAddress)) {
@@ -118,7 +115,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if(isValid) {
             Intent goToLoginIntent = new Intent(LoginActivity.this, ProjectActivity.class);
-            goToLoginIntent.putExtra("authenticatedUser", emailAddress);
+            goToLoginIntent.putExtra(DBUtils.AUTHENTICATED_USER, emailAddress);
             startActivity(goToLoginIntent);
             LoginActivity.this.finish();
 

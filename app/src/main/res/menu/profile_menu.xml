@@ -4,7 +4,4 @@
     <item android:id="@+id/option_remove_avatar"
         android:title="Remove profile avatar" />
 
-    <item android:id="@+id/option_delete_account"
-        android:title="Delete account" />
-
 </menu>

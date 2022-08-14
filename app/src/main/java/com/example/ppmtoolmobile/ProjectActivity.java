@@ -15,15 +15,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ppmtoolmobile.dao.ProjectAndUserDAOImpl;
 import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
 import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
+import com.example.ppmtoolmobile.services.ProjectService;
+import com.example.ppmtoolmobile.utils.DBUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -53,6 +53,9 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
         setContentView(R.layout.activity_project);
 
         filterProjectEditText = findViewById(R.id.filterProjectEditText);
@@ -65,17 +68,23 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         projectViewModel = new ViewModelProvider(this).get(ProjectActivityViewModel.class);
 
 
-
+        authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
         userHelper = new UserDAOImpl(this);
+
+        userId = userHelper.getCurrentUserId(authenticatedUser);
         projectHelper = new ProjectDAOImpl(this);
 
+        Intent projectServiceIntent = new Intent(this, ProjectService.class);
+        projectServiceIntent.putExtra("userId", userId);
+        startForegroundService(projectServiceIntent);
+
         // getting current username through intent from LoginActivity.class
-        authenticatedUser = getIntent().getStringExtra("authenticatedUser");
+
 
 //        Toast.makeText(this, "project activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         // current user id
-        userId = userHelper.getCurrentUserId(authenticatedUser);
+
 
         // Getting users first name and amount of projects (This will be displayed in the heading of the main screen)
         userFirstName = userHelper.getCurrentUserFirstName(authenticatedUser);
@@ -134,7 +143,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     private void moveToIntent(Intent intent) {
 //        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
 
-        intent.putExtra("authenticatedUser", authenticatedUser);
+        intent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
         startActivity(intent);
         overridePendingTransition(0,0);
     }
@@ -149,7 +158,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View view) {
         if(view == projectAddBtn) {
             Intent goToAddProjectIntent = new Intent(this, AddProjectActivity.class);
-            goToAddProjectIntent.putExtra("authenticatedUser", authenticatedUser);
+            goToAddProjectIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
             startActivity(goToAddProjectIntent);
         } else if(view == filterProjectEditText) {
             searchProjects();

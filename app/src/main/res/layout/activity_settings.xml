@@ -105,8 +105,6 @@
             </FrameLayout>
         </androidx.cardview.widget.CardView>
 
-
-        <!-- setting 2 -->
         <androidx.cardview.widget.CardView
             android:id="@+id/settingsMyProjectsCardView"
             android:layout_width="match_parent"
@@ -169,72 +167,6 @@
             </FrameLayout>
         </androidx.cardview.widget.CardView>
 
-
-        <!-- setting 3 -->
-        <androidx.cardview.widget.CardView
-            android:id="@+id/settingsNotificationsCardView"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="13dp"
-            app:cardCornerRadius="9dp"
-            app:cardElevation="0dp">
-
-            <FrameLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/input_outline"
-                android:elevation="0dp"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/settingsNotificationsImageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_notification_icon" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="50dp"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:id="@+id/settingsNotificationsTitleTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/roboto_bold"
-                        android:letterSpacing="-0.01"
-                        android:text="Notifications"
-                        android:textColor="@color/dark_black"
-                        android:textSize="18sp" />
-
-
-                    <TextView
-                        android:id="@+id/settingsNotificationsDescriptionTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/roboto"
-                        android:letterSpacing="-0.01"
-                        android:text="Manage push notifications"
-                        android:textColor="@color/dark_blue_gray"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-            </FrameLayout>
-        </androidx.cardview.widget.CardView>
-
-
-        <!-- setting 4 -->
         <androidx.cardview.widget.CardView
             android:id="@+id/settingsLogoutCardView"
             android:layout_width="match_parent"

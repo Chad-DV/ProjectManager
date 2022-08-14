@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
@@ -348,10 +349,9 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
             String priority = cursor.getString(5);
             String remindMeInterval = cursor.getString(6);
             String checklist = cursor.getString(7);
-            boolean status = cursor.getInt(8) > 0;
-            int theUserId = cursor.getInt(9);
+            int theUserId = cursor.getInt(8);
 
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, checklist, remindMeInterval, status, theUserId);
+            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, remindMeInterval, checklist, theUserId);
 
             projectList.add(project);
         }

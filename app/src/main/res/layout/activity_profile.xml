@@ -121,30 +121,6 @@
             android:textSize="15sp" />
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-3dp"
-            android:hint=" "
-            app:passwordToggleEnabled="true"
-            app:passwordToggleTint="@color/dark_blue_gray">
-
-
-            <EditText
-                android:id="@+id/profilePasswordEditText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/input_default"
-                android:fontFamily="@font/roboto"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:letterSpacing="-0.01"
-                android:textColor="@color/dark_black"
-                android:textColorHint="@color/dark_blue_gray"
-                android:textSize="15sp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
 
         <!--        <EditText-->
         <!--            android:id="@+id/profilePasswordEditText"-->
