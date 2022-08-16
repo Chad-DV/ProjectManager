@@ -159,10 +159,27 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
         while(cursor.moveToNext()) {
             firstName = cursor.getString(0);
         }
-
-
         closeCursor(cursor);
         return firstName;
+    }
+
+
+    public String getCurrentUserEmailAddress(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(DBUtils.USER_TABLE,// Selecting Table
+                new String[]{DBUtils.COLUMN_USER_EMAIL_ADDRESS},//Selecting columns want to query
+                DBUtils.COLUMN_USER_ID + " = ?",
+                new String[]{String.valueOf(userId)},//Where clause
+                null, null, null);
+
+        String emailAddress = null;
+
+        while(cursor.moveToNext()) {
+            emailAddress = cursor.getString(0);
+        }
+        closeCursor(cursor);
+        return emailAddress;
     }
 
     @Override
@@ -175,7 +192,7 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
                 new String[]{String.valueOf(emailAddress)},//Where clause
                 null, null, null);
 
-        long userId = 0;
+        long userId = -999;
 
         while(cursor.moveToNext()) {
             userId = cursor.getLong(0);
@@ -264,30 +281,47 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         boolean success = false;
+        String currentUserEmail;
 
         cv.put(DBUtils.COLUMN_USER_FIRST_NAME, user.getFirstName());
         cv.put(DBUtils.COLUMN_USER_LAST_NAME, user.getLastName());
         cv.put(DBUtils.COLUMN_USER_EMAIL_ADDRESS, user.getEmailAddress());
-        cv.put(DBUtils.COLUMN_USER_PASSWORD, user.getPassword());
 
 
         Cursor cursor = db.rawQuery("SELECT " + DBUtils.COLUMN_USER_EMAIL_ADDRESS + " FROM " + DBUtils.USER_TABLE + " WHERE " + DBUtils.COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{String.valueOf(user.getEmailAddress())});
 
-        // if new email is unique, true
-        if(!isEmailExists(user.getEmailAddress())) {
-            System.out.println("email is unique, updated");
-            success = true;
+        // if new email is unique
+        // allow email to be changed
+//        if(!isEmailExists(user.getEmailAddress())) {
+//            System.out.println("There is no other user with email : " + user.getEmailAddress());
+//            success = true;
+//        }
+
+//        if(isEmailExists(user.getEmailAddress()) && !user.getEmailAddress().equals(cursor.getString(0))) {
+//            System.out.println("User does exist and user email is not same as current");
+//        }
+
+        System.out.println(getCurrentUserEmailAddress(user.getId()));
+        System.out.println(user.getEmailAddress());
+
+        if(cursor.moveToNext() && isEmailExists(user.getEmailAddress())) {
+
+            System.out.println("user.getEmail: " + user.getEmailAddress());
+            System.out.println("cursor.getSteing(0): " + cursor.getString(0));
+            System.out.println("Email exists ");
+
+            if(getCurrentUserEmailAddress(user.getId()).equals(cursor.getString(0))) {
+                System.out.println("Email exists and email is the same as current user");
+                success = true;
+            } else {
+                System.out.println("Email exists and email is NOT the same as current user");
+                success = false;
+            }
         }
 
-
-        if(cursor.moveToFirst() && user.getEmailAddress().equals(cursor.getString(0))) {
-            success = true;
-            System.out.println("current email is not unique with itself");
-        }
-
-        if(success == true) {
-            db.update(DBUtils.USER_TABLE, cv, DBUtils.COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
-        }
+//        if(success == true) {
+//            db.update(DBUtils.USER_TABLE, cv, DBUtils.COLUMN_USER_ID + " = ?", new String[]{String.valueOf(user.getId())});
+//        }
 
         closeCursor(cursor);
 

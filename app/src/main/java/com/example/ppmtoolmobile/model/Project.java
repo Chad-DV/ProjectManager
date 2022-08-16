@@ -35,7 +35,7 @@ public class Project {
 
     }
 
-    public Project(String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist) {
+    public Project(String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist, long userId) {
         this.title = title;
         this.description = description;
         this.dateDue = dateDue;
@@ -43,6 +43,7 @@ public class Project {
         this.priority = priority;
         this.remindMeInterval = remindMeInterval;
         this.checklist = checklist;
+        this.userId = userId;
     }
 
     public Project(long id, String title, String description, LocalDateTime dateCreated, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist, long userId) {
@@ -58,9 +59,18 @@ public class Project {
     }
 
 
+    public Project(long id, String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist, long userId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.dateDue = dateDue;
+        this.priority = priority;
+        this.remindMeInterval = remindMeInterval;
+        this.checklist = checklist;
+        this.userId = userId;
+    }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public Project(long id, String title, String description, LocalDateTime dateDue, String priority, String remindMeInterval, String checklist) {
         this.id = id;
         this.title = title;

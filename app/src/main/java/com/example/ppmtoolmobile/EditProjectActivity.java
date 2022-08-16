@@ -5,14 +5,18 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,8 +29,10 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
+import com.example.ppmtoolmobile.dao.UserDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
 import com.example.ppmtoolmobile.utils.ArrayConversionUtils;
+import com.example.ppmtoolmobile.utils.DBUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -47,13 +53,16 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
     private ProjectDAOImpl projectHelper;
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
-    private RadioButton editProjectPriorityRadioBtn, projectPriorityHighRadioBtn, projectPriorityMediumRadioBtn, projectPriorityLowRadioBtn;
+    private RadioButton editProjectPriorityRadioBtn;
     private RadioGroup editProjectPriorityRadioGroup;
-
+    private UserDAOImpl userHelper;
     private ImageButton editProjectChecklistBtn;
     private ListView editProjectChecklistListView;
     private List<String> checklistItemList;
     private ProjectChecklistItemAdapter checklistItemAdapter;
+    private long userId;
+    private String authenticatedUser;
+    private Dialog dialog;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -61,7 +70,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_project);
 
-        checklistItemList = new ArrayList<>();
+
 
         editProjectRemindMe2WeeksCheckbox = findViewById(R.id.editProjectRemindMe2WeeksCheckbox);
         editProjectRemindMe1WeekCheckbox = findViewById(R.id.editProjectRemindMe1WeekCheckbox);
@@ -76,9 +85,9 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectBtn = findViewById(R.id.editProjectBtn);
         editProjectPriorityRadioGroup = findViewById(R.id.editProjectPriorityRadioGroup);
 
-        projectPriorityHighRadioBtn = findViewById(R.id.projectPriorityHighRadioBtn);
-        projectPriorityMediumRadioBtn = findViewById(R.id.projectPriorityMediumRadioBtn);
-        projectPriorityLowRadioBtn = findViewById(R.id.projectPriorityLowRadioBtn);
+//        projectPriorityHighRadioBtn = findViewById(R.id.projectPriorityHighRadioBtn);
+//        projectPriorityMediumRadioBtn = findViewById(R.id.projectPriorityMediumRadioBtn);
+//        projectPriorityLowRadioBtn = findViewById(R.id.projectPriorityLowRadioBtn);
         editProjectNavigationBack = findViewById(R.id.editProjectNavigationBack);
 
 
@@ -86,9 +95,18 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectChecklistBtn = findViewById(R.id.editProjectChecklistBtn);
         editProjectChecklistListView = findViewById(R.id.editProjectChecklistListView);
 
+        dialog = new Dialog(this);
+        checklistItemList = new ArrayList<>();
+
         projectHelper = new ProjectDAOImpl(this);
 
+        userId = getIntent().getLongExtra("userId", 000);
+        authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
+
+
         loadProjectData();
+
+        Toast.makeText(EditProjectActivity.this, "cur user: " + userId, Toast.LENGTH_SHORT).show();
 
         dateSetListener = (datePicker, year, month, day) -> {
             editProjectDueDateEditText.setText(year + "-" + checkDigit(month + 1)  + "-" + checkDigit(day));
@@ -300,21 +318,50 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         } else {
             String dateTime = dateDue + " " + timeDue;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList);
+            Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList, userId);
 
             System.out.println(theProject);
 
             boolean result = projectHelper.editProject(theProject);
 
             if (result) {
-                Toast.makeText(EditProjectActivity.this, "Project was edited sucessfully", Toast.LENGTH_SHORT).show();
+                clearInput();
+                displayDialog(R.layout.post_edited_success_dialog);
+                Button Okay = dialog.findViewById(R.id.btn_okay);
+
+                Okay.setOnClickListener(view -> {
+                    dialog.dismiss();
+
+                    new Handler().postDelayed(() -> {
+                        Intent goToProjectActivityIntent = new Intent(getApplicationContext(), ProjectActivity.class);
+                        goToProjectActivityIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
+                        startActivity(goToProjectActivityIntent);
+                    }, 1000);
+                });
+
+                dialog.show();
             } else {
-                Toast.makeText(EditProjectActivity.this, "Error editing project", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditProjectActivity.this, "Error editing project, try again shortly.", Toast.LENGTH_SHORT).show();
             }
 
         }
     }
 
+    private void clearInput() {
+        editProjectTitleEditText.setText("");
+        editProjectDescriptionEditText.setText("");
+        editProjectDueDateEditText.setText("");
+        editProjectDueTimeEditText.setText("");
+        editProjectRemindMe2WeeksCheckbox.setChecked(false);
+        editProjectRemindMe1WeekCheckbox.setChecked(false);
+        editProjectRemindMe1DayCheckbox.setChecked(false);
+        editProjectRemindMe1HourCheckbox.setChecked(false);
+        editProjectRemindMe30MinutesCheckbox.setChecked(false);
+        editProjectPriorityRadioGroup.setSelected(false);
+        checklistItemList.clear();
+
+        editProjectChecklistListView.setAdapter(checklistItemAdapter);
+    }
 
 
     private String checkDigit(int number) {
@@ -343,6 +390,19 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         return ArrayConversionUtils.convertArrayToString(msg);
     }
 
+
+    private void displayDialog(int layoutView) {
+        dialog.setContentView(layoutView);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.custom_dialog_background));
+        }
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false); //Optional
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
+
+    }
 
 
 

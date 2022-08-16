@@ -52,7 +52,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
     private DatePickerDialog.OnDateSetListener dateSetListener;
     private TimePickerDialog timePickerDialog;
     private ProjectDAOImpl projectHelper;
-
+    private long userId;
     private RadioButton projectPriorityRadioBtn;
     private Dialog dialog;
 
@@ -93,7 +93,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         checklistItemList = new ArrayList<>();
 
         authenticatedUser =  getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
-
+        userId = getIntent().getLongExtra("userId", -999);
 
 
         dateSetListener = (datePicker, year, month, day) -> {
@@ -232,30 +232,36 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         if (TextUtils.isEmpty(dateDue)) {
             addProjectDueDateEditText.setError("Due date is required");
             success = false;
+
         }
 
         if (TextUtils.isEmpty(timeDue)) {
             addProjectTimeEditText.setError("Due time is required");
             success = false;
+
         }
 
         if (TextUtils.isEmpty(dateDue) && TextUtils.isEmpty(timeDue)) {
             addProjectDueDateEditText.setError("Due date is required");
             addProjectTimeEditText.setError("Due time is required");
+            success = false;
+
         }
 
-
-        String dateTime = dateDue + " " + timeDue;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList);
-
         if(success) {
+            System.out.println("dateDue: " + dateDue);
+            System.out.println("timeDue: " + timeDue);
+            String dateTime = dateDue + " " + timeDue;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+            System.out.println(LocalDateTime.parse(dateTime, formatter));
+
+            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList, userId);
+
             System.out.println(theProject);
             boolean result = projectHelper.addProject(theProject, authenticatedUser);
             if(result) {
-                Toast.makeText(AddProjectActivity.this, "Project was added sucessfully", Toast.LENGTH_SHORT).show();
                 clearInput();
-
                 displayDialog(R.layout.post_created_success_dialog);
                 Button Okay = dialog.findViewById(R.id.btn_okay);
 
@@ -273,8 +279,9 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
 
             }
-
         }
+
+
     }
 
 

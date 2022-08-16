@@ -1,24 +1,24 @@
 package com.example.ppmtoolmobile.services;
 
-import static com.example.ppmtoolmobile.AppNotification.CHANNEL_ID;
 
+
+import static com.example.ppmtoolmobile.utils.NotificationUtils.CHANNEL_ID_1;
+import static com.example.ppmtoolmobile.utils.NotificationUtils.CHANNEL_ID_2;
+
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import android.app.Notification;
 
+import com.example.ppmtoolmobile.AppNotificationChannel;
 import com.example.ppmtoolmobile.LoginActivity;
-import com.example.ppmtoolmobile.ProjectActivity;
 import com.example.ppmtoolmobile.R;
 import com.example.ppmtoolmobile.dao.ProjectDAOImpl;
 import com.example.ppmtoolmobile.model.Project;
@@ -28,12 +28,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class ProjectService extends Service {
+public class ProjectService extends Service  {
 
+    private AppNotificationChannel appNotification;
     private ProjectDAOImpl projectHelper;
     private List<Project> projectList;
     private Logger logger = Logger.getLogger(ProjectService.class.getName());
@@ -46,11 +46,10 @@ public class ProjectService extends Service {
         super.onCreate();
 
         projectHelper = new ProjectDAOImpl(this);
-
+        appNotification = new AppNotificationChannel();
 
 
         new Timer().scheduleAtFixedRate(new TimerTask() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void run() {
 
@@ -63,6 +62,7 @@ public class ProjectService extends Service {
 
                     if(!remindMeIntervals[0].equals("null")) {
                         if(p.getProjectRemainingTimeInMinutes() == intervalArr[0]) {
+
                             sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 2 week(s)");
                         }
                     }
@@ -74,49 +74,78 @@ public class ProjectService extends Service {
                     if(!remindMeIntervals[2].equals("null")) {
                         if(p.getProjectRemainingTimeInMinutes() == intervalArr[2]) {
                             sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 1 day(s)");
-
                         }
                     }
 
                     if(!remindMeIntervals[3].equals("null")) {
                         if(p.getProjectRemainingTimeInMinutes() == intervalArr[3]) {
                             sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 2 minute(s)");
-                            logger.log(Level.INFO, "Project " + p.getTitle() + " is due in 2 mins");
                         }
                     }
 
                     if(!remindMeIntervals[4].equals("null")) {
                         if(p.getProjectRemainingTimeInMinutes() == intervalArr[4]) {
                             sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 1 minute(s)");
-                            logger.log(Level.INFO, "Project " + p.getTitle() + " is due in 1 min");
                         }
                     }
+
+                    if(p.getProjectRemainingTimeInMinutes() == 0) {
+                        sendNotification("Project expired", "Your project " + p.getTitle() + " has expired.");
+                    }
+
+
                 }
             }
         }, 10, 60000);
 
-
-
-//        System.out.println("projectSerivce: " + projectList);
     }
 
-    private void sendNotification(String title, String text) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void sendNotification(String title, String description) {
+        Intent resultIntent = new Intent(this, LoginActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Notification.Action action =
+                new Notification.Action.Builder(R.drawable.ic_sort_icon, "Open", pendingIntent)
+                        .build();
+
+        Notification notification = new Notification.Builder(this, CHANNEL_ID_1)
+                .setContentTitle(title)
+                .setContentText(description)
+                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setChannelId(CHANNEL_ID_1)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+                .setActions(action)
+                .build();
+
+        NotificationManager manager = getSystemService(NotificationManager.class);
+
+
+        int NOTIFICATION_ID = 1001;
+        manager.notify(NOTIFICATION_ID, notification);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void sendForegroundNotification(String title, String text) {
+
+
         Intent notificationIntent = new Intent(this, LoginActivity.class);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
 
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID_2)
                 .setContentTitle(title)
                 .setContentText(text)
-                .setSmallIcon(R.drawable.ic_caution_icon)
+                .setSmallIcon(R.drawable.ic_logo)
                 .setContentIntent(pendingIntent)
                 .build();
+
 
         startForeground(1, notification);
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -126,7 +155,7 @@ public class ProjectService extends Service {
 
 
         System.out.println(userId);
-        sendNotification("Projecto", "Service is running...");
+        sendForegroundNotification("Projecto", "Service is running...");
 
         return START_NOT_STICKY;
 

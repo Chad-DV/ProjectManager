@@ -39,7 +39,7 @@ import java.util.UUID;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText profileFirstNameEditText, profileLastNameEditText, profileEmailAddressEditText, profilePasswordEditText;
+    private EditText profileFirstNameEditText, profileLastNameEditText, profileEmailAddressEditText;
     private TextView changeUserAvatarTextView;
     private ImageView userAvatarImageView;
     private BottomNavigationView bottomNavView;
@@ -281,7 +281,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             profileFirstNameEditText.setText(userDetails.getFirstName());
             profileLastNameEditText.setText(userDetails.getLastName());
             profileEmailAddressEditText.setText(userDetails.getEmailAddress());
-            profilePasswordEditText.setText(userDetails.getPassword());
             userAvatarImageView.setImageBitmap(userAvatar);
 
 
@@ -311,11 +310,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         String firstName = profileFirstNameEditText.getText().toString().trim();
         String lastName = profileLastNameEditText.getText().toString().trim();
         String emailAddress = profileEmailAddressEditText.getText().toString().trim();
-        String password = profilePasswordEditText.getText().toString().trim();
 
         long userId = userHelper.getCurrentUserId(authenticatedUser);
 
-        User user = new User(userId, firstName, lastName, emailAddress, password);
+        User user = new User(userId, firstName, lastName, emailAddress);
 
 
 

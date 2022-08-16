@@ -2,9 +2,16 @@ package com.example.ppmtoolmobile;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -64,6 +71,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        System.out.println("going back to login state..");
+        finish();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onClick(View view) {
@@ -78,8 +92,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loginUser() {
 
-//       String emailAddress = loginEmailAddressEditText.getText().toString().trim();
-        String emailAddress = "john@gmail.com";
+       String emailAddress = loginEmailAddressEditText.getText().toString().trim();
+//        String emailAddress = "john@gmail.com";
         String password = "password";
 //
 //        if(TextUtils.isEmpty(emailAddress)) {
@@ -99,6 +113,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            loginEmailAddressEditText.requestFocus();
 //            return;
 //        }
+
 
         if (loginRememberMeCheckbox.isChecked()) {
             loginPrefsEditor.putBoolean("saveLogin", true);

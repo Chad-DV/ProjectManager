@@ -8,6 +8,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -76,7 +78,15 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
         Intent projectServiceIntent = new Intent(this, ProjectService.class);
         projectServiceIntent.putExtra("userId", userId);
-        startForegroundService(projectServiceIntent);
+
+
+
+        if(!isMyServiceRunning(ProjectService.class)) {
+            startForegroundService(projectServiceIntent);
+        }
+
+
+
 
         // getting current username through intent from LoginActivity.class
 
@@ -139,10 +149,19 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        System.out.println("in isMyServiceRunning");
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private void moveToIntent(Intent intent) {
-//        Intent goToSettingsActivityIntent = new Intent(ProjectActivity.this, ProfileActivity.class);
-
         intent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
         startActivity(intent);
         overridePendingTransition(0,0);
@@ -159,6 +178,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         if(view == projectAddBtn) {
             Intent goToAddProjectIntent = new Intent(this, AddProjectActivity.class);
             goToAddProjectIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
+            goToAddProjectIntent.putExtra("userId", userId);
             startActivity(goToAddProjectIntent);
         } else if(view == filterProjectEditText) {
             searchProjects();

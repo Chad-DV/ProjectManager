@@ -59,17 +59,17 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
 
         Cursor cursor = dbRead.rawQuery("SELECT " + DBUtils.COLUMN_USER_ID + " FROM " + DBUtils.USER_TABLE + " WHERE " + DBUtils.COLUMN_USER_EMAIL_ADDRESS + " = ?", new String[]{emailAddress});
 
-        while(cursor.moveToNext()) {
+        if(cursor.moveToNext()) {
             userId = cursor.getLong(0);
-            cv.put(DBUtils.COLUMN_PROJECT_TITLE, project.getTitle());
-            cv.put(DBUtils.COLUMN_PROJECT_DESCRIPTION, project.getDescription());
-            cv.put(DBUtils.COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
-            cv.put(DBUtils.COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
-            cv.put(DBUtils.COLUMN_PROJECT_PRIORITY, project.getPriority());
-            cv.put(DBUtils.COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
-            cv.put(DBUtils.COLUMN_PROJECT_CHECKLIST, project.getChecklist().toString());
-            cv.put(DBUtils.COLUMN_USER_PROJECT_FK, userId);
         }
+        cv.put(DBUtils.COLUMN_PROJECT_TITLE, project.getTitle());
+        cv.put(DBUtils.COLUMN_PROJECT_DESCRIPTION, project.getDescription());
+        cv.put(DBUtils.COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
+        cv.put(DBUtils.COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
+        cv.put(DBUtils.COLUMN_PROJECT_PRIORITY, project.getPriority());
+        cv.put(DBUtils.COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
+        cv.put(DBUtils.COLUMN_PROJECT_CHECKLIST, project.getChecklist().toString());
+        cv.put(DBUtils.COLUMN_USER_PROJECT_FK, userId);
 
         if(isDuplicateProject(userId, project.getTitle())) {
             Toast.makeText(context.getApplicationContext(), "Project already exists with this title.", Toast.LENGTH_SHORT).show();
@@ -105,6 +105,8 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         long result = 0;
+        long userId = 0;
+
 
         cv.put(DBUtils.COLUMN_PROJECT_TITLE, project.getTitle());
         cv.put(DBUtils.COLUMN_PROJECT_DESCRIPTION, project.getDescription());

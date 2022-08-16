@@ -169,6 +169,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
                 case R.id.option_edit:
                     Intent getProjectIdIntent = new Intent(ProjectFragment.this.getActivity(), EditProjectActivity.class);
                     getProjectIdIntent.putExtra("projectId", projectId);
+                    getProjectIdIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
+                    getProjectIdIntent.putExtra("userId", theUserId);
                     startActivity(getProjectIdIntent);
                     break;
             }
