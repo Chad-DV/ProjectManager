@@ -111,27 +111,19 @@
         android:textColor="@color/dark_black"
         android:fontFamily="@font/roboto"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint=" "
-        android:layout_marginTop="-4dp"
-        app:passwordToggleTint="@color/dark_blue_gray"
-        app:passwordToggleEnabled="true">
-
         <EditText
             android:id="@+id/registerPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:background="@drawable/input_default"
+            android:layout_marginTop="8dp"
             android:textSize="15sp"
+            android:inputType="textPassword"
             android:letterSpacing="-0.01"
             android:hint="Password"
             android:textColorHint="@color/dark_blue_gray"
             android:textColor="@color/dark_black"
             android:fontFamily="@font/roboto"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
 
 
     <Button

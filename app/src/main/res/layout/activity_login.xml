@@ -83,31 +83,19 @@
         android:fontFamily="@font/roboto"/>
 
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-3dp"
-        android:hint=" "
-        app:passwordToggleTint="@color/dark_blue_gray"
-        app:passwordToggleEnabled="true">
-
-
         <EditText
             android:id="@+id/loginPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/input_default"
-            android:textSize="15sp"
-            android:letterSpacing="-0.01"
-            android:inputType="textPassword"
+            android:fontFamily="@font/roboto"
+            android:layout_marginTop="8dp"
             android:hint="Password"
-            android:textColorHint="@color/dark_blue_gray"
+            android:inputType="textPassword"
+            android:letterSpacing="-0.01"
             android:textColor="@color/dark_black"
-            android:fontFamily="@font/roboto"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
+            android:textColorHint="@color/dark_blue_gray"
+            android:textSize="15sp" />
 
     <CheckBox
         android:id="@+id/loginRememberMeCheckbox"

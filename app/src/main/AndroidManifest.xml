@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ppmtoolmobile">
+    package="com.example.projecto">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".AppNotificationChannel"
+        android:name="com.example.projecto.AppNotificationChannel"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+
+        <receiver android:name="com.example.projecto.receivers.BootCompleteReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.projecto.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,30 +33,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="com.example.projecto.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
+            android:name="com.example.projecto.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ProjectActivity"
+            android:name="com.example.projecto.ProjectActivity"
             android:exported="false" />
         <activity
-            android:name=".EditProjectActivity"
+            android:name="com.example.projecto.EditProjectActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewProjectActivity"
+            android:name="com.example.projecto.ViewProjectActivity"
             android:exported="false" />
         <activity
-            android:name=".AddProjectActivity"
+            android:name="com.example.projecto.AddProjectActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.example.projecto.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".RegisterActivity"
+            android:name="com.example.projecto.RegisterActivity"
             android:exported="true" /> <!-- For broadcast receiver -->
-        <service android:name=".services.ProjectService"/>
+        <service android:name="com.example.projecto.services.ProjectService"/>
 
     </application>
 
