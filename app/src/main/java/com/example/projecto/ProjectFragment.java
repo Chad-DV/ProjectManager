@@ -1,5 +1,8 @@
 package com.example.projecto;
 
+import static com.example.projecto.utils.DBUtils.PROJECT_ID;
+import static com.example.projecto.utils.DBUtils.USER_ID;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -144,7 +147,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
 
         Intent goToProjectIntent = new Intent(ProjectFragment.this.getActivity(), ViewProjectActivity.class);
         goToProjectIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
-        goToProjectIntent.putExtra("projectId", projectId);
+        goToProjectIntent.putExtra(PROJECT_ID, projectId);
         startActivity(goToProjectIntent);
     }
 
@@ -168,9 +171,9 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
                     break;
                 case R.id.option_edit:
                     Intent getProjectIdIntent = new Intent(ProjectFragment.this.getActivity(), EditProjectActivity.class);
-                    getProjectIdIntent.putExtra("projectId", projectId);
+                    getProjectIdIntent.putExtra(PROJECT_ID, projectId);
                     getProjectIdIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
-                    getProjectIdIntent.putExtra("userId", theUserId);
+                    getProjectIdIntent.putExtra(USER_ID, theUserId);
                     startActivity(getProjectIdIntent);
                     break;
             }

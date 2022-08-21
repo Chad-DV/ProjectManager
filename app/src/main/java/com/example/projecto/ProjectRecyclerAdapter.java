@@ -69,7 +69,7 @@ public class ProjectRecyclerAdapter extends RecyclerView.Adapter<ProjectRecycler
             holder.projectDueStatusInfoBtn.setText("Expired");
             holder.projectDueStatusInfoBtn.setBackgroundResource(R.drawable.btn_prj_status_expired);
         } else {
-            holder.projectDueStatusInfoBtn.setText("Not Expired");
+            holder.projectDueStatusInfoBtn.setText("Active");
             holder.projectDueStatusInfoBtn.setBackgroundResource(R.drawable.btn_prj_status_not_expired);
         }
 

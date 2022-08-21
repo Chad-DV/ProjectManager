@@ -40,7 +40,7 @@
         android:fontFamily="@font/roboto_flex"
         android:layout_marginTop="-4dp"
         android:text="Your Project Management assitant"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="25dp"
         android:textFontWeight="400"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue_gray"
@@ -279,14 +279,14 @@
         <TextView
             android:id="@+id/loginPromptTextView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="3dp"
             android:fontFamily="@font/roboto_flex"
             android:letterSpacing="-0.02"
-            android:textFontWeight="600"
-            android:layout_marginLeft="3dp"
             android:text="@string/login"
             android:textAlignment="textStart"
             android:textColor="@color/primary_purple"
+            android:textFontWeight="600"
             android:textSize="13sp" />
 
 

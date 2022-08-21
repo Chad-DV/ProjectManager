@@ -27,26 +27,11 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_flex"
         android:textFontWeight="600"
-
+        android:layout_marginBottom="25dp"
         android:text="Login"
-
         android:textColor="@color/dark_black"
         android:textSize="28sp" />
 
-
-    <TextView
-        android:id="@+id/loginTextView3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="-4dp"
-        android:layout_marginBottom="35dp"
-        android:fontFamily="@font/roboto_flex"
-        android:letterSpacing="-0.01"
-        android:text="We do not share or collect your data"
-        android:textAlignment="textStart"
-        android:textColor="@color/dark_blue_gray"
-        android:textSize="13sp" />
 
     <TextView
         android:layout_width="match_parent"

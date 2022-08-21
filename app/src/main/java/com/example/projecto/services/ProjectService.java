@@ -35,8 +35,9 @@ public class ProjectService extends Service  {
     private ProjectDAOImpl projectHelper;
     private List<Project> projectList;
     // 2 weeks, 1 week, 1 day, 1 hour, 30 min
-    private final long[] intervalArr = {20160, 10080, 1440, 60, 30};
+    private final long[] intervalArr = {20160, 10080, 1440, 60, 2};
     private long userId;
+    private String[] remindMeIntervals;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -52,13 +53,10 @@ public class ProjectService extends Service  {
                 projectList = projectHelper.getUserProjects(userId);
                 for(Project p : projectList) {
 
-                    String[] remindMeIntervals = ArrayConversionUtils.convertStringToArray(p.getRemindMeInterval());
-
-                    System.out.println(Arrays.toString(remindMeIntervals));
+                     remindMeIntervals = ArrayConversionUtils.convertStringToArray(p.getRemindMeInterval());
 
                     if(!remindMeIntervals[0].equals("null")) {
                         if(p.getProjectRemainingTimeInMinutes() == intervalArr[0]) {
-
                             sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 2 week(s)");
                         }
                     }
@@ -81,7 +79,7 @@ public class ProjectService extends Service  {
 
                     if(!remindMeIntervals[4].equals("null")) {
                         if(p.getProjectRemainingTimeInMinutes() == intervalArr[4]) {
-                            sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 30 minute(s)");
+                            sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 2 minute(s)");
                         }
                     }
 

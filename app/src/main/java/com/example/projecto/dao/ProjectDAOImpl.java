@@ -221,32 +221,6 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public List<Project> sortByPriorityHighToLow(long userId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        List<Project> projectList = new ArrayList<>();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + DBUtils.PROJECT_TABLE + " WHERE " + DBUtils.COLUMN_USER_PROJECT_FK + " = ? " + "ORDER BY " + DBUtils.COLUMN_PROJECT_PRIORITY + " DESC", new String[]{String.valueOf(userId)});
-        readDataFromCursor(projectList, cursor);
-
-        return projectList;
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    public List<Project> sortByPriorityLowToHigh(long userId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        List<Project> projectList = new ArrayList<>();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM " + DBUtils.PROJECT_TABLE + " WHERE " + DBUtils.COLUMN_USER_PROJECT_FK + " = ? "
-                + "ORDER BY " + DBUtils.COLUMN_PROJECT_PRIORITY + " ASC", new String[]{String.valueOf(userId)});
-
-        readDataFromCursor(projectList, cursor);
-
-        return projectList;
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override

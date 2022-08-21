@@ -18,8 +18,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         // redirect to Launcher screen after 3 seconds
         new Handler().postDelayed(() -> {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));

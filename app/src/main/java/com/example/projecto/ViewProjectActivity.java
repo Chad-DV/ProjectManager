@@ -1,6 +1,7 @@
 package com.example.projecto;
 
 import static com.example.projecto.utils.ArrayConversionUtils.convertStringToArray;
+import static com.example.projecto.utils.DBUtils.PROJECT_ID;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,21 +33,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ViewProjectActivity extends AppCompatActivity implements View.OnClickListener {
+public class ViewProjectActivity extends AppCompatActivity{
 
     private TextView viewProjectDescriptionTextView, viewProjectDateCreatedTextView, viewProjectDateDueTextView, viewProjectPriorityTextView;
     private CollapsingToolbarLayout viewProjectCollapsingToolbarLayout;
     private String authenticatedUser;
-    private ImageView viewProjectMenu;
     private Button viewProjectDueStatusInfoBtn;
     private long userId;
     private long projectId;
     private UserDAOImpl userHelper;
     private ProjectDAOImpl projectHelper;
-    private Dialog dialog;
     private ListView viewProjectChecklistListView;
     private List<String> checklistItemList;
-    private static String strSeparator = ", ";
     private ProjectChecklistItemAdapter checklistItemAdapter;
 
 
@@ -56,34 +54,24 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_project);
 
-
-//        viewProjectTitleTextView = findViewById(R.id.viewProjectTitleTextView);
         viewProjectDescriptionTextView = findViewById(R.id.viewProjectDescriptionTextView);
-//        viewProjectDueDateTextView = findViewById(R.id.viewProjectDateDueTextView2);
         viewProjectCollapsingToolbarLayout = findViewById(R.id.viewProjectCollapsingToolbarLayout);
         viewProjectDueStatusInfoBtn = findViewById(R.id.viewProjectDueStatusInfoBtn);
-        viewProjectMenu = findViewById(R.id.viewProjectMenu);
         viewProjectChecklistListView = findViewById(R.id.viewProjectChecklistListView);
-//        viewProjectNoChecklistItems = findViewById(R.id.viewProjectNoChecklistItems);
         viewProjectDateCreatedTextView = findViewById(R.id.viewProjectDateCreatedTextView);
         viewProjectDateDueTextView = findViewById(R.id.viewProjectDateDueTextView);
         viewProjectPriorityTextView = findViewById(R.id.viewProjectPriorityTextView);
         checklistItemList = new ArrayList<>();
 
-        dialog = new Dialog(this);
-
         projectHelper = new ProjectDAOImpl(this);
         userHelper = new UserDAOImpl(this);
         authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
         userId = userHelper.getCurrentUserId(authenticatedUser);
-        projectId = getIntent().getLongExtra("projectId", 0);
+        projectId = getIntent().getLongExtra(PROJECT_ID, 0);
 
 
         viewProjectCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         viewProjectCollapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
-
-        viewProjectMenu.setOnClickListener(this);
-
 
         loadProjectDetails();
 
@@ -95,12 +83,11 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
     private void loadProjectDetails() {
         Project project = projectHelper.getProjectById(projectId);
 
+        System.out.println(project);
+
         viewProjectCollapsingToolbarLayout.setTitle(project.getTitle());
         viewProjectDescriptionTextView.setText(project.getDescription());
 
-
-//        viewProjectCollapsingToolbarLayout.setCollapsedTitleTypeface(getResources().getFont(R.font.roboto_flex));
-//        viewProjectCollapsingToolbarLayout.setExpandedTitleTypeface(getResources().getFont(R.font.roboto_flex));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String formattedDateCreated = project.getDateCreated().format(formatter);
@@ -113,18 +100,19 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         String[] checklistItemArray = convertStringToArray(project.getChecklist());
         checklistItemList = Arrays.stream(checklistItemArray).collect(Collectors.toList());
 
+        System.out.println("checklistItemList: " + checklistItemList);
+
 
         checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
         viewProjectChecklistListView.setAdapter(checklistItemAdapter);
         ListViewHelper.getListViewSize(viewProjectChecklistListView);
 
-//        System.out.println("Checklist arr: " + Arrays.toString(checklistItemArray));
-        System.out.println("Checklist list: " + checklistItemList);
-
         LinearLayout viewProjectChecklistLinearLayout = findViewById(R.id.viewProjectChecklistLinearLayout);
 
-        if(checklistItemArray[0].isEmpty()) {
-            viewProjectChecklistLinearLayout.setVisibility(View.INVISIBLE);
+        if(checklistItemArray[0].equals("")) {
+            viewProjectChecklistLinearLayout.setVisibility(View.GONE);
+        } else {
+            viewProjectChecklistLinearLayout.setVisibility(View.VISIBLE);
         }
 
 
@@ -134,83 +122,13 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
             viewProjectDueStatusInfoBtn.setText("Expired");
             viewProjectDueStatusInfoBtn.setBackgroundResource(R.drawable.btn_prj_status_expired);
         } else {
-            viewProjectDueStatusInfoBtn.setText("Not Expired");
+            viewProjectDueStatusInfoBtn.setText("Active");
             viewProjectDueStatusInfoBtn.setBackgroundResource(R.drawable.btn_prj_status_not_expired);
         }
 
 
 
     }
-
-    @Override
-    public void onClick(View view) {
-        if(view == viewProjectMenu) {
-            PopupMenu popupMenu = new PopupMenu(ViewProjectActivity.this, viewProjectMenu);
-
-            // Inflating popup menu from popup_menu.xml file
-            popupMenu.getMenuInflater().inflate(R.menu.project_menu, popupMenu.getMenu());
-
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @Override
-                public boolean onMenuItemClick(MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.option_delete:
-                            deleteProject();
-                            break;
-                        case R.id.option_edit:
-                            Intent getProjectIdIntent = new Intent(ViewProjectActivity.this, EditProjectActivity.class);
-                            getProjectIdIntent.putExtra("projectId", projectId);
-                            startActivity(getProjectIdIntent);
-
-                    }
-
-
-                    return true;
-                }
-
-            });
-            // Showing the popup menu
-            popupMenu.show();
-        }
-    }
-
-
-    private void deleteProject() {
-        displayDialog(R.layout.caution_dialog_layout);
-
-        Button Okay = dialog.findViewById(R.id.btn_okay);
-        Button Cancel = dialog.findViewById(R.id.btn_cancel);
-
-        Okay.setOnClickListener(view -> {
-            boolean res = projectHelper.deleteProjectById(projectId);
-            if(res) {
-                finish();
-            }
-            dialog.dismiss();
-        });
-
-        Cancel.setOnClickListener(view -> {
-            dialog.dismiss();
-        });
-
-        dialog.show();
-
-    }
-
-
-
-    private void displayDialog(int layoutView) {
-        dialog.setContentView(layoutView);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.custom_dialog_background));
-        }
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.setCancelable(false); //Optional
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation; //Setting the animations to dialog
-
-    }
-
 
 
 }

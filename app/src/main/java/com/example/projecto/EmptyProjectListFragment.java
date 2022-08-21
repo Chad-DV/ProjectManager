@@ -29,8 +29,6 @@ public class EmptyProjectListFragment extends Fragment{
 
         View v = inflater.inflate(R.layout.fragment_empty_project_list, null);
 
-        System.out.println("in EmptyProjectListFragment");
-
         projectViewModel = new ViewModelProvider(requireActivity()).get(ProjectActivityViewModel.class);
 
         return v;

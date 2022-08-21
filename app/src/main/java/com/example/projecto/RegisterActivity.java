@@ -22,7 +22,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private Button registerBtn;
     private EditText firstNameEditText, lastNameEditText, emailAddressEditText, passwordEditText;
     private TextView loginPromptTextView2;
-    private ProgressBar registerProgressBar;
     private UserDAOImpl userHelper;
 
 
@@ -38,9 +37,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         lastNameEditText = (EditText) findViewById(R.id.registerLastNameEditText);
         emailAddressEditText = (EditText) findViewById(R.id.registerEmailAddressEditText);
         passwordEditText = (EditText) findViewById(R.id.registerPasswordEditText);
-
-//        loginPromptTextView2.setTypeface(R.font.roboto_flex);
-
 
         loginPromptTextView2.setOnClickListener(RegisterActivity.this);
         registerBtn.setOnClickListener(RegisterActivity.this);

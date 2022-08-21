@@ -15,15 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.example.projecto.ProfileActivity;
-import com.example.projecto.model.Project;
 import com.example.projecto.model.User;
 import com.example.projecto.model.UserAvatar;
 import com.example.projecto.utils.DBUtils;
 import com.example.projecto.utils.PasswordUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 

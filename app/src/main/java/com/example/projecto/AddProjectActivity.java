@@ -1,5 +1,7 @@
 package com.example.projecto;
 
+import static com.example.projecto.utils.DBUtils.USER_ID;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -92,7 +94,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         checklistItemList = new ArrayList<>();
 
         authenticatedUser =  getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
-        userId = getIntent().getLongExtra("userId", -999);
+        userId = getIntent().getLongExtra(USER_ID, -999);
 
 
         dateSetListener = (datePicker, year, month, day) -> {
@@ -213,20 +215,20 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             success = false;
         }
 
-        if (title.length() < 15) {
-            addProjectTitleEditText.setError("Minimum of 15 characters required");
-            success = false;
-        }
-
-        if (TextUtils.isEmpty(description)) {
-            addProjectDescriptionEditText.setError("Description is required");
-            success = false;
-        }
-
-        if (description.length() < 25) {
-            addProjectDescriptionEditText.setError("Minimum of 25 characters required");
-            success = false;
-        }
+//        if (title.length() < 15) {
+//            addProjectTitleEditText.setError("Minimum of 15 characters required");
+//            success = false;
+//        }
+//
+//        if (TextUtils.isEmpty(description)) {
+//            addProjectDescriptionEditText.setError("Description is required");
+//            success = false;
+//        }
+//
+//        if (description.length() < 25) {
+//            addProjectDescriptionEditText.setError("Minimum of 25 characters required");
+//            success = false;
+//        }
 
         if (TextUtils.isEmpty(dateDue)) {
             addProjectDueDateEditText.setError("Due date is required");
@@ -255,7 +257,9 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
             System.out.println(LocalDateTime.parse(dateTime, formatter));
 
+
             Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList, userId);
+
 
             System.out.println(theProject);
             boolean result = projectHelper.addProject(theProject, authenticatedUser);
@@ -266,12 +270,9 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
 
                 Okay.setOnClickListener(view -> {
                     dialog.dismiss();
-
-                    new Handler().postDelayed(() -> {
                         Intent goToProjectActivityIntent = new Intent(getApplicationContext(), ProjectActivity.class);
                         goToProjectActivityIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
                         startActivity(goToProjectActivityIntent);
-                    }, 1000);
                 });
 
                 dialog.show();

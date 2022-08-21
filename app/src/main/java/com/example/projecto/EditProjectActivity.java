@@ -1,5 +1,8 @@
 package com.example.projecto;
 
+import static com.example.projecto.utils.DBUtils.PROJECT_ID;
+import static com.example.projecto.utils.DBUtils.USER_ID;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +16,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +71,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_project);
 
-
-
         editProjectRemindMe2WeeksCheckbox = findViewById(R.id.editProjectRemindMe2WeeksCheckbox);
         editProjectRemindMe1WeekCheckbox = findViewById(R.id.editProjectRemindMe1WeekCheckbox);
         editProjectRemindMe1DayCheckbox = findViewById(R.id.editProjectRemindMe1DayCheckbox);
@@ -83,10 +83,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueTimeEditText = findViewById(R.id.editProjectDueTimeEditText);
         editProjectBtn = findViewById(R.id.editProjectBtn);
         editProjectPriorityRadioGroup = findViewById(R.id.editProjectPriorityRadioGroup);
-
-//        projectPriorityHighRadioBtn = findViewById(R.id.projectPriorityHighRadioBtn);
-//        projectPriorityMediumRadioBtn = findViewById(R.id.projectPriorityMediumRadioBtn);
-//        projectPriorityLowRadioBtn = findViewById(R.id.projectPriorityLowRadioBtn);
         editProjectNavigationBack = findViewById(R.id.editProjectNavigationBack);
 
 
@@ -99,7 +95,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
 
         projectHelper = new ProjectDAOImpl(this);
 
-        userId = getIntent().getLongExtra("userId", 000);
+        userId = getIntent().getLongExtra(USER_ID, 000);
         authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
 
 
@@ -201,7 +197,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadProjectData() {
-        projectId = getIntent().getLongExtra("projectId", -999);
+        projectId = getIntent().getLongExtra(PROJECT_ID, -999);
         Project project = projectHelper.getProjectById(projectId);
 
         // get full date and time as LocalDateTime
@@ -220,16 +216,11 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
 //        System.out.println("remind me values .length: " + remindMeValues.length);
         System.out.println("project.getRemindMeInterval(): " + project.getRemindMeInterval());
 
+        System.out.println("projectChecklist: " + project.getChecklist());
         System.out.println("checklistItemArray: " + Arrays.toString(checklistItemArray));
         System.out.println("checklistItemList: " + checklistItemList);
 
         int selected = -1;
-//        System.out.println("projectPriorityHighRadioBtn: " + R.id.projectPriorityHighRadioBtn);
-//        System.out.println("projectPriorityMediumRadioBtn: " + R.id.projectPriorityMediumRadioBtn);
-//        System.out.println("projectPriorityLowRadioBtn: " + R.id.projectPriorityLowRadioBtn);
-//
-//        System.out.println("checked radio btn id: " + editProjectPriorityRadioGroup.getCheckedRadioButtonId());
-
 
         if(priority.equalsIgnoreCase("High")) {
             selected = 0;
@@ -238,9 +229,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         } else {
             selected = 2;
         }
-
-//
-//        System.out.println("SELECTED VALUE IS: " + selected);
 
         switch (selected) {
             case 0:
@@ -261,13 +249,10 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueTimeEditText.setText(time);
 
 
-        if(checklistItemArray[0].isEmpty()) {
+        if(checklistItemArray[0].equals("")) {
             System.out.println("Checklist has no values");
             editProjectChecklistListView.setVisibility(View.GONE);
         }
-
-//        editProjectChecklistListView.setVisibility(View.VISIBLE);
-
 
         checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
         editProjectChecklistListView.setAdapter(checklistItemAdapter);
@@ -356,11 +341,9 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
                     Okay.setOnClickListener(view -> {
                         dialog.dismiss();
 
-                        new Handler().postDelayed(() -> {
-                            Intent goToProjectActivityIntent = new Intent(getApplicationContext(), ProjectActivity.class);
-                            goToProjectActivityIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
-                            startActivity(goToProjectActivityIntent);
-                        }, 1000);
+                        Intent goToProjectActivityIntent = new Intent(getApplicationContext(), ProjectActivity.class);
+                        goToProjectActivityIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
+                        startActivity(goToProjectActivityIntent);
                     });
 
                     dialog.show();

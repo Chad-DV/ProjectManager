@@ -51,16 +51,6 @@
             app:layout_collapseMode="pin"
             android:layout_height="?attr/actionBarSize">
 
-            <ImageView
-                android:id="@+id/viewProjectMenu"
-                android:layout_width="wrap_content"
-                android:stateListAnimator="@null"
-
-                android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_dotted_menu_light" />
-
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -81,7 +71,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:padding="15dp"
+
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -108,7 +98,7 @@
                         android:text="Created by You"
                         android:textFontWeight="600"
                         android:textColor="@color/dark_black"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/viewProjectOwnerTextView"
@@ -130,7 +120,7 @@
                         android:background="@drawable/project_card_small_button"
                         android:fontFamily="@font/roboto_flex"
                         android:stateListAnimator="@null"
-                        android:text="Not started"
+                        android:text="Expired"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
@@ -151,7 +141,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
                 android:fontFamily="@font/roboto_flex"
-                android:letterSpacing="-0.02"
+                android:letterSpacing="-0.01"
 
                 android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
                 android:textAlignment="textStart"
@@ -174,7 +164,7 @@
                     android:text="Date created"
                     android:textAlignment="textStart"
                     android:textColor="@color/dark_black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/viewProjectDateCreatedTextView"
@@ -185,7 +175,7 @@
                     android:letterSpacing="-0.03"
                     android:text="23 January 2022"
                     android:textColor="@color/dark_blue_gray"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
 
             </LinearLayout>
@@ -207,7 +197,7 @@
                     android:text="Date due"
                     android:textAlignment="textStart"
                     android:textColor="@color/dark_black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/viewProjectDateDueTextView"
@@ -218,7 +208,7 @@
                     android:layout_marginTop="-3dp"
                     android:text="23 January 2022"
                     android:textColor="@color/dark_blue_gray"
-                    android:textSize="14sp" />
+                    android:textSize="12sp" />
 
 
             </LinearLayout>
@@ -240,7 +230,7 @@
                     android:text="Project priority"
                     android:textAlignment="textStart"
                     android:textColor="@color/dark_black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/viewProjectPriorityTextView"
@@ -251,7 +241,7 @@
                     android:text="High"
                     android:layout_marginTop="-3dp"
                     android:textColor="@color/dark_blue_gray"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
 
             </LinearLayout>
@@ -273,13 +263,13 @@
                     android:letterSpacing="-0.01"
                     android:text="Checklist"
                     android:textColor="@color/dark_black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/viewProjectChecklistDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-3dp"
+                    android:layout_marginTop="-4dp"
                     android:fontFamily="@font/roboto_flex"
                     android:letterSpacing="-0.03"
                     android:text="Your projects checklist"

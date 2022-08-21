@@ -12,8 +12,6 @@ public interface ProjectDAO {
     Project getProjectById(long projectId);
     List<Project> filterProjects(long userId, String query);
     int getProjectCount(long userId);
-    List<Project> sortByPriorityHighToLow(long userId);
-    List<Project> sortByPriorityLowToHigh(long userId);
     List<Project> sortByDateNewestToOldest(long userId);
     List<Project> sortByDateOldestToNewest(long userId);
 }

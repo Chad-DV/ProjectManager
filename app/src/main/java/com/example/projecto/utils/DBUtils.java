@@ -4,8 +4,10 @@ public class DBUtils {
 
     public static final int USER_AVATAR_MAX_SIZE = 420;
     public static final String AUTHENTICATED_USER = "authenticatedUser";
+    public static final String USER_ID = "userId";
+    public static final String PROJECT_ID = "projectId";
     public static final String DATABASE_NAME = "ppmtool.db";
-    public static final int DATABASE_VERSION = 16;
+    public static final int DATABASE_VERSION = 18;
     public static final String USER_TABLE = "user";
     public static final String COLUMN_USER_ID = "id";
     public static final String COLUMN_USER_FIRST_NAME = "first_name";

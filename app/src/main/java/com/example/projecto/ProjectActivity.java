@@ -1,5 +1,7 @@
 package com.example.projecto;
 
+import static com.example.projecto.utils.DBUtils.USER_ID;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,10 +55,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
-
         setContentView(R.layout.activity_project);
 
         filterProjectEditText = findViewById(R.id.filterProjectEditText);
@@ -76,7 +74,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         projectHelper = new ProjectDAOImpl(this);
 
         Intent projectServiceIntent = new Intent(this, ProjectService.class);
-        projectServiceIntent.putExtra("userId", userId);
+        projectServiceIntent.putExtra(USER_ID, userId);
 
 
 
@@ -157,7 +155,7 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
         if(view == projectAddBtn) {
             Intent goToAddProjectIntent = new Intent(this, AddProjectActivity.class);
             goToAddProjectIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
-            goToAddProjectIntent.putExtra("userId", userId);
+            goToAddProjectIntent.putExtra(USER_ID, userId);
             startActivity(goToAddProjectIntent);
         } else if(view == filterProjectEditText) {
             searchProjects();
