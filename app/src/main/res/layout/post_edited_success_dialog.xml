@@ -17,16 +17,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
         android:text="Success"
         android:textColor="@android:color/black"
-        android:textSize="28sp" />
+        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/projectCreatedSuccessDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:textSize="13sp"
         android:textColor="@color/dark_blue_gray"
         android:text="Your project was updated successfully."
         android:textAlignment="center"
@@ -36,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="25dp"
         app:srcCompat="@drawable/ic_post_created_success_illustration" />
 
 
@@ -49,8 +50,10 @@
             android:layout_height="wrap_content"
             android:background="@drawable/primary_button"
             android:backgroundTint="@color/light_purple"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
+            android:textFontWeight="600"
             android:stateListAnimator="@null"
+            android:textSize="12sp"
             android:text="Okay"
             android:textAllCaps="false"
             android:textColor="@color/primary_purple" />

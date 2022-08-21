@@ -25,22 +25,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-
-                android:fontFamily="@font/roboto_bold"
-                android:letterSpacing="-0.03"
+                android:textFontWeight="600"
+                android:fontFamily="@font/roboto_flex"
+                android:letterSpacing="-0.01"
                 android:text="You currently have no projects to manage"
                 android:textAlignment="center"
                 android:lineHeight="27dp"
                 android:textColor="@color/dark_black"
-                android:textSize="28sp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/d33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto"
+                android:fontFamily="@font/roboto_flex"
                 android:letterSpacing="-0.01"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="-2dp"
 
                 android:textAlignment="center"
                 android:text="Create your first project and get started!"

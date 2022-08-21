@@ -1,5 +1,7 @@
 package com.example.projecto;
 
+import static com.example.projecto.utils.ArrayConversionUtils.convertStringToArray;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 
 public class ViewProjectActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView viewProjectTitleTextView, viewProjectDescriptionTextView, viewProjectDateCreatedTextView, viewProjectDateDueTextView, viewProjectPriorityTextView;
+    private TextView viewProjectDescriptionTextView, viewProjectDateCreatedTextView, viewProjectDateDueTextView, viewProjectPriorityTextView;
     private CollapsingToolbarLayout viewProjectCollapsingToolbarLayout;
     private String authenticatedUser;
     private ImageView viewProjectMenu;
@@ -76,7 +78,6 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
         userId = userHelper.getCurrentUserId(authenticatedUser);
         projectId = getIntent().getLongExtra("projectId", 0);
 
-        Toast.makeText(this, "view project activity: " + projectId, Toast.LENGTH_SHORT).show();
 
         viewProjectCollapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppBar);
         viewProjectCollapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppBar);
@@ -96,6 +97,10 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
 
         viewProjectCollapsingToolbarLayout.setTitle(project.getTitle());
         viewProjectDescriptionTextView.setText(project.getDescription());
+
+
+//        viewProjectCollapsingToolbarLayout.setCollapsedTitleTypeface(getResources().getFont(R.font.roboto_flex));
+//        viewProjectCollapsingToolbarLayout.setExpandedTitleTypeface(getResources().getFont(R.font.roboto_flex));
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String formattedDateCreated = project.getDateCreated().format(formatter);
@@ -182,8 +187,6 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
             if(res) {
                 finish();
             }
-
-            Toast.makeText(ViewProjectActivity.this, String.valueOf(res), Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
 
@@ -208,14 +211,6 @@ public class ViewProjectActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-
-    public static String[] convertStringToArray(String str){
-        if(str == null) {
-            return new String[]{};
-        }
-        return str.split(strSeparator);
-
-    }
 
 
 }

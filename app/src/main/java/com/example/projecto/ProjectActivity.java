@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.projecto.dao.ProjectDAOImpl;
 import com.example.projecto.dao.UserDAOImpl;
@@ -85,18 +84,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
             startForegroundService(projectServiceIntent);
         }
 
-
-
-
-        // getting current username through intent from LoginActivity.class
-
-
-//        Toast.makeText(this, "project activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
-
-        // current user id
-
-
-        // Getting users first name and amount of projects (This will be displayed in the heading of the main screen)
         userFirstName = userHelper.getCurrentUserFirstName(authenticatedUser);
         projectCount = projectHelper.getProjectCount(userId);
 
@@ -115,13 +102,6 @@ public class ProjectActivity extends AppCompatActivity implements View.OnClickLi
 
         welcomeUserTextView1.setText("Hello " + userFirstName);
 
-
-         Toast.makeText(this, "New project count: " + projectCount, Toast.LENGTH_SHORT).show();
-
-
-//        loadFragment(new ProjectFragment());
-
-        // Perform item selected listener
         bottomNavView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

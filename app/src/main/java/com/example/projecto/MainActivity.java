@@ -21,12 +21,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         // redirect to Launcher screen after 3 seconds
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            finish();
         }, 3000);
     }
 }

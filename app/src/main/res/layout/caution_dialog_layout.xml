@@ -22,21 +22,23 @@
         android:id="@+id/dialogCautionTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Caution"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
+        android:text="Caution"
         android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:fontFamily="@font/roboto_bold" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/dialogCautionDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:textSize="13sp"
         android:textColor="@color/dark_blue_gray"
         android:text="Are you sure to want to proceed? Changes cannot be reverted"
         android:textAlignment="center"
-        android:fontFamily="@font/roboto" />
+        android:fontFamily="@font/roboto_flex" />
 
 
 
@@ -51,11 +53,13 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-
+            android:textSize="12sp"
             android:stateListAnimator="@null"
             android:background="@null"
             android:text="Cancel"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
+            android:letterSpacing="0.03"
+            android:textFontWeight="600"
             android:textAllCaps="false"
             android:textColor="@color/primary_purple" />
 
@@ -70,8 +74,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/primary_button"
+            android:textSize="12sp"
             android:backgroundTint="@color/light_purple"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
+            android:letterSpacing="0.03"
+            android:textFontWeight="600"
             android:stateListAnimator="@null"
             android:text="Okay"
             android:textAllCaps="false"

@@ -26,18 +26,20 @@
         android:text="Success"
         android:layout_marginTop="10dp"
         android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:fontFamily="@font/roboto_bold" />
+        android:textSize="20sp"
+        android:textFontWeight="600"
+        android:fontFamily="@font/roboto_flex" />
 
     <TextView
         android:id="@+id/dialogSuccessDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="@color/dark_blue_gray"
+        android:fontFamily="@font/roboto_flex"
+        android:textSize="13sp"
         android:text="Your request was completed successfully"
         android:textAlignment="center"
-        android:fontFamily="@font/roboto" />
+        android:textColor="@color/dark_blue_gray" />
 
 
 
@@ -54,8 +56,11 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:stateListAnimator="@null"
+            android:letterSpacing="0.03"
+            android:textFontWeight="600"
+            android:textSize="12sp"
             android:text="Cancel"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
             android:textAllCaps="false"
             android:textColor="@color/primary_purple" />
 
@@ -71,7 +76,10 @@
             android:layout_weight="1"
             android:background="@drawable/primary_button"
             android:backgroundTint="@color/light_purple"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
+            android:letterSpacing="0.03"
+            android:textSize="12sp"
+            android:textFontWeight="600"
             android:stateListAnimator="@null"
             android:text="Okay"
             android:textAllCaps="false"

@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,7 +26,6 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.projecto.dao.ProjectDAOImpl;
 import com.example.projecto.dao.UserDAOImpl;
@@ -68,7 +68,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
         sortProjectsTextView = v.findViewById(R.id.sortProjectsTextView);
         authenticatedUser = getActivity().getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
         theUserId = userHelper.getCurrentUserId(authenticatedUser);
-
+        projectListLoadingProgressBar = v.findViewById(R.id.projectListLoadingProgressBar);
         viewModelTextView1 = v.findViewById(R.id.viewModelTextView1);
         viewModelTextView2 = v.findViewById(R.id.viewModelTextView2);
 
@@ -214,7 +214,7 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
                     viewModelTextView1.setVisibility(View.GONE);
                     viewModelTextView2.setVisibility(View.GONE);
                     recyclerView.setVisibility(View.VISIBLE);
-                    Toast.makeText(getActivity(), projectList.toString() , Toast.LENGTH_SHORT).show();
+
                 }
                 adapter.refreshList(projectList);
             }
@@ -241,9 +241,12 @@ public class ProjectFragment extends Fragment implements View.OnClickListener, P
 
         projectListLoadingProgressBar.setVisibility(View.VISIBLE);
 
+
         projectList = projectHelper.getUserProjects(theUserId);
 
         projectListLoadingProgressBar.setVisibility(View.GONE);
+
+
 
 
     }

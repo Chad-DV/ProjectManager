@@ -39,7 +39,8 @@
             android:layout_width="wrap_content"
             android:textAlignment="center"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
+            android:textFontWeight="600"
+            android:fontFamily="@font/roboto_flex"
             android:letterSpacing="-0.01"
             android:layout_weight="1"
             android:text="Add a project"
@@ -49,63 +50,72 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        android:padding="15dp">
+
     <TextView
         android:id="@+id/rer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
         android:letterSpacing="-0.01"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="5dp"
         android:text="Project title"
         android:textColor="@color/dark_black"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
 
     <EditText
         android:id="@+id/addProjectTitleEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:background="@drawable/input_default"
-        android:fontFamily="@font/roboto"
+        android:paddingLeft="15dp"
+        android:background="@drawable/input_outline"
+        android:fontFamily="@font/roboto_flex"
         android:textColorHint="@color/dark_blue_gray"
         android:textColor="@color/dark_black"
         android:hint="Project title"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/re3r"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
         android:letterSpacing="-0.01"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
         android:text="Project description"
         android:textColor="@color/dark_black"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
 
     <EditText
         android:id="@+id/addProjectDescriptionEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:background="@drawable/input_default"
-        android:fontFamily="@font/roboto"
+        android:paddingLeft="15dp"
+        android:background="@drawable/input_outline"
+        android:fontFamily="@font/roboto_flex"
         android:textColorHint="@color/dark_blue_gray"
         android:textColor="@color/dark_black"
         android:hint="Project description"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/re333r"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="2dp"
-        android:fontFamily="@font/roboto"
+        android:layout_marginTop="8dp"
+        android:textFontWeight="600"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/roboto_flex"
         android:letterSpacing="-0.01"
         android:text="Project due date"
         android:textColor="@color/dark_black"
@@ -115,13 +125,14 @@
         android:id="@+id/addProjectDueDateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/input_default"
-        android:fontFamily="@font/roboto"
+        android:background="@drawable/input_outline"
+        android:fontFamily="@font/roboto_flex"
         android:editable="false"
+        android:paddingLeft="15dp"
         android:textColorHint="@color/dark_blue_gray"
         android:textColor="@color/dark_black"
         android:hint="Select due date"
-        android:textSize="15sp"
+        android:textSize="13sp"
         tools:ignore="Deprecated" />
 
 
@@ -129,10 +140,11 @@
         android:id="@+id/fe44"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
         android:letterSpacing="-0.01"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginTop="8dp"
+        android:textFontWeight="600"
+        android:layout_marginBottom="5dp"
         android:text="Project due time"
         android:textColor="@color/dark_black"
         android:textSize="12sp" />
@@ -141,13 +153,14 @@
         android:id="@+id/addProjectTimeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/input_default"
-        android:fontFamily="@font/roboto"
+        android:background="@drawable/input_outline"
+        android:fontFamily="@font/roboto_flex"
+        android:paddingLeft="15dp"
         android:editable="false"
         android:textColorHint="@color/dark_blue_gray"
         android:textColor="@color/dark_black"
         android:hint="Project due time"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
 
     <TextView
@@ -155,20 +168,21 @@
         android:layout_width="wrap_content"
         android:textAlignment="center"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
         android:letterSpacing="-0.01"
         android:layout_marginTop="30dp"
         android:text="Remind me"
         android:textColor="@color/dark_black"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/addProjectRemindMeDescriptionTextView"
         android:layout_width="wrap_content"
         android:textAlignment="center"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/roboto"
+        android:layout_marginTop="-3dp"
+        android:fontFamily="@font/roboto_flex"
         android:letterSpacing="-0.01"
         android:text="Send a notification when a project is closing on a due date"
         android:textColor="@color/dark_blue_gray"
@@ -176,73 +190,68 @@
 
     <CheckBox
         android:id="@+id/addProjectRemindMe2WeeksCheckbox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
         android:buttonTint="@color/primary_purple"
         android:backgroundTint="@color/primary_purple"
         android:letterSpacing="-0.01"
-        android:scaleX=".9"
-        android:scaleY=".9"
+        android:layout_marginLeft="-6dp"
         android:text="2 weeks before"
         android:layout_marginTop="10dp"
-        android:textSize="16sp" />
+        android:textSize="13sp" />
 
     <CheckBox
         android:id="@+id/addProjectRemindMe1WeekCheckbox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
         android:buttonTint="@color/primary_purple"
         android:backgroundTint="@color/primary_purple"
         android:letterSpacing="-0.01"
-        android:scaleX=".9"
-        android:scaleY=".9"
+        android:layout_marginLeft="-6dp"
         android:text="@string/remindMe1Week"
         android:layout_marginTop="10dp"
-        android:textSize="16sp" />
+        android:textSize="13sp" />
 
     <CheckBox
         android:id="@+id/addProjectRemindMe1DayCheckbox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
         android:buttonTint="@color/primary_purple"
         android:backgroundTint="@color/primary_purple"
         android:letterSpacing="-0.01"
-        android:scaleX=".9"
-        android:scaleY=".9"
+        android:layout_marginLeft="-6dp"
         android:text="@string/remindMe1Day"
         android:layout_marginTop="10dp"
-        android:textSize="16sp" />
+        android:textSize="13sp" />
 
     <CheckBox
         android:id="@+id/addProjectRemindMe1HourCheckbox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
         android:buttonTint="@color/primary_purple"
         android:backgroundTint="@color/primary_purple"
         android:letterSpacing="-0.01"
-        android:scaleX=".9"
-        android:scaleY=".9"
+        android:layout_marginLeft="-6dp"
         android:text="@string/remindMe1Hour"
         android:layout_marginTop="10dp"
-        android:textSize="16sp" />
+        android:textSize="13sp" />
 
     <CheckBox
         android:id="@+id/addProjectRemindMe30MinutesCheckbox"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
+        android:fontFamily="@font/roboto_flex"
         android:buttonTint="@color/primary_purple"
         android:backgroundTint="@color/primary_purple"
         android:letterSpacing="-0.01"
-        android:scaleX=".9"
-        android:scaleY=".9"
+        android:layout_marginLeft="-6dp"
         android:text="@string/remindMe30Minutes"
         android:layout_marginTop="10dp"
-        android:textSize="16sp" />
+        android:textSize="13sp" />
 
 
 
@@ -251,20 +260,21 @@
         android:id="@+id/addProjectPriorityTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
         android:letterSpacing="-0.01"
         android:layout_marginTop="30dp"
         android:text="Project priority"
         android:textColor="@color/dark_black"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/addProjectPriorityDescriptionTextView"
         android:layout_width="wrap_content"
         android:textAlignment="center"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/roboto"
+        android:layout_marginTop="-3dp"
+        android:fontFamily="@font/roboto_flex"
         android:letterSpacing="-0.01"
         android:text="Shows the urgency of the project"
         android:textColor="@color/dark_blue_gray"
@@ -284,6 +294,7 @@
             android:id="@+id/projectPriorityHighRadioBtn"
             android:layout_width="wrap_content"
             android:buttonTint="@color/primary_purple"
+            android:textSize="13sp"
             android:backgroundTint="@color/primary_purple"
             android:layout_height="wrap_content"
             android:text="High"
@@ -294,6 +305,7 @@
             android:layout_width="wrap_content"
             android:buttonTint="@color/primary_purple"
             android:backgroundTint="@color/primary_purple"
+            android:textSize="13sp"
             android:layout_height="wrap_content"
             android:text="Medium" />
 
@@ -301,6 +313,7 @@
             android:id="@+id/projectPriorityLowRadioBtn"
             android:layout_width="wrap_content"
             android:buttonTint="@color/primary_purple"
+            android:textSize="13sp"
             android:backgroundTint="@color/primary_purple"
             android:layout_height="wrap_content"
             android:text="Low" />
@@ -314,13 +327,14 @@
             android:id="@+id/addProjectChecklistTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
             android:letterSpacing="-0.01"
+            android:textFontWeight="600"
             android:layout_weight="1"
             android:layout_marginTop="30dp"
             android:text="Project checklist"
             android:textColor="@color/dark_black"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
 
 
@@ -337,8 +351,8 @@
         android:id="@+id/addProjectChecklistDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:layout_marginTop="2dp"
+        android:fontFamily="@font/roboto_flex"
+        android:layout_marginTop="-3dp"
         android:letterSpacing="-0.01"
         android:text="Create a checklist of items to easily track your progress"
         android:textColor="@color/dark_blue_gray"
@@ -359,12 +373,14 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
             android:layout_weight="1"
-            android:background="@drawable/input_default"
-            android:fontFamily="@font/roboto"
+            android:paddingLeft="15dp"
+            android:letterSpacing="0.01"
+            android:background="@drawable/input_outline"
+            android:fontFamily="@font/roboto_flex"
             android:hint="Add item"
             android:textColor="@color/dark_black"
             android:textColorHint="@color/dark_blue_gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
         <ImageButton
             android:id="@+id/addProjectChecklistBtn"
@@ -423,13 +439,15 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/primary_button"
         android:stateListAnimator="@null"
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/roboto_flex"
         android:letterSpacing="-0.01"
+        android:textFontWeight="600"
         android:paddingRight="10dp"
         android:text="Add project"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="13sp" />
+    </LinearLayout>
 
 </LinearLayout>
 

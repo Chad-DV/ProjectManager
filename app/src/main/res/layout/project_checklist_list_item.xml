@@ -16,14 +16,14 @@
         android:background="@drawable/input_default"
         android:ellipsize="end"
         android:gravity="center_vertical"
-        android:fontFamily="@font/roboto"
-        android:letterSpacing="-0.03"
+        android:fontFamily="@font/roboto_flex"
+        android:letterSpacing="-0.01"
         android:maxLines="1"
         android:layout_marginBottom="8dp"
 
         android:text="My projects"
         android:textColor="@color/dark_black"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
 
 </LinearLayout>

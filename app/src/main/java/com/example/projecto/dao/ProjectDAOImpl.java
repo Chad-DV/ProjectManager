@@ -109,7 +109,6 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
 
         cv.put(DBUtils.COLUMN_PROJECT_TITLE, project.getTitle());
         cv.put(DBUtils.COLUMN_PROJECT_DESCRIPTION, project.getDescription());
-//        cv.put(COLUMN_PROJECT_DATE_CREATED, project.getDateCreated().toString());
         cv.put(DBUtils.COLUMN_PROJECT_DATE_DUE, project.getDateDue().toString());
         cv.put(DBUtils.COLUMN_PROJECT_PRIORITY, project.getPriority());
         cv.put(DBUtils.COLUMN_PROJECT_REMIND_ME_INTERVAL, project.getRemindMeInterval());
@@ -193,8 +192,6 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
             readDataFromCursor(projectList, cursor);
         }
 
-        System.out.println("searched results: " + projectList);
-
 
         return projectList;
     }
@@ -203,7 +200,6 @@ public class ProjectDAOImpl extends SQLiteOpenHelper implements ProjectDAO{
     @Override
     public int getProjectCount(long userId) {
         SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT * FROM " + PROJECT_TABLE, null);
         Cursor cursor = db.rawQuery("SELECT * FROM " + DBUtils.PROJECT_TABLE + " WHERE " + DBUtils.COLUMN_USER_PROJECT_FK + " = ?", new String[]{String.valueOf(userId)});
 
         int projectCount = cursor.getCount();

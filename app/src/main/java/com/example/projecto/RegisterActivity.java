@@ -39,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         emailAddressEditText = (EditText) findViewById(R.id.registerEmailAddressEditText);
         passwordEditText = (EditText) findViewById(R.id.registerPasswordEditText);
 
+//        loginPromptTextView2.setTypeface(R.font.roboto_flex);
 
 
         loginPromptTextView2.setOnClickListener(RegisterActivity.this);

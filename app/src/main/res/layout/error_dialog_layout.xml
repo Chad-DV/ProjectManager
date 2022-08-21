@@ -23,17 +23,19 @@
         android:id="@+id/dialogErrorTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Error"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
+        android:text="Error"
         android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:fontFamily="@font/roboto_bold" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/dialogErrorDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:textSize="13sp"
         android:textColor="@color/dark_blue_gray"
         android:text="There was an error processing this request, please try again."
         android:textAlignment="center"
@@ -65,20 +67,21 @@
 <!--            android:id="@+id/divider"-->
 <!--            android:layout_width="10dp"-->
 <!--            android:layout_height="0dp" />-->
-
         <Button
             android:id="@+id/btn_okay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/primary_button"
+            android:textSize="12sp"
             android:backgroundTint="@color/light_purple"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
+            android:letterSpacing="0.03"
+            android:textFontWeight="600"
             android:stateListAnimator="@null"
             android:text="Okay"
             android:textAllCaps="false"
             android:textColor="@color/primary_purple" />
-
     </LinearLayout>
 
 

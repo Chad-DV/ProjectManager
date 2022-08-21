@@ -48,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView userAvatarImageView;
     private BottomNavigationView bottomNavView;
     private ProgressBar avatarProgressBar;
-    private Button profileUpdateBtn;
+    private Button profileUpdateBtn, profileCancelUpdateBtn;
     private ImageView profileNavigationBack, profileMenu;
     private UserDAOImpl userHelper;
     private long theUserId;
@@ -71,6 +71,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         changeUserAvatarTextView = findViewById(R.id.changeUserAvatarTextView);
         userAvatarImageView = findViewById(R.id.userAvatarImageView);
         profileUpdateBtn = findViewById(R.id.profileUpdateBtn);
+        profileCancelUpdateBtn = findViewById(R.id.profileCancelUpdateBtn);
         avatarProgressBar = findViewById(R.id.avatarProgressBar);
         profileMenu = findViewById(R.id.profileMenu);
         dialog = new Dialog(this);
@@ -85,6 +86,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         changeUserAvatarTextView.setOnClickListener(this);
         profileUpdateBtn.setOnClickListener(this);
         profileMenu.setOnClickListener(this);
+        profileCancelUpdateBtn.setOnClickListener(this);
 
         bottomNavView = findViewById(R.id.bottomNavView);
         bottomNavView.setSelectedItemId(R.id.nav_profile);
@@ -126,6 +128,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             updateUserDetails();
         } else if(view == profileMenu) {
             showMenu();
+        } else if(view == profileCancelUpdateBtn) {
+            cancel();
         }
     }
 
@@ -206,7 +210,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(ProfileActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
         });
@@ -270,7 +273,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void loadUserDetails() {
         theUserId = userHelper.getCurrentUserId(authenticatedUser);
-        Toast.makeText(this, "USER : " + authenticatedUser, Toast.LENGTH_SHORT).show();
         Bitmap userAvatar = userHelper.getAvatar(theUserId);
 
         System.out.println("current user no avatar: " + userHelper.getUserDetails(authenticatedUser));
@@ -285,25 +287,27 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             userAvatarImageView.setImageBitmap(getCroppedBitmap(userAvatar, DBUtils.USER_AVATAR_MAX_SIZE));
 
 
-//            Bitmap bitmap = (Bitmap) userAndAvatarDetails.get(4);
-//            profileFirstNameEditText.setText(userAndAvatarDetails.get(1).toString());
-//            profileLastNameEditText.setText(userAndAvatarDetails.get(2).toString());
-//            profileEmailAddressEditText.setText(userAndAvatarDetails.get(3).toString());
-//
-//            userAvatarImageView.setImageBitmap(bitmap);
-
         } else {
             User userDetails = userHelper.getUserDetails(authenticatedUser);
             profileFirstNameEditText.setText(userDetails.getFirstName());
             profileLastNameEditText.setText(userDetails.getLastName());
             profileEmailAddressEditText.setText(userDetails.getEmailAddress());
         }
+    }
+
+    private void cancel() {
+
+        User userDetails = userHelper.getUserDetails(authenticatedUser);
+        String firstName = userDetails.getFirstName();
+        String lastName = userDetails.getLastName();
+        String emailAddress = userDetails.getEmailAddress();
+
+        profileFirstNameEditText.setText(firstName);
+        profileLastNameEditText.setText(lastName);
+        profileEmailAddressEditText.setText(emailAddress);
 
 
-
-
-
-
+        profileFirstNameEditText.requestFocus();
     }
 
     private void updateUserDetails() {
@@ -387,25 +391,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         editor.apply();
         startActivity(new Intent(getApplicationContext(), LoginActivity.class));
     }
-
-//    private void x (String user, String userDetails) {
-//        if(!user.getEmailAddress().equals(userDetails.getEmailAddress())) {
-//            boolean res = userHelper.editUserDetails(user);
-//            if(res) {
-//                Toast.makeText(this, "Profile updated successfully, you will be prompted to login shortly", Toast.LENGTH_LONG).show();
-//                new Handler().postDelayed(() -> {
-//                    setLoginSharedPreference(false);
-//                }, 2000);
-//            } else {
-//                Toast.makeText(this, "Oops...Email address is already taken", Toast.LENGTH_SHORT).show();
-//            }
-//        } else {
-//            boolean res = userHelper.editUserDetails(user);
-//            if(res) {
-//                Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
 
     private boolean validateInput(String firstName, String lastName, String emailAddress) {
 

@@ -115,10 +115,7 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
             boolean passwordMatch = PasswordUtils.verifyUserPassword(password, securePassword, salt);
 
             if(passwordMatch) {
-                System.out.println("Provided user password " + password + " is correct.");
                 valid = true;
-            } else {
-                System.out.println("Provided password is incorrect");
             }
 
         }
@@ -213,8 +210,6 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
                 new String[]{String.valueOf(theEmailAddress)},//Where clause
                 null, null, null);
 
-        System.out.println("cursor count: " + cursor.getCount());
-
         while(cursor.moveToNext()) {
             long userId = cursor.getLong(0);
             String firstName = cursor.getString(1);
@@ -281,7 +276,6 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         boolean success = false;
-        String currentUserEmail;
 
         cv.put(DBUtils.COLUMN_USER_FIRST_NAME, user.getFirstName());
         cv.put(DBUtils.COLUMN_USER_LAST_NAME, user.getLastName());
@@ -352,33 +346,6 @@ public class UserDAOImpl extends SQLiteOpenHelper implements UserDAO {
         return result == -1 ? false : true;
 
 
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private void readDataFromCursor(List<Project> projectList, Cursor cursor) {
-        while(cursor.moveToNext()) {
-            long id = cursor.getLong(0);
-            String title = cursor.getString(1);
-            String description = cursor.getString(2);
-            String dateCreated = cursor.getString(3);
-            String dateDue = cursor.getString(4);
-
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-            LocalDateTime dateCreatedFormatted = LocalDateTime.parse(dateCreated, formatter);
-            LocalDateTime dateDueFormatted = LocalDateTime.parse(dateDue, formatter);
-
-            String priority = cursor.getString(5);
-            String remindMeInterval = cursor.getString(6);
-            String checklist = cursor.getString(7);
-            int theUserId = cursor.getInt(8);
-
-            Project project = new Project(id, title, description, dateCreatedFormatted, dateDueFormatted, priority, remindMeInterval, checklist, theUserId);
-
-            projectList.add(project);
-        }
-
-        closeCursor(cursor);
 
     }
 

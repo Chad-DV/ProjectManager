@@ -25,7 +25,6 @@ public class AppNotificationChannel extends Application {
         super.onCreate();
 
         createNotificationChannels();
-        System.out.println("created notification channels..");
     }
 
     private void createNotificationChannels() {

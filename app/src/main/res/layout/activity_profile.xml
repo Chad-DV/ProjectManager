@@ -36,11 +36,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_flex"
                 android:letterSpacing="-0.01"
                 android:text="@string/my_profile"
                 android:textAlignment="center"
                 android:textColor="@color/dark_black"
+                android:textFontWeight="600"
                 android:textSize="20sp" />
 
             <ImageView
@@ -73,8 +74,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="-5dp"
-            android:fontFamily="@font/roboto"
+
+            android:fontFamily="@font/roboto_flex"
             android:letterSpacing="-0.01"
             android:text="@string/change"
             android:textAlignment="center"
@@ -82,44 +83,91 @@
             android:textSize="11sp" />
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="35dp"
+            android:padding="15dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/roboto_flex"
+            android:letterSpacing="-0.01"
+            android:text="First name"
+            android:textColor="@color/dark_black"
+            android:textColorHint="@color/dark_blue_gray"
+            android:textFontWeight="600"
+            android:textSize="11sp" />
+
         <EditText
             android:id="@+id/profileFirstNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:background="@drawable/input_default"
-            android:fontFamily="@font/roboto"
+            android:background="@drawable/input_outline"
+            android:fontFamily="@font/roboto_flex"
             android:hint="First name"
+            android:paddingLeft="15dp"
             android:textColor="@color/dark_black"
             android:textColorHint="@color/dark_blue_gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/roboto_flex"
+            android:letterSpacing="-0.01"
+            android:text="Last name"
+            android:textColor="@color/dark_black"
+            android:textColorHint="@color/dark_blue_gray"
+            android:textFontWeight="600"
+            android:textSize="11sp" />
 
 
         <EditText
             android:id="@+id/profileLastNameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/input_default"
-            android:fontFamily="@font/roboto"
+            android:paddingLeft="15dp"
+            android:background="@drawable/input_outline"
+            android:fontFamily="@font/roboto_flex"
             android:hint="Last name"
             android:textColor="@color/dark_black"
             android:textColorHint="@color/dark_blue_gray"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/roboto_flex"
+            android:letterSpacing="-0.01"
+            android:text="Email address"
+            android:textColor="@color/dark_black"
+            android:textColorHint="@color/dark_blue_gray"
+            android:textFontWeight="600"
+            android:textSize="11sp" />
 
 
         <EditText
             android:id="@+id/profileEmailAddressEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/input_default"
-            android:fontFamily="@font/roboto"
+            android:paddingLeft="15dp"
+            android:background="@drawable/input_outline"
+            android:fontFamily="@font/roboto_flex"
             android:hint="Email address"
             android:textColor="@color/dark_black"
             android:textColorHint="@color/dark_blue_gray"
-            android:textSize="15sp" />
-
+            android:textSize="13sp" />
 
 
         <!--        <EditText-->
@@ -138,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
 
@@ -148,13 +196,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/primary_button"
-                android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_flex"
+                android:textFontWeight="600"
                 android:letterSpacing="-0.01"
                 android:stateListAnimator="@null"
                 android:text="@string/save"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="13sp"
                 app:backgroundTint="@color/primary_purple" />
 
             <Button
@@ -163,14 +212,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/primary_button"
-                android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_flex"
+                android:textFontWeight="600"
                 android:letterSpacing="-0.01"
                 android:stateListAnimator="@null"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
                 android:textColor="@color/dark_black"
-                android:textSize="16dp"
+                android:textSize="13sp"
                 app:backgroundTint="@color/white" />
+
+
+        </LinearLayout>
 
 
         </LinearLayout>

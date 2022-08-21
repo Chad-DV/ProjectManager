@@ -4,141 +4,176 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="35dp"
+    android:padding="40dp"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".RegisterActivity">
 
-
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:layout_marginBottom="10dp"
         app:srcCompat="@drawable/ic_logo" />
 
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/registerTextView1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
 
-        android:orientation="horizontal">
+        android:text="Get started with Projecto"
 
-        <TextView
-            android:id="@+id/registerTextView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/roboto"
-            android:letterSpacing="-0.03"
-            android:text="Register with "
-            android:textAlignment="textStart"
-            android:textColor="@color/dark_black"
-            android:textSize="22sp" />
-
-        <TextView
-            android:id="@+id/registerTextView2"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:letterSpacing="-0.03"
-            android:text="PPMTool"
-            android:textAlignment="textStart"
-            android:textColor="@color/dark_black"
-            android:textSize="22sp" />
-
-    </LinearLayout>
+        android:textColor="@color/dark_black"
+        android:textSize="28sp" />
 
 
     <TextView
         android:id="@+id/registerTextView3"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:letterSpacing="-0.01"
-        android:layout_marginTop="3dp"
-        android:text="We do not share or collect your data"
+        android:fontFamily="@font/roboto_flex"
+        android:layout_marginTop="-4dp"
+        android:text="Your Project Management assitant"
         android:layout_marginBottom="35dp"
+        android:textFontWeight="400"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue_gray"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="First name"
+        android:textSize="11sp"
+        android:layout_marginBottom="5dp"
+        android:letterSpacing="-0.01"
+        android:textFontWeight="600"
+        android:textColorHint="@color/dark_blue_gray"
+        android:textColor="@color/dark_black"
+        android:fontFamily="@font/roboto_flex"
+        />
 
 
     <EditText
         android:id="@+id/registerFirstNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/input_default"
-        android:textSize="15sp"
-
-        android:drawablePadding="10dp"
+        android:background="@drawable/input_outline"
+        android:paddingLeft="15dp"
+        android:textSize="13sp"
         android:letterSpacing="-0.01"
         android:hint="First name"
         android:textColorHint="@color/dark_blue_gray"
         android:textColor="@color/dark_black"
-        android:fontFamily="@font/roboto"/>
+        android:fontFamily="@font/roboto_flex"/>
 
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Last name"
+        android:textSize="11sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:textFontWeight="600"
+        android:letterSpacing="-0.01"
+        android:textColorHint="@color/dark_blue_gray"
+        android:textColor="@color/dark_black"
+        android:fontFamily="@font/roboto_flex"
+        />
 
     <EditText
         android:id="@+id/registerLastNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/input_default"
-        android:fontFamily="@font/roboto"
+        android:paddingLeft="15dp"
+        android:background="@drawable/input_outline"
+        android:fontFamily="@font/roboto_flex"
         android:hint="Last name"
         android:letterSpacing="-0.01"
         android:textColor="@color/dark_black"
         android:textColorHint="@color/dark_blue_gray"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Email address"
+        android:textSize="11sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:textFontWeight="600"
+        android:letterSpacing="-0.01"
+        android:textColorHint="@color/dark_blue_gray"
+        android:textColor="@color/dark_black"
+        android:fontFamily="@font/roboto_flex"
+        />
+
 
     <EditText
         android:id="@+id/registerEmailAddressEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/input_default"
-        android:textSize="15sp"
-        android:letterSpacing="-0.01"
+        android:background="@drawable/input_outline"
+        android:textSize="13sp"
         android:hint="Email address"
-        android:layout_marginTop="8dp"
+        android:letterSpacing="-0.01"
+        android:paddingLeft="15dp"
         android:textColorHint="@color/dark_blue_gray"
         android:textColor="@color/dark_black"
-        android:fontFamily="@font/roboto"/>
+        android:fontFamily="@font/roboto_flex"/>
 
-        <EditText
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:textSize="11sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:textFontWeight="600"
+        android:letterSpacing="-0.01"
+        android:textColorHint="@color/dark_blue_gray"
+        android:textColor="@color/dark_black"
+        android:fontFamily="@font/roboto_flex"
+        />
+
+    <EditText
             android:id="@+id/registerPasswordEditText"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/input_default"
-            android:layout_marginTop="8dp"
-            android:textSize="15sp"
+            android:background="@drawable/input_outline"
+            android:textSize="13sp"
             android:inputType="textPassword"
+        android:paddingLeft="15dp"
             android:letterSpacing="-0.01"
             android:hint="Password"
             android:textColorHint="@color/dark_blue_gray"
             android:textColor="@color/dark_black"
-            android:fontFamily="@font/roboto"/>
+            android:fontFamily="@font/roboto_flex"/>
 
 
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/primary_button"
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/roboto_flex"
         android:letterSpacing="-0.01"
+        android:textFontWeight="600"
         android:stateListAnimator="@null"
         android:text="@string/register"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="12sp" />
 
 <!--    <LinearLayout-->
 <!--        android:layout_width="wrap_content"-->
@@ -224,34 +259,39 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="start"
         android:layout_height="wrap_content">
 
 
         <TextView
             android:id="@+id/loginPromptTextView1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
+            android:fontFamily="@font/roboto_flex"
             android:letterSpacing="-0.02"
             android:text="@string/accountPrompt"
+
             android:textAlignment="textStart"
             android:textColor="@color/dark_blue_gray"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/loginPromptTextView2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/roboto_flex"
             android:letterSpacing="-0.02"
+            android:textFontWeight="600"
+            android:layout_marginLeft="3dp"
             android:text="@string/login"
             android:textAlignment="textStart"
             android:textColor="@color/primary_purple"
             android:textSize="13sp" />
 
-    </LinearLayout>
 
+
+    </LinearLayout>
 
     <!--    </LinearLayout>-->
 </LinearLayout>

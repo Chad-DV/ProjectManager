@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             loginPrefsEditor.commit();
         }
 
-//        if(validateInput(emailAddress, password)) {
+        if(validateInput(emailAddress, password)) {
             boolean isValid = userHelper.login(new User(emailAddress, password));
 
             if(isValid) {
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 LoginActivity.this.finish();
 
             }
-//        }
+        }
 
 
 

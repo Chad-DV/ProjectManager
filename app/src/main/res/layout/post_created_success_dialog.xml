@@ -19,43 +19,42 @@
         android:text="Congratulations"
         android:layout_marginTop="10dp"
         android:textColor="@android:color/black"
-        android:textSize="28sp"
-        android:fontFamily="@font/roboto_bold" />
+        android:textFontWeight="600"
+        android:textSize="24sp"
+        android:fontFamily="@font/roboto_flex" />
 
     <TextView
         android:id="@+id/projectCreatedSuccessDescriptionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="-3dp"
+        android:textSize="13sp"
         android:textColor="@color/dark_blue_gray"
         android:text="Your project was created successfully."
         android:textAlignment="center"
-        android:fontFamily="@font/roboto" />
+        android:fontFamily="@font/roboto_flex" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="25dp"
         app:srcCompat="@drawable/ic_post_created_success_illustration" />
 
 
-
-
-
-        <Button
-            android:id="@+id/btn_okay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/primary_button"
-            android:backgroundTint="@color/light_purple"
-            android:fontFamily="@font/roboto_bold"
-            android:stateListAnimator="@null"
-            android:text="Okay"
-            android:textAllCaps="false"
-            android:textColor="@color/primary_purple" />
-
-
+    <Button
+        android:id="@+id/btn_okay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/primary_button"
+        android:backgroundTint="@color/light_purple"
+        android:fontFamily="@font/roboto_flex"
+        android:textFontWeight="600"
+        android:stateListAnimator="@null"
+        android:textSize="12sp"
+        android:text="Okay"
+        android:textAllCaps="false"
+        android:textColor="@color/primary_purple" />
 
 
 </LinearLayout>

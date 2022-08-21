@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 
@@ -33,7 +34,8 @@ import java.util.TimerTask;
 public class ProjectService extends Service  {
     private ProjectDAOImpl projectHelper;
     private List<Project> projectList;
-    private long[] intervalArr = {20160, 10080, 1440, 60, 30};
+    // 2 weeks, 1 week, 1 day, 1 hour, 30 min
+    private final long[] intervalArr = {20160, 10080, 1440, 60, 30};
     private long userId;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -125,7 +127,8 @@ public class ProjectService extends Service  {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID_2)
                 .setContentTitle(title)
                 .setContentText(text)
-                .setSmallIcon(R.drawable.ic_logo)
+                .setSmallIcon(R.drawable.ic_logo_purple)
+                .setColor(getResources().getColor(R.color.primary_purple))
                 .setContentIntent(pendingIntent)
                 .build();
 

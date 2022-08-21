@@ -20,20 +20,12 @@ import java.util.List;
 
 public class EmptyProjectListFragment extends Fragment{
 
-    private List<Project> projectList;
-    private ProjectRecyclerAdapter adapter;
-    private ProjectDAOImpl projectHelper;
-    private UserDAOImpl userHelper;
-    private RecyclerView recyclerView;
     private ProjectActivityViewModel projectViewModel;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-
-
 
         View v = inflater.inflate(R.layout.fragment_empty_project_list, null);
 

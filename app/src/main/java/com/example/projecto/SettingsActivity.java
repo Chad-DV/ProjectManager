@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.projecto.utils.DBUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -20,11 +19,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private BottomNavigationView bottomNavView;
-    private CardView settingsProfileCardView, settingsMyProjectsCardView, settingsNotificationsCardView, settingsLogoutCardView;
+    private CardView settingsProfileCardView, settingsMyProjectsCardView, settingsLogoutCardView;
     private ImageView settingsNavigationBack;
     private String authenticatedUser;
-    private NotificationManagerCompat notificationManagerCompat;
-    private Notification notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +35,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         settingsLogoutCardView = findViewById(R.id.settingsLogoutCardView);
 
         authenticatedUser = getIntent().getStringExtra(DBUtils.AUTHENTICATED_USER);
-
-        Toast.makeText(this, "settings activity: " + authenticatedUser, Toast.LENGTH_SHORT).show();
 
         bottomNavView.setSelectedItemId(R.id.nav_settings);
 

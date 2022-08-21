@@ -47,18 +47,15 @@ public class ProjectRecyclerAdapter extends RecyclerView.Adapter<ProjectRecycler
         holder.projectPriorityInfoBtn.setText(project.getPriority() + " priority");
 
 
-
-
-
         if(project.getPriority().equals("High") || project.getPriority().equals("None")) {
             holder.projectPriorityInfoBtn.setTextColor(Color.RED);
             holder.projectPriorityInfoBtn.setBackgroundResource(R.drawable.btn_prj_high_priority);
         } else if(project.getPriority().equals("Medium")) {
-            holder.projectPriorityInfoBtn.setTextColor(R.color.dark_orange);
+            holder.projectPriorityInfoBtn.setTextColor(Color.rgb(255, 165, 0));
             holder.projectPriorityInfoBtn.setBackgroundResource(R.drawable.btn_prj_medium_priority);
 
         } else if(project.getPriority().equals("Low")) {
-            holder.projectPriorityInfoBtn.setTextColor(R.color.white);
+            holder.projectPriorityInfoBtn.setTextColor(Color.GREEN);
             holder.projectPriorityInfoBtn.setBackgroundResource(R.drawable.btn_prj_low_priority);
         }
 

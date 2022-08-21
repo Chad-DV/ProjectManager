@@ -105,7 +105,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
 
         loadProjectData();
 
-        Toast.makeText(EditProjectActivity.this, "cur user: " + userId, Toast.LENGTH_SHORT).show();
 
         dateSetListener = (datePicker, year, month, day) -> {
             editProjectDueDateEditText.setText(year + "-" + checkDigit(month + 1)  + "-" + checkDigit(day));
@@ -147,7 +146,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             int currMinute = mcurrentTime.get(Calendar.MINUTE);
             timePickerDialog = new TimePickerDialog(this,android.R.style.Theme_Holo_Light_Dialog, (timePicker, selectedHour, selectedMinute) -> {
                 editProjectDueTimeEditText.setText( "" + checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
-                Toast.makeText(EditProjectActivity.this, "hour=" + selectedHour + " min=" + selectedMinute, Toast.LENGTH_SHORT).show();
 
             }, currHour,currMinute, true);
 
@@ -160,7 +158,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             if(TextUtils.isEmpty(add_item)) {
                 editProjectChecklistEditText.setError("Please enter a value");
             } else if (checklistItemList.contains(add_item)) {
-                Toast.makeText(getBaseContext(), "Item Already Exist", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Item Already Exists", Toast.LENGTH_LONG).show();
             } // Enter the element if it does not exist
             else {
                 checklistItemList.add(add_item);
@@ -299,50 +297,77 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         String remindMeInterval = getProjectRemindMeValues();
         String checkList = ArrayConversionUtils.convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
 
+        boolean success = true;
+
+
+
+        if (TextUtils.isEmpty(title)) {
+            editProjectTitleEditText.setError("Title is required");
+            success = false;
+        }
+
+        if (title.length() < 15) {
+            editProjectTitleEditText.setError("Minimum of 15 characters required");
+            success = false;
+        }
+
+        if (TextUtils.isEmpty(description)) {
+            editProjectDescriptionEditText.setError("Description is required");
+            success = false;
+        }
+
+        if (description.length() < 25) {
+            editProjectDescriptionEditText.setError("Minimum of 25 characters required");
+            success = false;
+        }
 
 
         if(TextUtils.isEmpty(dateDue)) {
             editProjectDueDateEditText.setError("Due date is required");
-            return;
+            success = false;
         }
 
         if(TextUtils.isEmpty(timeDue)) {
             editProjectDueTimeEditText.setError("Due time is required");
-            return;
+            success = false;
         }
 
         if(TextUtils.isEmpty(dateDue) && TextUtils.isEmpty(timeDue)) {
             editProjectDueDateEditText.setError("Due date is required");
             editProjectDueTimeEditText.setError("Due time is required");
+            success = false;
+
         } else {
-            String dateTime = dateDue + " " + timeDue;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList, userId);
 
-            System.out.println(theProject);
+            if(success) {
+                String dateTime = dateDue + " " + timeDue;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList, userId);
 
-            boolean result = projectHelper.editProject(theProject);
+                System.out.println(theProject);
 
-            if (result) {
-                clearInput();
-                displayDialog(R.layout.post_edited_success_dialog);
-                Button Okay = dialog.findViewById(R.id.btn_okay);
+                boolean result = projectHelper.editProject(theProject);
 
-                Okay.setOnClickListener(view -> {
-                    dialog.dismiss();
+                if (result) {
+                    clearInput();
+                    displayDialog(R.layout.post_edited_success_dialog);
+                    Button Okay = dialog.findViewById(R.id.btn_okay);
 
-                    new Handler().postDelayed(() -> {
-                        Intent goToProjectActivityIntent = new Intent(getApplicationContext(), ProjectActivity.class);
-                        goToProjectActivityIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
-                        startActivity(goToProjectActivityIntent);
-                    }, 1000);
-                });
+                    Okay.setOnClickListener(view -> {
+                        dialog.dismiss();
 
-                dialog.show();
-            } else {
-                Toast.makeText(EditProjectActivity.this, "Error editing project, try again shortly.", Toast.LENGTH_SHORT).show();
+                        new Handler().postDelayed(() -> {
+                            Intent goToProjectActivityIntent = new Intent(getApplicationContext(), ProjectActivity.class);
+                            goToProjectActivityIntent.putExtra(DBUtils.AUTHENTICATED_USER, authenticatedUser);
+                            startActivity(goToProjectActivityIntent);
+                        }, 1000);
+                    });
+
+                    dialog.show();
+                } else {
+                    Toast.makeText(EditProjectActivity.this, "Error editing project, try again shortly.", Toast.LENGTH_SHORT).show();
+                }
             }
-
         }
     }
 

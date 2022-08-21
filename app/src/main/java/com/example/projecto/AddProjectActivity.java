@@ -143,7 +143,6 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             int currMinute = mcurrentTime.get(Calendar.MINUTE);
             timePickerDialog = new TimePickerDialog(this,android.R.style.Theme_Holo_Light_Dialog, (timePicker, selectedHour, selectedMinute) -> {
                 addProjectTimeEditText.setText( "" + checkDigit(selectedHour) + ":" + checkDigit(selectedMinute));
-                Toast.makeText(AddProjectActivity.this, "hour=" + selectedHour + " min=" + selectedMinute, Toast.LENGTH_SHORT).show();
 
             }, currHour,currMinute, true);
 
@@ -157,7 +156,7 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             if(TextUtils.isEmpty(add_item)) {
                 addProjectChecklistEditText.setError("Please enter a value");
             } else if (checklistItemList.contains(add_item)) {
-                Toast.makeText(getBaseContext(), "Item Already Exist", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Item Already Exists", Toast.LENGTH_LONG).show();
             } else {
                 checklistItemList.add(add_item);
                 checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
@@ -213,20 +212,21 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             addProjectTitleEditText.setError("Title is required");
             success = false;
         }
-//        if (title.length() < 15) {
-//            addProjectTitleEditText.setError("Minimum of 15 characters required");
-//            success = false;
-//        }
 
-        if (TextUtils.isEmpty(title)) {
-            addProjectDescriptionEditText.setError("Title is required");
+        if (title.length() < 15) {
+            addProjectTitleEditText.setError("Minimum of 15 characters required");
             success = false;
         }
 
-//        if (description.length() < 30) {
-//            addProjectDescriptionEditText.setError("Minimum of 30 characters required");
-//            success = false;
-//        }
+        if (TextUtils.isEmpty(description)) {
+            addProjectDescriptionEditText.setError("Description is required");
+            success = false;
+        }
+
+        if (description.length() < 25) {
+            addProjectDescriptionEditText.setError("Minimum of 25 characters required");
+            success = false;
+        }
 
         if (TextUtils.isEmpty(dateDue)) {
             addProjectDueDateEditText.setError("Due date is required");
