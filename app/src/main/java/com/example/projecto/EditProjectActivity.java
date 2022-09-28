@@ -35,7 +35,10 @@ import com.example.projecto.dao.UserDAOImpl;
 import com.example.projecto.model.Project;
 import com.example.projecto.utils.ArrayConversionUtils;
 import com.example.projecto.utils.DBUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -161,7 +164,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
                 checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
                 editProjectChecklistListView.setAdapter(checklistItemAdapter);
                 ListViewHelper.getListViewSize(editProjectChecklistListView);
-                System.out.println("CHECKLIST AFTER EDITING: " + checklistItemList );
                 editProjectChecklistEditText.setText("");
 
             }
@@ -208,17 +210,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         String time = dueDateAndTime.format(DateTimeFormatter.ofPattern("HH:mm"));
 
         String[] remindMeValues = ArrayConversionUtils.convertStringToArray(project.getRemindMeInterval());
-        String[] checklistItemArray = ArrayConversionUtils.convertStringToArray(project.getChecklist());
-        checklistItemList = Arrays.stream(checklistItemArray).collect(Collectors.toList());
         String priority = project.getPriority();
-
-        System.out.println("project: " + project);
-//        System.out.println("remind me values .length: " + remindMeValues.length);
-        System.out.println("project.getRemindMeInterval(): " + project.getRemindMeInterval());
-
-        System.out.println("projectChecklist: " + project.getChecklist());
-        System.out.println("checklistItemArray: " + Arrays.toString(checklistItemArray));
-        System.out.println("checklistItemList: " + checklistItemList);
 
         int selected = -1;
 
@@ -248,11 +240,9 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         editProjectDueDateEditText.setText(date);
         editProjectDueTimeEditText.setText(time);
 
-
-        if(checklistItemArray[0].equals("")) {
-            System.out.println("Checklist has no values");
-            editProjectChecklistListView.setVisibility(View.GONE);
-        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        checklistItemList = gson.fromJson(project.getChecklist(), type);
 
         checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
         editProjectChecklistListView.setAdapter(checklistItemAdapter);
@@ -280,8 +270,6 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
         String timeDue = editProjectDueTimeEditText.getText().toString().trim();
         String priority = getProjectPriorityValue();
         String remindMeInterval = getProjectRemindMeValues();
-        String checkList = ArrayConversionUtils.convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
-
         boolean success = true;
 
 
@@ -327,10 +315,7 @@ public class EditProjectActivity extends AppCompatActivity implements View.OnCli
             if(success) {
                 String dateTime = dateDue + " " + timeDue;
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList, userId);
-
-                System.out.println(theProject);
-
+                Project theProject = new Project(projectId, title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checklistItemList.toString(), userId);
                 boolean result = projectHelper.editProject(theProject);
 
                 if (result) {

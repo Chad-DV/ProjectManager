@@ -35,7 +35,7 @@ public class ProjectService extends Service  {
     private ProjectDAOImpl projectHelper;
     private List<Project> projectList;
     // 2 weeks, 1 week, 1 day, 1 hour, 30 min
-    private final long[] intervalArr = {20160, 10080, 1440, 60, 2};
+    private final long[] intervalArr = {20160, 10080, 1440, 60, 30};
     private long userId;
     private String[] remindMeIntervals;
 
@@ -79,7 +79,7 @@ public class ProjectService extends Service  {
 
                     if(!remindMeIntervals[4].equals("null")) {
                         if(p.getProjectRemainingTimeInMinutes() == intervalArr[4]) {
-                            sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 2 minute(s)");
+                            sendNotification("Have you completed your project?", "Project " + p.getTitle() + " is due in 30 minute(s)");
                         }
                     }
 
@@ -119,7 +119,7 @@ public class ProjectService extends Service  {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void sendForegroundNotification(String title, String text) {
         Intent notificationIntent = new Intent(this, LoginActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID_2)

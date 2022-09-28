@@ -35,6 +35,8 @@ import com.example.projecto.dao.ProjectDAOImpl;
 import com.example.projecto.model.Project;
 import com.example.projecto.utils.ArrayConversionUtils;
 import com.example.projecto.utils.DBUtils;
+import com.google.gson.Gson;
+
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -205,30 +207,30 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
         String timeDue = addProjectTimeEditText.getText().toString().trim();
         String priority = getProjectPriorityValue();
         String remindMeInterval = getProjectRemindMeValues();
-        String checkList = ArrayConversionUtils.convertArrayToString(checklistItemList.toArray(new String[checklistItemList.size()]));
+        Gson object = new Gson();
+        String checklist = object.toJson(checklistItemList);
 
         boolean success = true;
-
 
         if (TextUtils.isEmpty(title)) {
             addProjectTitleEditText.setError("Title is required");
             success = false;
         }
 
-//        if (title.length() < 15) {
-//            addProjectTitleEditText.setError("Minimum of 15 characters required");
-//            success = false;
-//        }
-//
-//        if (TextUtils.isEmpty(description)) {
-//            addProjectDescriptionEditText.setError("Description is required");
-//            success = false;
-//        }
-//
-//        if (description.length() < 25) {
-//            addProjectDescriptionEditText.setError("Minimum of 25 characters required");
-//            success = false;
-//        }
+        if (title.length() < 15) {
+            addProjectTitleEditText.setError("Minimum of 15 characters required");
+            success = false;
+        }
+
+        if (TextUtils.isEmpty(description)) {
+            addProjectDescriptionEditText.setError("Description is required");
+            success = false;
+        }
+
+        if (description.length() < 25) {
+            addProjectDescriptionEditText.setError("Minimum of 25 characters required");
+            success = false;
+        }
 
         if (TextUtils.isEmpty(dateDue)) {
             addProjectDueDateEditText.setError("Due date is required");
@@ -255,13 +257,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
             String dateTime = dateDue + " " + timeDue;
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-            System.out.println(LocalDateTime.parse(dateTime, formatter));
+            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checklist, userId);
 
-
-            Project theProject = new Project(title, description, LocalDateTime.parse(dateTime, formatter), priority, remindMeInterval, checkList, userId);
-
-
-            System.out.println(theProject);
             boolean result = projectHelper.addProject(theProject, authenticatedUser);
             if(result) {
                 clearInput();
@@ -276,12 +273,8 @@ public class AddProjectActivity extends AppCompatActivity implements View.OnClic
                 });
 
                 dialog.show();
-
-
             }
         }
-
-
     }
 
 

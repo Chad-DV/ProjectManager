@@ -26,7 +26,10 @@ import com.example.projecto.dao.UserDAOImpl;
 import com.example.projecto.model.Project;
 import com.example.projecto.utils.DBUtils;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +47,6 @@ public class ViewProjectActivity extends AppCompatActivity{
     private UserDAOImpl userHelper;
     private ProjectDAOImpl projectHelper;
     private ListView viewProjectChecklistListView;
-    private List<String> checklistItemList;
     private ProjectChecklistItemAdapter checklistItemAdapter;
 
 
@@ -61,7 +63,7 @@ public class ViewProjectActivity extends AppCompatActivity{
         viewProjectDateCreatedTextView = findViewById(R.id.viewProjectDateCreatedTextView);
         viewProjectDateDueTextView = findViewById(R.id.viewProjectDateDueTextView);
         viewProjectPriorityTextView = findViewById(R.id.viewProjectPriorityTextView);
-        checklistItemList = new ArrayList<>();
+
 
         projectHelper = new ProjectDAOImpl(this);
         userHelper = new UserDAOImpl(this);
@@ -82,12 +84,13 @@ public class ViewProjectActivity extends AppCompatActivity{
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadProjectDetails() {
         Project project = projectHelper.getProjectById(projectId);
-
-        System.out.println(project);
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        List<String> checklist = gson.fromJson(project.getChecklist(), type);
+        LinearLayout linearLayout =  findViewById(R.id.viewProjectChecklistLinearLayout);
 
         viewProjectCollapsingToolbarLayout.setTitle(project.getTitle());
         viewProjectDescriptionTextView.setText(project.getDescription());
-
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         String formattedDateCreated = project.getDateCreated().format(formatter);
@@ -97,26 +100,14 @@ public class ViewProjectActivity extends AppCompatActivity{
         viewProjectDateDueTextView.setText(formattedDateDue);
         viewProjectPriorityTextView.setText(project.getPriority());
 
-        String[] checklistItemArray = convertStringToArray(project.getChecklist());
-        checklistItemList = Arrays.stream(checklistItemArray).collect(Collectors.toList());
 
-        System.out.println("checklistItemList: " + checklistItemList);
-
-
-        checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklistItemList);
-        viewProjectChecklistListView.setAdapter(checklistItemAdapter);
-        ListViewHelper.getListViewSize(viewProjectChecklistListView);
-
-        LinearLayout viewProjectChecklistLinearLayout = findViewById(R.id.viewProjectChecklistLinearLayout);
-
-        if(checklistItemArray[0].equals("")) {
-            viewProjectChecklistLinearLayout.setVisibility(View.GONE);
-        } else {
-            viewProjectChecklistLinearLayout.setVisibility(View.VISIBLE);
+        if(checklist.isEmpty()) {
+            linearLayout.setVisibility(View.INVISIBLE);
         }
 
-
-
+        checklistItemAdapter = new ProjectChecklistItemAdapter(getApplicationContext(), checklist);
+        viewProjectChecklistListView.setAdapter(checklistItemAdapter);
+        ListViewHelper.getListViewSize(viewProjectChecklistListView);
 
         if(project.isProjectExpired()) {
             viewProjectDueStatusInfoBtn.setText("Expired");
@@ -125,9 +116,6 @@ public class ViewProjectActivity extends AppCompatActivity{
             viewProjectDueStatusInfoBtn.setText("Active");
             viewProjectDueStatusInfoBtn.setBackgroundResource(R.drawable.btn_prj_status_not_expired);
         }
-
-
-
     }
 
 

@@ -83,8 +83,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loginUser() {
         String emailAddress = loginEmailAddressEditText.getText().toString().trim();
-//        String emailAddress = "ape1234@gmail.com";
-//        String password = "password";
        String password = loginPasswordEditText.getText().toString().trim();
 
 
